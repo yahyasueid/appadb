@@ -1,0 +1,609 @@
+{# templates/layout/_sidebar.html.twig #}
+
+{% set locale = app.request.locale %}
+{% set is_ar  = (locale == 'ar') %}
+
+<style>
+/* ════════════════════════════════════════════════
+   SIDEBAR — styles complets + responsive
+   ════════════════════════════════════════════════ */
+
+/* ── Structure ── */
+.sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sw, 270px);
+    height: 100vh;
+    background: linear-gradient(180deg, #1B5E20 0%, #2E7D32 100%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    box-shadow: 4px 0 20px rgba(27,94,32,.15);
+    will-change: transform;
+    overflow: hidden;
+}
+
+/* RTL */
+html[dir="rtl"] .sidebar {
+    left: auto; right: 0;
+    box-shadow: -4px 0 20px rgba(27,94,32,.15);
+}
+
+/* ── Brand ── */
+.sidebar-brand {
+    height: var(--hh, 68px);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    gap: 12px;
+    flex-shrink: 0;
+}
+.sidebar-brand .logo {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,.15);
+    flex-shrink: 0;
+}
+.sidebar-brand .logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+.sidebar-brand h1 {
+    font-family: var(--fd);
+    font-size: 1.1rem;
+    letter-spacing: -.02em;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sidebar-brand h1 span { color: #A5D6A7; }
+
+/* ── Nav ── */
+.sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+.sidebar-nav::-webkit-scrollbar { width: 3px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 10px; }
+
+.nav-sec {
+    font-size: .6rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: rgba(255,255,255,.4);
+    padding: 16px 12px 6px;
+    font-weight: 700;
+}
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: rgba(255,255,255,.7);
+    text-decoration: none;
+    font-size: .865rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .18s, color .18s;
+    position: relative;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.nav-item:hover  { background: rgba(255,255,255,.1); color: #fff; }
+.nav-item.active { background: rgba(255,255,255,.18); color: #fff; }
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 3px; height: 20px;
+    background: #A5D6A7;
+    border-radius: 0 4px 4px 0;
+}
+html[dir="rtl"] .nav-item.active::before { left: auto; right: 0; border-radius: 4px 0 0 4px; }
+.nav-item i { font-size: 1.1rem; width: 20px; text-align: center; flex-shrink: 0; }
+
+.nav-badge {
+    margin-left: auto;
+    background: #A5D6A7;
+    color: #1B5E20;
+    font-size: .6rem;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+html[dir="rtl"] .nav-badge { margin-left: 0; margin-right: auto; }
+
+/* ── Groupes avec sous-menu ── */
+.nav-group-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    cursor: pointer;
+    color: rgba(226,232,240,.82);
+    font-size: .865rem;
+    font-weight: 500;
+    transition: background .15s, color .15s;
+    text-align: left;
+    font-family: inherit;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+html[dir="rtl"] .nav-group-btn { text-align: right; }
+.nav-group-btn:hover  { background: rgba(255,255,255,.08); color: #e2e8f0; }
+.nav-group-btn.active { background: rgba(74,222,128,.12);  color: #4ade80; }
+
+.nav-group-btn .g-ico { font-size: 1.05rem; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-group-btn .g-lbl { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; }
+html[dir="rtl"] .nav-group-btn .g-lbl { text-align: right; }
+.nav-group-btn .g-chv { font-size: .6rem; opacity: .5; transition: transform .2s; flex-shrink: 0; }
+html[dir="rtl"] .nav-group-btn .g-chv  { transform: rotate(180deg); }
+.nav-group-btn.open    .g-chv           { transform: rotate(90deg); }
+html[dir="rtl"] .nav-group-btn.open .g-chv { transform: rotate(270deg); }
+
+/* ── Sous-menu ── */
+.nav-sub {
+    display: none;
+    flex-direction: column;
+    gap: 1px;
+    margin: 2px 0 4px 34px;
+    padding-left: 10px;
+    border-left: 2px solid rgba(255,255,255,.1);
+}
+html[dir="rtl"] .nav-sub {
+    margin-left: 0; margin-right: 34px;
+    padding-left: 0; padding-right: 10px;
+    border-left: none; border-right: 2px solid rgba(255,255,255,.1);
+}
+.nav-sub.open { display: flex; }
+
+.nav-sub-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    color: rgba(226,232,240,.6);
+    font-size: .78rem;
+    text-decoration: none;
+    transition: background .13s, color .13s;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.nav-sub-item:hover  { background: rgba(255,255,255,.07); color: #e2e8f0; }
+.nav-sub-item.active { background: rgba(74,222,128,.15);  color: #4ade80; font-weight: 600; }
+.nav-sub-item .dot   { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: currentColor; opacity: .7; }
+.nav-sub-item .slbl  { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.nav-sub-item .scnt  { font-size: .62rem; font-weight: 700; flex-shrink: 0; background: rgba(255,255,255,.1); padding: 1px 6px; border-radius: 8px; }
+.nav-sub-item.active .scnt { background: rgba(74,222,128,.2); }
+
+.nav-sub-all {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: rgba(226,232,240,.35);
+    font-size: .73rem;
+    text-decoration: none;
+    transition: .13s;
+    font-style: italic;
+}
+.nav-sub-all:hover  { color: rgba(226,232,240,.7); background: rgba(255,255,255,.04); }
+.nav-sub-all.active { color: #4ade80; }
+
+/* ── Footer utilisateur ── */
+.sidebar-footer {
+    padding: 14px 12px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    flex-shrink: 0;
+}
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.1);
+}
+.user-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #A5D6A7, #0288D1);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .78rem; color: #1B5E20;
+    flex-shrink: 0;
+}
+.user-info        { flex: 1; min-width: 0; }
+.user-info .name  { font-size: .79rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-info .role  { font-size: .66rem; color: rgba(255,255,255,.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Backdrop mobile ── */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,.5);
+    z-index: 999;
+    display: none;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+.sidebar-backdrop.show {
+    display: block;
+    opacity: 1;
+}
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE SIDEBAR
+   ════════════════════════════════════════════════ */
+
+/* ── Tablette 769–992 px : sidebar réduite ── */
+@media (min-width: 769px) and (max-width: 992px) {
+    :root { --sw: 220px; }
+
+    .sidebar-brand h1  { font-size: .98rem; }
+    .sidebar-brand     { padding: 0 16px; }
+    .sidebar-nav       { padding: 12px 10px; }
+    .nav-sec           { font-size: .58rem; padding: 12px 10px 5px; }
+    .nav-item          { font-size: .82rem; padding: 9px 12px; }
+    .nav-item i        { font-size: 1rem; }
+    .nav-group-btn     { font-size: .82rem; padding: 9px 12px; }
+    .nav-sub-item      { font-size: .75rem; }
+    .user-info .name   { font-size: .75rem; }
+    .user-info .role   { font-size: .63rem; }
+}
+
+/* ── Mobile ≤ 768 px : tiroir hors écran ── */
+@media (max-width: 768px) {
+    /* LTR : glisse vers la gauche */
+    .sidebar {
+        transform: translateX(calc(-1 * var(--sw, 270px)));
+        box-shadow: none;
+    }
+    .sidebar.show {
+        transform: translateX(0);
+        box-shadow: 6px 0 32px rgba(27,94,32,.28);
+    }
+
+    /* RTL : glisse vers la droite */
+    html[dir="rtl"] .sidebar {
+        left: auto; right: 0;
+        transform: translateX(var(--sw, 270px));
+    }
+    html[dir="rtl"] .sidebar.show {
+        transform: translateX(0);
+        box-shadow: -6px 0 32px rgba(27,94,32,.28);
+    }
+    
+    /* main-wrapper sans marge */
+    .main-wrapper { margin-left: 0 !important; }
+    html[dir="rtl"] .main-wrapper { margin-right: 0 !important; }
+
+    /* Backdrop visible */
+    .sidebar-backdrop { display: none; }
+    .sidebar-backdrop.show { display: block; }
+}
+
+/* ── Petit mobile ≤ 480 px : sidebar légèrement plus étroite ── */
+@media (max-width: 480px) {
+    :root { --sw: 260px; }
+
+    .sidebar-brand { padding: 0 14px; }
+    .sidebar-nav   { padding: 10px 10px; }
+    .nav-item, .nav-group-btn { padding: 9px 12px; }
+    .user-info .name { font-size: .74rem; }
+}
+
+/* ── Safe area (iPhone notch / Dynamic Island) ── */
+@supports (padding: env(safe-area-inset-top)) {
+    .sidebar {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    html[dir="rtl"] .sidebar {
+        padding-right: env(safe-area-inset-right);
+    }
+}
+</style>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+        <div class="logo"><img src="{{ asset('img/logo.png') }}" alt="Logo ADB-MR"></div>
+        <h1>ADB<span>-MR.ORG</span></h1>
+    </div>
+
+    <nav class="sidebar-nav">
+
+        {# ── PRINCIPAL ── #}
+        <div class="nav-sec">{{ 'sidebar.principal'|trans }}</div>
+        <a class="nav-item {{ app.current_route == 'app_dashboard' ? 'active' : '' }}"
+           href="{{ path('app_dashboard') }}">
+            <i class="bi bi-grid-1x2"></i><span>{{ 'sidebar.dashboard'|trans }}</span>
+        </a>
+
+        {# ══ PROJETS ══ #}
+        {% if is_granted('ROLE_EMPLOYE_PROJETS') %}
+        {% set on_projet  = app.current_route starts with 'app_projet' %}
+        {% set assoc_proj = app.request.query.get('assoc') %}
+        <div class="nav-sec">{{ 'sidebar.projets'|trans }}</div>
+        <button type="button" class="nav-group-btn {{ on_projet ? 'open active' : '' }}" onclick="sbToggle(this)">
+            <i class="bi bi-kanban g-ico"></i>
+            <span class="g-lbl">{{ 'sidebar.gestion_projets'|trans }}</span>
+            <i class="bi bi-chevron-right g-chv"></i>
+        </button>
+        <div class="nav-sub {{ on_projet ? 'open' : '' }}">
+            {% for assoc in sidebar_associations %}
+                {% set active_proj = on_projet and (assoc_proj == assoc.id ~ '') %}
+                {% set palette     = ['#4ade80','#60a5fa','#f59e0b','#f87171','#a78bfa','#34d399','#fb923c','#38bdf8'] %}
+                {% set dot_color   = palette[assoc.id % 8] %}
+                {% set assoc_label = is_ar and assoc.nomAr ? assoc.nomAr : assoc.nom %}
+                <a class="nav-sub-item {{ active_proj ? 'active' : '' }}"
+                   href="{{ path('app_projets', {assoc: assoc.id}) }}"
+                   title="{{ assoc.nom }}{% if assoc.nomAr %} — {{ assoc.nomAr }}{% endif %}">
+                    <span class="dot" style="background:{{ dot_color }}"></span>
+                    <span class="slbl" dir="{{ is_ar ? 'rtl' : 'ltr' }}">
+                        {{- assoc_label|length > 18 ? assoc_label|u.truncate(18, '…') : assoc_label -}}
+                    </span>
+                    <span class="scnt">{{ assoc.projets|length }}</span>
+                </a>
+            {% else %}
+                <span style="padding:6px 10px;font-size:.75rem;opacity:.4;font-style:italic">{{ 'sidebar.aucune_assoc'|trans }}</span>
+            {% endfor %}
+            <a class="nav-sub-all {{ on_projet and not assoc_proj ? 'active' : '' }}" href="{{ path('app_projets') }}">
+                <i class="bi bi-grid-3x3-gap"></i>{{ 'sidebar.voir_toutes'|trans }}
+            </a>
+        </div>
+        {% endif %}
+
+        {# ══ PARRAINAGES ══ #}
+        {% if is_granted('ROLE_EMPLOYE_PARRAINAGES') %}
+
+        {% set on_orphelin = app.current_route starts with 'app_parrainage_orphelin' %}
+        {% set on_famille  = app.current_route starts with 'app_parrainage_famille' %}
+        {% set on_handicap = app.current_route starts with 'app_parrainage_handicap' %}
+        {% set on_imam     = app.current_route starts with 'app_parrainage_imam' %}
+        {% set assoc_par   = app.request.query.get('assoc') %}
+
+        <div class="nav-sec">{{ 'sidebar.parrainages'|trans }}</div>
+
+        {# ── Orphelins ── #}
+        <button type="button" class="nav-group-btn {{ on_orphelin ? 'open active' : '' }}" onclick="sbToggle(this)">
+            <i class="bi bi-person-heart g-ico"></i>
+            <span class="g-lbl">{{ is_ar ? 'الأيتام' : 'Orphelins' }}</span>
+            <i class="bi bi-chevron-right g-chv"></i>
+        </button>
+        <div class="nav-sub {{ on_orphelin ? 'open' : '' }}">
+            {% for assoc in sidebar_associations %}
+                {% set active_a    = on_orphelin and (assoc_par == assoc.id ~ '') %}
+                {% set palette     = ['#4ade80','#60a5fa','#f59e0b','#f87171','#a78bfa','#34d399','#fb923c','#38bdf8'] %}
+                {% set dot_color   = palette[assoc.id % 8] %}
+                {% set assoc_label = is_ar and assoc.nomAr ? assoc.nomAr : assoc.nom %}
+                <a class="nav-sub-item {{ active_a ? 'active' : '' }}"
+                   href="{{ path('app_parrainage_orphelin_index', {assoc: assoc.id}) }}"
+                   title="{{ assoc.nom }}{% if assoc.nomAr %} — {{ assoc.nomAr }}{% endif %}">
+                    <span class="dot" style="background:{{ dot_color }}"></span>
+                    <span class="slbl" dir="{{ is_ar ? 'rtl' : 'ltr' }}">
+                        {{- assoc_label|length > 18 ? assoc_label|u.truncate(18, '…') : assoc_label -}}
+                    </span>
+                </a>
+            {% else %}
+                <span style="padding:6px 10px;font-size:.75rem;opacity:.4;font-style:italic">{{ 'sidebar.aucune_assoc'|trans }}</span>
+            {% endfor %}
+            <a class="nav-sub-all {{ on_orphelin and not assoc_par ? 'active' : '' }}"
+               href="{{ path('app_parrainage_orphelin_index') }}">
+                <i class="bi bi-grid-3x3-gap"></i>{{ 'sidebar.voir_toutes'|trans }}
+            </a>
+        </div>
+
+        {# ── Familles ── #}
+        <button type="button" class="nav-group-btn {{ on_famille ? 'open active' : '' }}" onclick="sbToggle(this)">
+            <i class="bi bi-house-heart g-ico"></i>
+            <span class="g-lbl">{{ is_ar ? 'الأسر' : 'Familles' }}</span>
+            <i class="bi bi-chevron-right g-chv"></i>
+        </button>
+        <div class="nav-sub {{ on_famille ? 'open' : '' }}">
+            {% for assoc in sidebar_associations %}
+                {% set active_a    = on_famille and (assoc_par == assoc.id ~ '') %}
+                {% set palette     = ['#4ade80','#60a5fa','#f59e0b','#f87171','#a78bfa','#34d399','#fb923c','#38bdf8'] %}
+                {% set dot_color   = palette[assoc.id % 8] %}
+                {% set assoc_label = is_ar and assoc.nomAr ? assoc.nomAr : assoc.nom %}
+                <a class="nav-sub-item {{ active_a ? 'active' : '' }}"
+                   href="{{ path('app_parrainage_famille_index', {assoc: assoc.id}) }}"
+                   title="{{ assoc.nom }}{% if assoc.nomAr %} — {{ assoc.nomAr }}{% endif %}">
+                    <span class="dot" style="background:{{ dot_color }}"></span>
+                    <span class="slbl" dir="{{ is_ar ? 'rtl' : 'ltr' }}">
+                        {{- assoc_label|length > 18 ? assoc_label|u.truncate(18, '…') : assoc_label -}}
+                    </span>
+                </a>
+            {% else %}
+                <span style="padding:6px 10px;font-size:.75rem;opacity:.4;font-style:italic">{{ 'sidebar.aucune_assoc'|trans }}</span>
+            {% endfor %}
+            <a class="nav-sub-all {{ on_famille and not assoc_par ? 'active' : '' }}"
+               href="{{ path('app_parrainage_famille_index') }}">
+                <i class="bi bi-grid-3x3-gap"></i>{{ 'sidebar.voir_toutes'|trans }}
+            </a>
+        </div>
+
+        {# ── Handicapés ── #}
+        <button type="button" class="nav-group-btn {{ on_handicap ? 'open active' : '' }}" onclick="sbToggle(this)">
+            <i class="bi bi-universal-access g-ico"></i>
+            <span class="g-lbl">{{ is_ar ? 'ذوو الاحتياجات' : 'Handicapés' }}</span>
+            <i class="bi bi-chevron-right g-chv"></i>
+        </button>
+        <div class="nav-sub {{ on_handicap ? 'open' : '' }}">
+            {% for assoc in sidebar_associations %}
+                {% set active_a    = on_handicap and (assoc_par == assoc.id ~ '') %}
+                {% set palette     = ['#4ade80','#60a5fa','#f59e0b','#f87171','#a78bfa','#34d399','#fb923c','#38bdf8'] %}
+                {% set dot_color   = palette[assoc.id % 8] %}
+                {% set assoc_label = is_ar and assoc.nomAr ? assoc.nomAr : assoc.nom %}
+                <a class="nav-sub-item {{ active_a ? 'active' : '' }}"
+                   href="{{ path('app_parrainage_handicap_index', {assoc: assoc.id}) }}"
+                   title="{{ assoc.nom }}{% if assoc.nomAr %} — {{ assoc.nomAr }}{% endif %}">
+                    <span class="dot" style="background:{{ dot_color }}"></span>
+                    <span class="slbl" dir="{{ is_ar ? 'rtl' : 'ltr' }}">
+                        {{- assoc_label|length > 18 ? assoc_label|u.truncate(18, '…') : assoc_label -}}
+                    </span>
+                </a>
+            {% else %}
+                <span style="padding:6px 10px;font-size:.75rem;opacity:.4;font-style:italic">{{ 'sidebar.aucune_assoc'|trans }}</span>
+            {% endfor %}
+            <a class="nav-sub-all {{ on_handicap and not assoc_par ? 'active' : '' }}"
+               href="{{ path('app_parrainage_handicap_index') }}">
+                <i class="bi bi-grid-3x3-gap"></i>{{ 'sidebar.voir_toutes'|trans }}
+            </a>
+        </div>
+
+        {# ── Imams / Enseignants ── #}
+        <button type="button" class="nav-group-btn {{ on_imam ? 'open active' : '' }}" onclick="sbToggle(this)">
+            <i class="bi bi-book g-ico"></i>
+            <span class="g-lbl">{{ is_ar ? 'الأئمة والمعلمون' : 'Imams / Enseignants' }}</span>
+            <i class="bi bi-chevron-right g-chv"></i>
+        </button>
+        <div class="nav-sub {{ on_imam ? 'open' : '' }}">
+            {% for assoc in sidebar_associations %}
+                {% set active_a    = on_imam and (assoc_par == assoc.id ~ '') %}
+                {% set palette     = ['#4ade80','#60a5fa','#f59e0b','#f87171','#a78bfa','#34d399','#fb923c','#38bdf8'] %}
+                {% set dot_color   = palette[assoc.id % 8] %}
+                {% set assoc_label = is_ar and assoc.nomAr ? assoc.nomAr : assoc.nom %}
+                <a class="nav-sub-item {{ active_a ? 'active' : '' }}"
+                   href="{{ path('app_parrainage_imam_index', {assoc: assoc.id}) }}"
+                   title="{{ assoc.nom }}{% if assoc.nomAr %} — {{ assoc.nomAr }}{% endif %}">
+                    <span class="dot" style="background:{{ dot_color }}"></span>
+                    <span class="slbl" dir="{{ is_ar ? 'rtl' : 'ltr' }}">
+                        {{- assoc_label|length > 18 ? assoc_label|u.truncate(18, '…') : assoc_label -}}
+                    </span>
+                </a>
+            {% else %}
+                <span style="padding:6px 10px;font-size:.75rem;opacity:.4;font-style:italic">{{ 'sidebar.aucune_assoc'|trans }}</span>
+            {% endfor %}
+            <a class="nav-sub-all {{ on_imam and not assoc_par ? 'active' : '' }}"
+               href="{{ path('app_parrainage_imam_index') }}">
+                <i class="bi bi-grid-3x3-gap"></i>{{ 'sidebar.voir_toutes'|trans }}
+            </a>
+        </div>
+
+        {% endif %}
+
+        {# ══ CAISSE ══ #}
+        {% if is_granted('ROLE_COMPTABLE') %}
+        <div class="nav-sec">{{ 'sidebar.finance'|trans }}</div>
+        <a class="nav-item {{ app.current_route starts with 'app_caisse' ? 'active' : '' }}"
+           href="{{ path('app_caisse') }}">
+            <i class="bi bi-wallet2"></i><span>{{ 'sidebar.caisse'|trans }}</span>
+        </a>
+        {% endif %}
+
+        {# ══ RAPPORTS ══ #}
+        <div class="nav-sec">{{ 'sidebar.rapports_section'|trans }}</div>
+        <a class="nav-item {{ app.current_route starts with 'app_rapport' ? 'active' : '' }}"
+           href="{{ path('app_rapports') }}">
+            <i class="bi bi-file-earmark-bar-graph"></i><span>{{ 'sidebar.rapports'|trans }}</span>
+        </a>
+
+        {# ══ ADMINISTRATION ══ #}
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="nav-sec">{{ 'sidebar.administration'|trans }}</div>
+
+        <a class="nav-item {{ app.current_route starts with 'app_association_index' ? 'active' : '' }}"
+           href="{{ path('app_association_index') }}">
+            <i class="bi bi-building g-ico"></i><span>{{ 'sidebar.associations'|trans }}</span>
+        </a>
+        <a class="nav-item {{ app.current_route starts with 'app_utilisateur' ? 'active' : '' }}"
+           href="{{ path('app_utilisateurs') }}">
+            <i class="bi bi-person-gear"></i><span>{{ 'sidebar.utilisateurs'|trans }}</span>
+        </a>
+        <a class="nav-item {{ app.current_route starts with 'app_audit' ? 'active' : '' }}"
+           href="{{ path('app_audit') }}">
+            <i class="bi bi-shield-check"></i><span>{{ 'sidebar.audit'|trans }}</span>
+        </a>
+        <a class="nav-item {{ app.current_route starts with 'app_parametre' ? 'active' : '' }}"
+           href="{{ path('app_parametres') }}">
+            <i class="bi bi-gear"></i><span>{{ 'sidebar.parametres'|trans }}</span>
+        </a>
+        {% endif %}
+
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-card">
+            {% if app.user.hasPhoto %}
+                <img src="{{ asset(app.user.photoPath) }}" alt="" class="header-user__avatar">
+            {% else %}
+                <div class="header-user__initials" style="background:{{ app.user.posteCouleur }}">
+                    {{ app.user.initials }}
+                </div>
+            {% endif %}
+            <div class="user-info">
+                <div class="name">{{ app.user.fullName }}</div>
+                <div class="role">{{ app.user.posteLabel }}</div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+
+<script>
+function sbToggle(btn) {
+    var sub = btn.nextElementSibling;
+    if (!sub) return;
+    var open = sub.classList.toggle('open');
+    btn.classList.toggle('open', open);
+}
+
+/* ── Toggle sidebar mobile (menu hamburger) ── */
+(function() {
+    var toggle   = document.getElementById('menuToggle');
+    var sidebar  = document.getElementById('sidebar');
+    var backdrop = document.getElementById('sidebarBackdrop');
+
+    if (!toggle || !sidebar) return;
+
+    function openSidebar() {
+        sidebar.classList.add('show');
+        if (backdrop) backdrop.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        if (backdrop) backdrop.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', function() {
+        sidebar.classList.contains('show') ? closeSidebar() : openSidebar();
+    });
+
+    if (backdrop) {
+        backdrop.addEventListener('click', closeSidebar);
+    }
+
+    /* Fermer avec Escape */
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('show')) closeSidebar();
+    });
+
+    /* Fermer après navigation (clic sur un lien dans la sidebar) */
+    sidebar.querySelectorAll('a.nav-item, a.nav-sub-item, a.nav-sub-all').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) closeSidebar();
+        });
+    });
+})();
+</script>

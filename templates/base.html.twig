@@ -1,0 +1,710 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|default('ar') }}" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ADB{% endblock %}</title>
+
+    {# === FONTS === #}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700&family=Playfair+Display:wght@600;700&family=Noto+Kufi+Arabic:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {# === CSS === #}
+    <link href="{{ asset('css/sigaf.css') }}" rel="stylesheet">
+
+    {# === DATATABLES CSS === #}
+    <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
+
+    {# === DATATABLES + TABLE SIGAF DESIGN === #}
+    <style>
+    /* ============================================
+       SIGAF TABLE DESIGN
+       ============================================ */
+
+    /* --- Reset DataTables defaults --- */
+    .dataTables_wrapper { padding: 0; font-family: inherit; }
+    table.dataTable { border-collapse: collapse !important; }
+
+    /* --- Table container --- */
+    .panel-body.np .dataTables_wrapper {
+        padding: 16px 20px;
+    }
+
+    /* --- Header row --- */
+    table.dataTable thead th {
+        background: linear-gradient(135deg, #14532D 0%, #166534 100%);
+        color: #fff;
+        font-weight: 600;
+        font-size: .8rem;
+        letter-spacing: .02em;
+        text-transform: uppercase;
+        padding: 12px 16px;
+        border: none !important;
+        white-space: nowrap;
+    }
+    table.dataTable thead th:first-child {
+        border-radius: 10px 0 0 0;
+    }
+    table.dataTable thead th:last-child {
+        border-radius: 0 10px 0 0;
+    }
+    html[dir="rtl"] table.dataTable thead th:first-child {
+        border-radius: 0 10px 0 0;
+    }
+    html[dir="rtl"] table.dataTable thead th:last-child {
+        border-radius: 10px 0 0 0;
+    }
+
+    /* --- Sorting icons --- */
+    table.dataTable thead th.sorting::before,
+    table.dataTable thead th.sorting::after,
+    table.dataTable thead th.sorting_asc::before,
+    table.dataTable thead th.sorting_asc::after,
+    table.dataTable thead th.sorting_desc::before,
+    table.dataTable thead th.sorting_desc::after {
+        opacity: .4;
+    }
+    table.dataTable thead th.sorting_asc::after,
+    table.dataTable thead th.sorting_desc::after {
+        opacity: 1;
+    }
+
+    /* --- Body rows --- */
+    table.dataTable tbody td {
+        padding: 12px 16px;
+        font-size: .84rem;
+        color: var(--t1, #1e293b);
+        border-bottom: 1px solid var(--brd, #f1f5f9);
+        vertical-align: middle;
+    }
+    table.dataTable tbody tr {
+        transition: background .15s;
+    }
+    table.dataTable tbody tr:hover {
+        background: rgba(20, 83, 45, .03) !important;
+    }
+    table.dataTable tbody tr:nth-child(even) {
+        background: rgba(248, 250, 252, .5);
+    }
+    table.dataTable tbody tr.selected {
+        background: rgba(20, 83, 45, .06) !important;
+    }
+
+    /* --- Search input --- */
+    .dataTables_wrapper .dataTables_filter input {
+        border: 1.5px solid var(--brd, #e2e8f0);
+        border-radius: 10px;
+        padding: 8px 16px 8px 36px;
+        font-size: .84rem;
+        font-family: inherit;
+        background: var(--bg, #fff) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center;
+        min-width: 220px;
+        transition: all .2s;
+    }
+    html[dir="rtl"] .dataTables_wrapper .dataTables_filter input {
+        padding: 8px 36px 8px 16px;
+        background-position: right 12px center;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: var(--ac, #14532D);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(20, 83, 45, .08);
+    }
+    .dataTables_wrapper .dataTables_filter label {
+        font-size: 0;
+    }
+
+    /* --- Length selector --- */
+    .dataTables_wrapper .dataTables_length select {
+        border: 1.5px solid var(--brd, #e2e8f0);
+        border-radius: 10px;
+        padding: 7px 32px 7px 12px;
+        font-size: .84rem;
+        font-family: inherit;
+        background: var(--bg, #fff);
+        cursor: pointer;
+        transition: border-color .2s;
+    }
+    .dataTables_wrapper .dataTables_length select:focus {
+        border-color: var(--ac, #14532D);
+        outline: none;
+    }
+    .dataTables_wrapper .dataTables_length label {
+        font-size: .82rem;
+        color: var(--t3, #94a3b8);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* --- Info text --- */
+    .dataTables_wrapper .dataTables_info {
+        font-size: .8rem;
+        color: var(--t3, #94a3b8);
+        padding-top: 16px;
+    }
+
+    /* --- Pagination --- */
+    .dataTables_wrapper .dataTables_paginate {
+        padding-top: 16px;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 6px 12px !important;
+        margin: 0 2px !important;
+        font-size: .82rem !important;
+        font-family: inherit !important;
+        color: var(--t2, #475569) !important;
+        background: transparent !important;
+        transition: all .15s;
+        min-width: 34px;
+        text-align: center;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled) {
+        background: var(--ac, #14532D) !important;
+        color: #fff !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background: var(--ac, #14532D) !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(20, 83, 45, .2);
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+        opacity: .35;
+        cursor: default;
+    }
+
+    /* --- Export buttons --- */
+    .dt-buttons {
+        display: flex;
+        gap: 6px;
+    }
+    .dt-buttons .dt-button {
+        border: 1.5px solid var(--brd, #e2e8f0) !important;
+        border-radius: 10px !important;
+        padding: 7px 14px !important;
+        font-size: .8rem !important;
+        font-family: inherit !important;
+        color: var(--t2, #475569) !important;
+        background: var(--bg, #fff) !important;
+        transition: all .2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .dt-buttons .dt-button:hover {
+        background: var(--ac, #14532D) !important;
+        color: #fff !important;
+        border-color: var(--ac, #14532D) !important;
+        box-shadow: 0 2px 8px rgba(20, 83, 45, .15);
+    }
+    .dt-buttons .dt-button i { font-size: .9rem; }
+
+    /* --- Top bar layout --- */
+    .dt-top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    /* --- Empty state --- */
+    table.dataTable .dataTables_empty {
+        padding: 40px 16px;
+        text-align: center;
+        color: var(--t3, #94a3b8);
+        font-size: .9rem;
+    }
+
+    /* --- RTL support --- */
+    html[dir="rtl"] .dataTables_wrapper .dataTables_filter { float: left; text-align: left; }
+    html[dir="rtl"] .dataTables_wrapper .dataTables_length { float: right; }
+    html[dir="rtl"] .dataTables_wrapper .dataTables_info { float: right; text-align: right; }
+    html[dir="rtl"] .dataTables_wrapper .dataTables_paginate { float: left; }
+    html[dir="rtl"] .dt-buttons { flex-direction: row-reverse; }
+    html[dir="rtl"] table.dataTable thead th,
+    html[dir="rtl"] table.dataTable tbody td {
+        text-align: right;
+    }
+
+    /* --- Responsive child rows --- */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+        background-color: var(--ac, #14532D) !important;
+        border: none;
+        border-radius: 50%;
+        box-shadow: 0 1px 4px rgba(0,0,0,.15);
+    }
+
+    /* --- Print hide --- */
+    @media print {
+        .dt-buttons, .dataTables_filter, .dataTables_length,
+        .dataTables_paginate, .dataTables_info, .btn-i, .sidebar,
+        .top-header, .page-title-row button { display: none !important; }
+    }
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+
+    <style>
+    /* ── Police arabe globale + logo body ── */
+
+    /* Variable police arabe display */
+    :root {
+      --font-ar-display: 'Noto Kufi Arabic', 'Noto Sans Arabic', sans-serif;
+    }
+
+    /* Appliquer la police arabe sur tout le document quand locale = ar (dir=rtl) */
+    html[dir="rtl"] body,
+    html[dir="rtl"] body * {
+      font-family: var(--font-ar-display) !important;
+    }
+    /* Exception : icônes Bootstrap Icons ne doivent jamais être remplacées */
+    html[dir="rtl"] .bi,
+    html[dir="rtl"] [class^="bi-"],
+    html[dir="rtl"] [class*=" bi-"] {
+      font-family: 'bootstrap-icons' !important;
+    }
+
+    /* Logo ADB-MR en filigrane — sur html pour ne jamais interférer avec le layout */
+    html {
+      background-image: url("{{ asset('img/logo.png') }}");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: 380px auto;
+    }
+    /* Masque du body par-dessus pour contrôler l'opacité du filigrane */
+    body {
+      background-color: rgba(245, 240, 232, 0.97);
+    }
+
+    /* ════════════════════════════════════════
+       FLASH MESSAGES — Modal agréable
+    ════════════════════════════════════════ */
+    .flash-mo {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      background: rgba(15, 40, 15, .32);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      animation: fBgIn .25s ease both;
+    }
+    @keyframes fBgIn { from { opacity: 0 } to { opacity: 1 } }
+
+    .flash-md {
+      background: #fff; border-radius: 22px;
+      box-shadow: 0 28px 80px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.05);
+      max-width: 420px; width: 100%; overflow: hidden;
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 24px 20px 20px 24px;
+      border-top: 4px solid var(--fc);
+      animation: fMdIn .3s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes fMdIn {
+      from { transform: translateY(20px) scale(.96); opacity: 0 }
+      to   { transform: none; opacity: 1 }
+    }
+
+    .flash-ico-wrap { position: relative; flex-shrink: 0; width: 48px; height: 48px }
+    .flash-ico {
+      width: 48px; height: 48px; border-radius: 13px;
+      background: var(--fbg); color: var(--fc);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; position: relative; z-index: 1;
+    }
+    .flash-ico-ring {
+      position: absolute; inset: -5px; border-radius: 18px;
+      border: 2px solid var(--fc); opacity: .15;
+      animation: fRing 2s ease-in-out infinite;
+    }
+    @keyframes fRing {
+      0%,100% { transform: scale(1); opacity: .15 }
+      50%      { transform: scale(1.1); opacity: .05 }
+    }
+
+    .flash-body { flex: 1; min-width: 0; padding-top: 2px }
+    .flash-title {
+      font-size: .68rem; font-weight: 900; color: var(--fc);
+      text-transform: uppercase; letter-spacing: .1em; margin-bottom: 5px;
+    }
+    .flash-msg { font-size: .91rem; color: #1B2A1B; line-height: 1.5; font-weight: 500 }
+
+    .flash-cls {
+      width: 30px; height: 30px; border-radius: 8px; border: none;
+      background: #f3f4f6; color: #9ca3af; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; transition: .15s; margin-top: -2px;
+    }
+    .flash-cls:hover { background: #fee2e2; color: #dc2626 }
+
+    .flash-prog { height: 3px; background: rgba(0,0,0,.07) }
+    .flash-prog-bar {
+      height: 100%; background: var(--fc);
+      animation: fProg 4.5s linear forwards;
+    }
+    @keyframes fProg { from { width: 100% } to { width: 0 } }
+
+    .flash-mo.out { animation: fBgOut .2s ease forwards }
+    @keyframes fBgOut { to { opacity: 0 } }
+    .flash-mo.out .flash-md { animation: fMdOut .2s ease forwards }
+    @keyframes fMdOut { to { transform: scale(.94) translateY(10px); opacity: 0 } }
+
+    /* RTL */
+    html[dir="rtl"] .flash-md { padding: 24px 24px 20px 20px; flex-direction: row-reverse; text-align: right }
+    html[dir="rtl"] .flash-prog-bar { margin-left: auto }
+    </style>
+</head>
+<body>
+
+    {# === SIDEBAR BACKDROP (mobile) === #}
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    {# === SIDEBAR MENU === #}
+    {% include 'layout/_sidebar.html.twig' %}
+
+    {# === MAIN CONTENT === #}
+    <div class="main-wrapper" id="mainWrapper">
+
+        {# === TOP HEADER === #}
+        {% include 'layout/_header.html.twig' %}
+
+        {# === CONTENT AREA === #}
+        <div class="content-area">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+
+    {# === MODALS === #}
+    {% block modals %}{% endblock %}
+
+    {# === TOAST CONTAINER === #}
+    <div class="toast-container" id="toastContainer"></div>
+
+    {# === FLASH MESSAGES === #}
+    {% set ftypes = {
+        'success': {i:'bi-check-circle-fill', c:'#2E7D32', bg:'rgba(46,125,50,.09)',  fr:'Succès',      ar:'تم بنجاح',  en:'Success'    },
+        'error':   {i:'bi-x-circle-fill',     c:'#D32F2F', bg:'rgba(211,47,47,.08)',  fr:'Erreur',      ar:'خطأ',       en:'Error'      },
+        'danger':  {i:'bi-x-circle-fill',     c:'#D32F2F', bg:'rgba(211,47,47,.08)',  fr:'Erreur',      ar:'خطأ',       en:'Error'      },
+        'warning': {i:'bi-exclamation-triangle-fill', c:'#D4A017', bg:'rgba(212,160,23,.09)', fr:'Attention', ar:'تنبيه', en:'Warning' },
+        'info':    {i:'bi-info-circle-fill',   c:'#0288D1', bg:'rgba(2,136,209,.08)', fr:'Information', ar:'معلومة',    en:'Info'       }
+    } %}
+    {% set loc = app.request.locale %}
+    {% for type, msgs in app.flashes(['success','error','danger','warning','info']) %}
+      {% set ft = ftypes[type] ?? ftypes['info'] %}
+      {% set title = loc == 'ar' ? ft.ar : (loc == 'en' ? ft.en : ft.fr) %}
+      {% for msg in msgs %}
+      <div class="flash-mo" style="--fc:{{ ft.c }};--fbg:{{ ft.bg }}">
+        <div class="flash-md">
+          <div class="flash-ico-wrap">
+            <div class="flash-ico"><i class="bi {{ ft.i }}"></i></div>
+            <div class="flash-ico-ring"></div>
+          </div>
+          <div class="flash-body">
+            <div class="flash-title">{{ title }}</div>
+            <div class="flash-msg">{{ msg }}</div>
+          </div>
+          <button class="flash-cls" onclick="fClose(this.closest('.flash-mo'))">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="flash-prog"><div class="flash-prog-bar"></div></div>
+      </div>
+      {% endfor %}
+    {% endfor %}
+
+    <script>
+    function fClose(mo) {
+      if (!mo || mo.classList.contains('out')) return;
+      mo.classList.add('out');
+      setTimeout(function() { mo.remove(); }, 210);
+    }
+    document.querySelectorAll('.flash-mo').forEach(function(mo, i) {
+      setTimeout(function() { fClose(mo); }, 4800 + i * 250);
+      mo.addEventListener('click', function(e) { if (e.target === mo) fClose(mo); });
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') document.querySelectorAll('.flash-mo').forEach(fClose);
+    });
+    </script>
+
+    {# === JS === #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/sigaf.js') }}"></script>
+
+    {# === DATATABLES JS === #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    {# === DATATABLES INIT === #}
+    <script>
+    $(document).ready(function() {
+
+        var locale = document.documentElement.lang || 'fr';
+        var isRtl  = document.documentElement.dir === 'rtl';
+
+        // --- Traductions ---
+        var langMap = {
+            fr: {
+                search: "", lengthMenu: "Afficher _MENU_",
+                info: "_START_ - _END_ sur _TOTAL_",
+                infoEmpty: "Aucun enregistrement", infoFiltered: "(sur _MAX_ total)",
+                zeroRecords: "Aucun resultat",
+                paginate: { first: "<<", previous: "<", next: ">", last: ">>" },
+                buttons: { excel: "Excel", pdf: "PDF", print: "Imprimer" }
+            },
+            ar: {
+                search: "", lengthMenu: "_MENU_ عرض",
+                info: "_START_ - _END_ من _TOTAL_",
+                infoEmpty: "لا توجد سجلات", infoFiltered: "(من _MAX_ إجمالي)",
+                zeroRecords: "لم يتم العثور على نتائج",
+                paginate: { first: ">>", previous: ">", next: "<", last: "<<" },
+                buttons: { excel: "Excel", pdf: "PDF", print: "طباعة" }
+            },
+            en: {
+                search: "", lengthMenu: "Show _MENU_",
+                info: "_START_ - _END_ of _TOTAL_",
+                infoEmpty: "No records", infoFiltered: "(from _MAX_ total)",
+                zeroRecords: "No results found",
+                paginate: { first: "<<", previous: "<", next: ">", last: ">>" },
+                buttons: { excel: "Excel", pdf: "PDF", print: "Print" }
+            }
+        };
+        var lang = langMap[locale] || langMap['fr'];
+
+        // --- Fonction PDF avec support arabe complet ---
+        function exportPdf(dt) {
+            // Collecter les donnees du tableau (texte pur, pas le HTML)
+            var headers = [];
+            dt.columns().header().each(function(th) {
+                headers.push($(th).text().trim());
+            });
+
+            var rows = [];
+            dt.rows({ search: 'applied' }).every(function() {
+                var row = [];
+                $(this.node()).find('td').each(function() {
+                    // Prendre le texte pur, ignorer les boutons/icones
+                    var $td = $(this).clone();
+                    $td.find('button, .btn-i, form, .bi').remove();
+                    row.push($td.text().trim());
+                });
+                rows.push(row);
+            });
+
+            // Construire le HTML du PDF
+            var title = document.title.replace(' — SIGAF', '') || 'SIGAF';
+            var date = new Date().toLocaleDateString(locale === 'ar' ? 'ar-MR' : locale === 'en' ? 'en-US' : 'fr-FR');
+            var dir = isRtl ? 'rtl' : 'ltr';
+            var align = isRtl ? 'right' : 'left';
+
+            // Logo ADB-MR en base64 via canvas (évite les restrictions CORS)
+            var logoSrc = '';
+            try {
+                var imgEl = document.querySelector('img[src*="logo"]') ||
+                            document.querySelector('.ph-logo img') ||
+                            document.querySelector('.sidebar-brand img');
+                if (imgEl && imgEl.complete) {
+                    var cv = document.createElement('canvas');
+                    cv.width = imgEl.naturalWidth; cv.height = imgEl.naturalHeight;
+                    cv.getContext('2d').drawImage(imgEl, 0, 0);
+                    logoSrc = cv.toDataURL('image/png');
+                }
+            } catch(e) {}
+            // Fallback : URL absolue (fonctionne si même origine)
+            if (!logoSrc) logoSrc = window.location.origin + '/img/logo.png';
+
+            // Drapeau mauritanien SVG inline (vert + croissant + étoile)
+            var flagSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="54" height="36" style="border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.15);flex-shrink:0">'
+                + '<rect width="3" height="2" fill="#006233"/>'
+                + '<rect width="3" height=".25" fill="#FFD700"/>'
+                + '<rect y="1.75" width="3" height=".25" fill="#FFD700"/>'
+                + '<g transform="translate(1.5,1) scale(.55)" fill="#FFD700">'
+                + '<path d="M0,-1 A1,1 0 1,0 .001,-1 Z M0,-.55 A.45,.45 0 1,1 .001,-.55 Z"/>'
+                + '<polygon points="0,-.28 .07,.1 -.18,-.16 .18,-.16 -.07,.1" transform="translate(0,.08)"/>'
+                + '</g>'
+                + '</svg>';
+
+            var html = '<!DOCTYPE html><html lang="' + locale + '" dir="' + dir + '"><head>';
+            html += '<meta charset="UTF-8">';
+            html += '<title>' + title + '</title>';
+            html += '<style>';
+            html += '@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap");';
+            html += '* { margin:0; padding:0; box-sizing:border-box; }';
+            html += 'body { font-family:"DM Sans","Noto Sans Arabic",sans-serif; padding:28px 30px; direction:' + dir + '; color:#1e293b; }';
+
+            // ── En-tête ──────────────────────────────────────────────────
+            html += '.pdf-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:14px; border-bottom:3px solid #14532D; gap:16px; }';
+            html += '.pdf-header-left { display:flex; align-items:center; gap:12px; }';
+            html += '.pdf-logo { width:48px; height:48px; object-fit:contain; }';
+            html += '.pdf-brand { display:flex; flex-direction:column; gap:2px; }';
+            html += '.pdf-brand-name { font-size:18px; font-weight:700; color:#14532D; letter-spacing:-.02em; }';
+            html += '.pdf-brand-name span { color:#166534; }';
+            html += '.pdf-brand-sub { font-size:9px; color:#64748b; text-transform:uppercase; letter-spacing:.08em; }';
+            html += '.pdf-title-block { text-align:center; flex:1; }';
+            html += '.pdf-title-block h1 { font-size:15px; font-weight:700; color:#1e293b; }';
+            html += '.pdf-title-block .pdf-date { font-size:10px; color:#94a3b8; margin-top:3px; }';
+            html += '.pdf-header-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; }';
+            html += '.pdf-meta { font-size:10px; color:#64748b; text-align:' + (isRtl ? 'left' : 'right') + '; }';
+            html += '.pdf-meta div { margin-bottom:2px; }';
+            html += '.pdf-flag-wrap { display:flex; align-items:center; gap:6px; }';
+            html += '.pdf-country { font-size:9px; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }';
+
+            // ── Table ────────────────────────────────────────────────────
+            html += 'table { width:100%; border-collapse:collapse; margin-top:6px; font-size:11px; }';
+            html += 'thead th { background:#14532D; color:#fff; padding:10px 12px; text-align:' + align + '; font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:.03em; }';
+            html += 'thead th:first-child { border-radius:' + (isRtl ? '0 8px 0 0' : '8px 0 0 0') + '; }';
+            html += 'thead th:last-child  { border-radius:' + (isRtl ? '8px 0 0 0' : '0 8px 0 0') + '; }';
+            html += 'tbody td { padding:8px 12px; border-bottom:1px solid #e2e8f0; text-align:' + align + '; }';
+            html += 'tbody tr:nth-child(even) { background:#f8fafc; }';
+
+            // ── Footer ───────────────────────────────────────────────────
+            html += '.pdf-footer { margin-top:18px; padding-top:10px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:9px; color:#94a3b8; }';
+            html += '@media print { body { padding:15px; } @page { margin:10mm; size:landscape; } }';
+            html += '</style></head><body>';
+
+            // ── Header HTML ──────────────────────────────────────────────
+            html += '<div class="pdf-header">';
+
+            // Gauche : logo + nom
+            html += '<div class="pdf-header-left">';
+            html += '<img class="pdf-logo" src="' + logoSrc + '" alt="ADB-MR" onerror="this.style.display=\'none\'">';
+            html += '<div class="pdf-brand">';
+            html += '<div class="pdf-brand-name"><span>ADB</span>-MR</div>';
+            html += '<div class="pdf-brand-sub">' + (locale === 'ar' ? 'الجمعية الخيرية لبنك التنمية' : 'Association pour le Développement') + '</div>';
+            html += '</div>';
+            html += '</div>';
+
+            // Centre : titre du document
+            html += '<div class="pdf-title-block">';
+            html += '<h1>' + title + '</h1>';
+            html += '<div class="pdf-date">' + date + ' &nbsp;·&nbsp; ' + rows.length + (locale === 'ar' ? ' سجل' : locale === 'en' ? ' records' : ' enregistrement(s)') + '</div>';
+            html += '</div>';
+
+            // Droite : drapeau + pays
+            html += '<div class="pdf-header-right">';
+            html += '<div class="pdf-flag-wrap">' + flagSvg;
+            html += '<div class="pdf-country">' + (locale === 'ar' ? 'موريتانيا' : 'Mauritanie') + '</div>';
+            html += '</div>';
+            html += '<div class="pdf-meta"><div>SIGAF v2.0</div><div>adb-mr.org</div></div>';
+            html += '</div>';
+
+            html += '</div>'; // .pdf-header
+
+            // Table
+            html += '<table><thead><tr>';
+            headers.forEach(function(h) { html += '<th>' + h + '</th>'; });
+            html += '</tr></thead><tbody>';
+            rows.forEach(function(row) {
+                html += '<tr>';
+                row.forEach(function(cell) { html += '<td>' + cell + '</td>'; });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+
+            // Footer
+            html += '<div class="pdf-footer">';
+            html += '<span>SIGAF — ' + (locale === 'ar' ? 'النظام المتكامل للتسيير الإداري والمالي' : locale === 'en' ? 'Integrated Administrative & Financial Management System' : 'Système Intégré de Gestion Administrative & Financière') + '</span>';
+            html += '<span>' + (locale === 'ar' ? 'طُبع في : ' : locale === 'en' ? 'Printed: ' : 'Imprimé le : ') + date + '</span>';
+            html += '</div>';
+
+            html += '</body></html>';
+
+            // Ouvrir et imprimer
+            var win = window.open('', '_blank', 'width=1100,height=700');
+            win.document.write(html);
+            win.document.close();
+            // Attendre les polices Google Fonts
+            setTimeout(function() { win.print(); }, 1200);
+        }
+
+        // --- Initialiser chaque .dtable ---
+        $('table.dtable').each(function() {
+            var $table = $(this);
+
+            var pageLength   = parseInt($table.data('page-length')) || 10;
+            var orderCol     = parseInt($table.data('order-column')) || 0;
+            var orderDir     = $table.data('order-dir') || 'asc';
+            var noSearch     = $table.data('no-search') === true;
+            var noExport     = $table.data('no-export') === true;
+            var noPagination = $table.data('no-pagination') === true;
+            var noSortCols   = $table.data('no-sort');
+
+            var columnDefs = [];
+            if (noSortCols !== undefined) {
+                var cols = String(noSortCols).split(',').map(function(c) { return parseInt(c.trim()); });
+                columnDefs.push({ orderable: false, targets: cols });
+            }
+
+            var buttons = [];
+            if (!noExport) {
+                buttons = [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="bi bi-file-earmark-spreadsheet"></i> Excel',
+                        className: 'dt-button',
+                        exportOptions: { columns: ':not(:last-child)' }
+                    },
+                    {
+                        text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                        className: 'dt-button',
+                        action: function(e, dt) { exportPdf(dt); }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bi bi-printer"></i> ' + lang.buttons.print,
+                        className: 'dt-button',
+                        exportOptions: { columns: ':not(:last-child)' },
+                        customize: function(win) {
+                            $(win.document.body).css({
+                                'font-family': '"DM Sans","Noto Sans Arabic","Noto Kufi Arabic",sans-serif',
+                                'direction': isRtl ? 'rtl' : 'ltr',
+                                'padding': '20px'
+                            });
+                            $(win.document.body).find('h1').css({ 'color': '#14532D', 'font-size': '18px', 'margin-bottom': '16px' });
+                            $(win.document.body).find('table th').css({ 'background': '#14532D', 'color': '#fff', 'padding': '10px', 'text-align': isRtl ? 'right' : 'left' });
+                            $(win.document.body).find('table td').css({ 'padding': '8px 10px', 'border-bottom': '1px solid #e2e8f0', 'text-align': isRtl ? 'right' : 'left' });
+                        }
+                    }
+                ];
+            }
+
+            $table.DataTable({
+                language: lang,
+                pageLength: pageLength,
+                order: [[orderCol, orderDir]],
+                searching: !noSearch,
+                paging: !noPagination,
+                responsive: true,
+                columnDefs: columnDefs,
+                dom: noExport
+                    ? '<"dt-top-bar"lf>rtip'
+                    : '<"dt-top-bar"lBf>rtip',
+                buttons: buttons
+            });
+        });
+    });
+    </script>
+
+    {% block javascripts %}{% endblock %}
+
+</body>
+</html>

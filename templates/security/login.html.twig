@@ -1,0 +1,56 @@
+{# templates/security/login.html.twig #}
+{% extends 'login.html.twig' %}
+
+{% block body %}
+    {# ═══ ERREUR ═══ #}
+    {% if error %}
+    <div class="login-error">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+    </div>
+    {% endif %}
+
+    {# ═══ FORMULAIRE ═══ #}
+    <form method="post" id="loginForm">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="field-group">
+            <label><i class="bi bi-envelope"></i>{{ 'login.email_label'|trans }}</label>
+            <div class="input-wrap">
+                <input type="email" name="_username" id="inputEmail" value="{{ last_username }}" placeholder="{{ 'login.email_placeholder'|trans }}" required autocomplete="email" autofocus>
+                <i class="bi bi-envelope input-icon"></i>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label><i class="bi bi-lock"></i>{{ 'login.password_label'|trans }}</label>
+            <div class="input-wrap">
+                <input type="password" name="_password" id="inputPassword" placeholder="{{ 'login.password_placeholder'|trans }}" required autocomplete="current-password">
+                <i class="bi bi-lock input-icon"></i>
+                <button type="button" class="toggle-pw" onclick="togglePassword()"><i class="bi bi-eye" id="eyeIcon"></i></button>
+            </div>
+        </div>
+
+        <div class="form-extras">
+            <label class="remember-check">
+                <input type="checkbox" name="_remember_me">
+                <span class="check-box"><i class="bi bi-check2"></i></span>
+                {{ 'login.remember_me'|trans }}
+            </label>
+            <a href="#" class="forgot-link">{{ 'login.forgot_password'|trans }}</a>
+        </div>
+
+        <button type="submit" class="btn-login" id="btnLogin">
+            <span class="btn-text">{{ 'login.submit'|trans }}</span>
+            <i class="bi bi-arrow-right btn-text"></i>
+            <div class="spinner"></div>
+        </button>
+    </form>
+
+    {# ═══ POSTES ═══ #}
+   
+{% endblock %}
+
+{% block extra_js %}
+    document.getElementById('loginForm').addEventListener('submit',function(){document.getElementById('btnLogin').classList.add('loading')});
+{% endblock %}

@@ -1,0 +1,742 @@
+login:
+  title: Connexion — ADB-MR
+  greeting: Bienvenue sur ADB-MR
+  subtitle: Connectez-vous avec votre compte poste
+  email_label: Adresse email
+  email_placeholder: votre@email.mr
+  password_label: Mot de passe
+  password_placeholder: ••••••••
+  remember_me: Se souvenir de moi
+  forgot_password: Mot de passe oublié ?
+  submit: Se connecter
+  postes_title: Postes de l'association
+  lang_divider: Langue / اللغة / Language
+  footer_version: ADB-MR v1.0 — Système Intégré de Gestion
+  footer_copyright: © 2026 Association Développement et Bien Faisance
+left:
+  association_name_ar: جمعية التنمية
+  association_highlight_ar: العمل الخيري
+  association_name_fr: Association Développement et Bien Faisance
+  association_subtitle: Système Intégré de Gestion Administrative & Financière
+  badge_secure: Sécurisé
+  badge_audit: Audit complet
+  badge_multilang: Multilingue
+poste:
+  admin: Admin
+  admin_desc: Accès total
+  dir_projets: directeur projets
+  dir_projets_desc: Gestion & validation projets
+  emp_projets: Employé Projets
+  emp_projets_desc: Saisie projets
+  dir_parrainages: Directeur Parrainages
+  dir_parrainages_desc: Gestion & validation parrainages
+  emp_parrainages: Employé Parrainages
+  emp_parrainages_desc: Saisie parrainages
+  comptable: Comptable
+  comptable_desc: Caisse & finances
+app:
+  name: ADB-MR
+  full_name: Système Intégré de Gestion Administrative & Financière
+sidebar:
+  principal: Principal
+  dashboard: Tableau de bord
+  projets: Projets
+  gestion_projets: Gestion Projets
+  validation_projets: Validation Projets
+  parrainages: Parrainages
+  gestion_parrainages: Gestion Parrainages
+  validation_parrainages: Validation Parrainages
+  finance: Finance
+  caisse: Caisse
+  rapports_section: Rapports
+  rapports: Rapports
+  administration: Administration
+  audit: Journal d'audit
+  utilisateurs: Utilisateurs
+  parametres: Paramètres
+  associations: Associations
+  voir_tous: "Voir toutes les associations"
+  voir_toutes: "Toutes les associations"
+  aucune_assoc: "Aucune association"
+header:
+  search_placeholder: Rechercher un bénéficiaire, projet, opération…
+  export: Exporter
+  notifications: Notifications
+  profile: Mon profil
+  settings: Paramètres
+  logout: Déconnexion
+dashboard:
+  title: Tableau de bord
+  welcome: Bienvenue
+  total_beneficiaires: Total Bénéficiaires
+  projets_actifs: Projets Actifs
+  solde_caisse: Solde Caisse
+  rapports_pending: Rapports en attente
+  activite_recente: Activité récente
+  depenses_mensuelles: Dépenses mensuelles
+action:
+  save: Enregistrer
+  cancel: Annuler
+  edit: Modifier
+  delete: Supprimer
+  validate: Valider
+  reject: Rejeter
+  export: Exporter
+  search: Rechercher
+  new: Nouveau
+  back: Retour
+  print: Imprimer
+  confirm: Confirmer
+  close: Fermer
+  'true': Oui
+  'false': Non
+  loading: Chargement...
+  no_data: Aucune donnée
+flash:
+  numero_required: Numéro de projet obligatoire.
+  numero_exists: Ce numéro de projet existe déjà. Choisissez un autre.
+  assoc_created: ✓ Association « %nom% » créée avec succès.
+  assoc_deleted: ✓ Association « %nom% » supprimée.
+  assoc_has_projects: 'Impossible de supprimer : %count% projet(s) lié(s). Déliez-les d''abord.'
+  assoc_not_found: Association introuvable.
+  assoc_updated: ✓ Association « %nom% » mise à jour.
+  csrf_invalid: Jeton de sécurité invalide. Réessayez.
+  deleted: Élément supprimé
+  error: Une erreur est survenue
+  fichier_added: ✓ Fichier « %nom% » ajouté.
+  fichier_deleted: ✓ Fichier supprimé.
+  invalid_url: URL invalide. Utilisez un lien YouTube valide.
+  logo_invalid_type: Format de logo non autorisé (PNG, JPG, SVG, WEBP).
+  logo_too_large: Le logo dépasse 2 Mo.
+  logo_upload_failed: Échec de l'envoi du logo.
+  no_file: Aucun fichier sélectionné.
+  not_found: Élément introuvable.
+  paiement_added: ✓ Paiement de %montant% MRU enregistré.
+  paiement_deleted: ✓ Paiement supprimé.
+  paiement_invalid_amount: Montant invalide (doit être supérieur à 0).
+  photo_deleted: ✓ Photo supprimée.
+  photos_added: ✓ %count% photo(s) ajoutée(s) sur %total% sélectionnée(s).
+  photos_added_one: ✓ 1 photo ajoutée.
+  photos_limit_reached: 'Limite atteinte : le projet ne peut pas dépasser 20 photos.'
+  photos_none_valid: Aucun fichier image valide sélectionné.
+  photos_partial: ⚠ %added% photo(s) ajoutée(s) — limite de 20 atteinte (%skipped% ignorée(s)).
+  projet_created: ✓ Projet « %nom% » créé avec succès.
+  projet_deleted: ✓ Projet « %nom% » supprimé.
+  projet_updated: ✓ Projet « %nom% » mis à jour.
+  rejected: Rejeté
+  saved: Enregistré avec succès
+  statut_updated: ✓ Statut et progression mis à jour.
+  success: Opération réussie
+  validated: Validé avec succès
+  video_added: ✓ Vidéo ajoutée.
+  video_deleted: ✓ Vidéo supprimée.
+  warning: Attention
+  paiement_depasse_budget: Montant demandé (%montant% MRU) dépasse le budget restant (%restant% MRU).
+common:
+  back: Retour
+  print: Imprimer
+  cancel: Annuler
+  close: Fermer
+  edit: Modifier
+  view: Voir
+  delete: Supprimer
+  save: Enregistrer
+  'true': Oui
+  'false': Non
+utilisateurs:
+  title: Utilisateurs
+  subtitle: '%total% utilisateurs · %actifs% actifs'
+  btn_new: Nouvel utilisateur
+  list_title: Liste des utilisateurs
+  total: total
+  col_user: Utilisateur
+  col_email: Email
+  col_poste: Poste
+  col_phone: Téléphone
+  col_status: Statut
+  col_last_login: Dernière connexion
+  col_actions: Actions
+  active: Actif
+  inactive: Inactif
+  never: Jamais
+  confirm_toggle: Changer le statut de cet utilisateur ?
+  confirm_reset: Réinitialiser le mot de passe ?
+  deactivate: Désactiver
+  activate: Activer
+  reset_pwd: Réinitialiser MDP
+  modal_new_title: Nouvel utilisateur
+  modal_new_subtitle: Créer un nouveau compte
+  modal_edit_title: Modifier
+  modal_edit_subtitle: Mot de passe optionnel
+  choose_photo: Choisir photo
+  change_photo: Changer
+  remove_photo: Supprimer
+  photo_hint: JPG, PNG, WebP · Max 2 Mo
+  btn_create: Créer
+  pai_count: paiement(s) enregistré(s)
+  vi_count: vidéo(s)
+  pho_cover_hint: La première est la couverture
+  fi_count_hint: 'Rapports: %r% · Transferts: %t%'
+  show_created_by: Créé par
+  show_validated_by: Validé par
+  show_updated_at: Mis à jour
+  show_statut_card: Statut & progression
+  flash_created: Utilisateur "%name%" créé avec succès.
+  flash_updated: Utilisateur "%name%" modifié avec succès.
+  flash_toggled_on: Compte "%name%" activé.
+  flash_toggled_off: Compte "%name%" désactivé.
+  flash_reset: Mot de passe de "%name%" réinitialisé.
+  flash_deleted: Compte "%name%" désactivé.
+  flash_self_error: Impossible de modifier votre propre compte.
+  flash_csrf_error: Token de sécurité invalide.
+form:
+  prenom: Prénom
+  prenom_placeholder: Prénom
+  prenom_required: Le prénom est obligatoire.
+  nom: Nom
+  nom_placeholder: Nom de famille
+  nom_required: Le nom est obligatoire.
+  email: Email
+  email_placeholder: email@association.mr
+  email_required: L'email est obligatoire.
+  email_invalid: L'email n'est pas valide.
+  telephone: Téléphone
+  telephone_placeholder: +222 XX XX XX XX
+  poste: Poste
+  poste_placeholder: — Sélectionner un poste —
+  poste_required: Le poste est obligatoire.
+  password: Mot de passe
+  new_password: Nouveau mot de passe
+  password_placeholder: Min. 8 caractères
+  password_optional: Laisser vide = pas de changement
+  password_confirm: Confirmer
+  password_confirm_placeholder: Confirmer le mot de passe
+  password_required: Le mot de passe est obligatoire.
+  password_mismatch: Les mots de passe ne correspondent pas.
+  password_min: Le mot de passe doit contenir au moins {{ limit }} caractères.
+  photo: Photo de profil
+  photo_max_size: La photo ne doit pas dépasser 2 Mo.
+  photo_mime: 'Format accepté : JPG, PNG ou WebP.'
+  remove_photo: Supprimer la photo
+assoc:
+  page_title: Gestion des Associations
+  btn_new: Nouvelle Association
+  btn_create: Créer l'association
+  btn_save: Enregistrer les modifications
+  btn_delete_confirm: Supprimer définitivement
+  access_denied: Accès refusé — Rôle Administrateur requis
+  stat_total: Total
+  stat_active: Actives
+  stat_inactive: Inactives
+  stat_projects: Projets liés
+  search_placeholder: Rechercher une association...
+  filter_all_status: Tous les statuts
+  filter_all_cities: Toutes les villes
+  entries: entrées
+  showing: Affichage de
+  of: sur
+  col_name: Association
+  col_responsible: Responsable
+  col_contact: Contact
+  col_city: Ville
+  col_agrement: Agrément
+  col_projects: Projets
+  col_status: Statut
+  col_actions: Actions
+  projects_label: projet(s)
+  status_active: Active
+  status_inactive: Inactive
+  status_hint: Une association inactive ne peut plus gérer de projets
+  modal_create_title: Nouvelle Association
+  modal_create_sub: Remplissez les informations de l'association
+  modal_edit_title: Modifier l'association
+  modal_view_title: Détail de l'association
+  modal_delete_title: Supprimer l'association
+  modal_delete_sub: Cette action est irréversible
+  section_identity: Identité
+  section_contact: Coordonnées
+  section_legal: Informations légales
+  section_visual: Visuel & Statut
+  field_nom: Nom officiel (français)
+  field_nom_ph: 'Ex: Association Développement et Bien Faisance'
+  field_nom_ar: Nom en arabe
+  field_sigle: Sigle / Acronyme
+  field_adresse: Adresse
+  field_adresse_ph: 'Ex: Ilot K, Tevragh Zeina, Nouakchott'
+  field_ville: Ville
+  field_pays: Pays
+  field_tel: Téléphone
+  field_email: Email
+  field_web: Site web
+  field_agrement: N° Agrément
+  field_date_creation: Date de création
+  field_responsable: Responsable
+  field_responsable_ph: Nom du président / responsable
+  field_logo: Logo
+  field_status: Statut
+  upload_click: Cliquer pour choisir
+  upload_or_drag: ou glisser ici
+  err_nom_required: Le nom est obligatoire
+  delete_confirm_title: Confirmer la suppression
+  delete_confirm_text: 'Vous êtes sur le point de supprimer :'
+  delete_warn: Les projets liés seront également affectés. Vérifiez avant de continuer.
+  empty_title: Aucune association enregistrée
+  empty_sub: Créez votre première association pour commencer
+proj:
+  page_title: Gestion des Projets
+  breadcrumb: Projets
+  rapport_title: Rapport du projet
+  btn_new: Nouveau projet
+  btn_save: Enregistrer
+  btn_create: Créer le projet
+  btn_edit: Modifier
+  btn_delete: Supprimer
+  btn_back: Retour
+  btn_print: Imprimer
+  btn_rapport: Rapport complet
+  btn_add: Ajouter
+  btn_send: Envoyer
+  btn_cancel: Annuler
+  stat_assoc: Associations
+  stat_total: Total projets
+  stat_in_progress: En cours
+  stat_budget: Budget MRU
+  stat_done: Terminés
+  stat_mru: MRU
+  search_ph: Rechercher un projet…
+  filter_statut: Tous statuts
+  filter_type: Tous types
+  filter_assoc:  Toutes associations
+  filter_annee: Toutes années
+  results: résultats
+  view_grid: Grille
+  view_list: Liste
+  paid: Payé
+  no_projects: Aucun projet pour cette association.
+  no_results: Aucun résultat pour cette recherche.
+  action_view: Visualiser
+  action_report: Rapport complet
+  action_edit: Modifier
+  action_delete: Supprimer
+  tab_paiements: Paiements
+  tab_photos: Photos
+  tab_fichiers: Fichiers
+  tab_videos: Vidéos
+  tab_infos: Infos
+  bilan_title: Bilan financier
+  bilan_budget: Budget total
+  bilan_paid: Total payé
+  bilan_remaining: Restant
+  bilan_rate: Taux paiement
+  bilan_phys: Progression physique
+  info_title: Informations
+  info_number: N° projet
+  info_assoc: Association
+  info_type: Type
+  info_statut: Statut
+  info_location: Lieu
+  info_donor: Donateur
+  info_duration: Durée
+  info_contract: Contrat
+  info_end_date: Fin prévue
+  info_created_by: Créé par
+  info_validated_by: Validé par
+  info_updated: Mis à jour
+  info_year: Année
+  info_progression: Progression
+  info_description: Description
+  statut_title: Statut & progression
+  statut_label: Statut
+  progression_label: Progression physique
+  create_title: Nouveau projet
+  create_sub: Créer un projet
+  field_assoc: Association
+  field_assoc_ph: — Choisir —
+  field_type: Type
+  field_type_ph: — Choisir —
+  field_numero: N° Projet
+  field_numero_ph: ex PRJ-2026-001
+  field_numero_hint: Lettres, chiffres et tirets uniquement
+  field_annee: Année
+  field_nom: Nom du projet
+  field_nom_ph: Titre du projet…
+  field_donor: Donateur
+  field_budget: Budget (MRU)
+  field_location: Lieu
+  field_duration: Durée
+  field_duration_ph: 'ex: 12 mois'
+  field_contract_date: Date contrat
+  field_end_date: Date fin prévue
+  field_description: Description
+  edit_title: Modifier le projet
+  delete_title: Confirmer la suppression
+  delete_subtitle: Action irréversible
+  delete_msg: Supprimer le projet <strong>%nom%</strong> ? Toutes les données (photos, fichiers, paiements) seront effacées.
+  visu_title: Visualiser
+  pai_title: Historique des paiements
+  pai_sub: '%count% paiement(s) enregistré(s)'
+  pai_none: Aucun paiement enregistré.
+  pai_add_title: Ajouter un paiement
+  pai_field_amount: Montant (MRU)
+  pai_field_date: Date
+  pai_field_mode: Mode
+  pai_field_ref: Référence
+  pai_field_ref_ph: VIR-2026-001
+  pai_field_notes: Notes
+  pai_field_justif: Justificatif PDF
+  pai_btn_add: Ajouter un paiement
+  pai_justif_label: Justificatif
+  pai_delete_confirm: Supprimer ce paiement ?
+  pho_title: Photos du projet
+  pho_sub: '%count%/20 · La première est la couverture'
+  pho_none: Aucune photo pour ce projet.
+  pho_add_title: Ajouter des photos
+  pho_add_sub: '%count%/20'
+  pho_drop_label: Cliquer ou glisser des images
+  pho_drop_types: JPG, PNG, WebP — max 5 Mo/photo
+  pho_field_legend: Légende
+  pho_field_legend_ph: Description des photos…
+  pho_btn_add: Ajouter des photos
+  pho_cover: Cover
+  pho_delete_confirm: Supprimer cette photo ?
+  fi_title: Fichiers PDF
+  fi_sub: 'Rapports: %rapports% · Transferts: %transferts%'
+  fi_none: Aucun fichier.
+  fi_add_title: Ajouter un fichier
+  fi_add_sub: PDF uniquement
+  fi_drop_label: Cliquer ou glisser un PDF
+  fi_drop_types: PDF — max 10 Mo
+  fi_field_cat: Catégorie
+  fi_btn_add: Ajouter un fichier
+  fi_download: Télécharger
+  fi_delete_confirm: Supprimer ce fichier ?
+  vi_title: Vidéos YouTube
+  vi_sub: '%count% vidéo(s)'
+  vi_none: Aucune vidéo.
+  vi_add_title: Ajouter une vidéo
+  vi_add_sub: YouTube uniquement
+  vi_field_url: URL YouTube
+  vi_field_url_ph: https://youtube.com/watch?v=…
+  vi_field_title: Titre
+  vi_field_title_ph: Titre de la vidéo…
+  vi_btn_add: Ajouter une vidéo
+  vi_delete_confirm: Supprimer cette vidéo ?
+  pai_count: paiement(s) enregistré(s)
+  vi_count: vidéo(s)
+  pho_cover_hint: La première est la couverture
+  fi_count_hint: 'Rapports: %r% · Transferts: %t%'
+  show_created_by: Créé par
+  show_validated_by: Validé par
+  show_updated_at: Mis à jour
+  show_statut_card: Statut & progression
+  flash_created: ✓ Projet « %nom% » créé avec succès.
+  flash_updated: ✓ Projet « %nom% » mis à jour.
+  flash_deleted: ✓ Projet « %nom% » supprimé.
+  flash_statut_updated: ✓ Statut mis à jour.
+  flash_paiement_added: ✓ Paiement de %montant% MRU enregistré.
+  flash_paiement_deleted: ✓ Paiement supprimé.
+  flash_photos_added: ✓ %count% photo(s) ajoutée(s).
+  flash_photo_deleted: ✓ Photo supprimée.
+  flash_fichier_added: ✓ Fichier « %nom% » ajouté.
+  flash_fichier_deleted: ✓ Fichier supprimé.
+  flash_video_added: ✓ Vidéo ajoutée.
+  flash_video_deleted: ✓ Vidéo supprimée.
+  flash_not_found: Élément introuvable.
+  flash_invalid_amount: Montant invalide.
+  flash_invalid_url: URL invalide.
+  flash_no_file: Aucun fichier sélectionné.
+  pho_slots_hint: '%slots% place(s) disponible(s) sur 20'
+  pho_limit_warning: Limite atteinte — Ce projet a déjà 20 photos.
+  pho_types_hint: JPG, PNG, WebP · Max 5 Mo par photo
+  pho_multi_hint: Vous pouvez sélectionner plusieurs photos à la fois
+  photos_partial_warn: Seules %slots% photo(s) peuvent encore être ajoutées à ce projet.
+  filter_results: projet(s)
+ 
+  # Statuts — labels individuels pour multilingue
+  statut_brouillon: Brouillon
+  statut_en_attente: En attente
+  statut_valide: Validé
+  statut_en_cours: En cours
+  statut_termine: Terminé
+  statut_rejete: Rejeté
+  # Clés manquantes
+  fi_cat_ph: Rapport, Transfert, Autre…
+  pho_slots_left: place(s) restante(s)
+  btn_clear: Effacer
+
+profile:
+    title: "Mon Profil"
+    link_profile: "Mon profil"
+    change_photo: "Changer la photo"
+    delete_photo: "Supprimer la photo"
+    confirm_delete_photo: "Supprimer la photo de profil ?"
+    section_info: "Informations personnelles"
+    section_info_sub: "Nom, email, téléphone et biographie"
+    section_password: "Mot de passe"
+    section_password_sub: "Modifier votre mot de passe de connexion"
+    section_photo: "Photo de profil"
+    section_photo_sub: "JPG, PNG ou WebP — max 3 Mo"
+    section_account: "Informations du compte"
+    section_account_sub: "Données non modifiables"
+    field_prenom: "Prénom"
+    field_prenom_ph: "Votre prénom"
+    field_nom: "Nom"
+    field_nom_ph: "Votre nom de famille"
+    field_email: "Adresse email"
+    field_tel: "Téléphone"
+    field_bio: "Biographie"
+    field_bio_ph: "Quelques mots sur vous..."
+    field_poste: "Poste / Fonction"
+    field_current_pw: "Mot de passe actuel"
+    field_new_pw: "Nouveau mot de passe"
+    field_confirm_pw: "Confirmer le nouveau mot de passe"
+    btn_save_info: "Enregistrer"
+    btn_change_pw: "Modifier le mot de passe"
+    btn_upload_photo: "Enregistrer la photo"
+    photo_click: "Cliquer pour choisir"
+    photo_drag: " ou glisser-déposer une image"
+    pw_weak: "Trop faible"
+    pw_fair: "Moyen"
+    pw_good: "Fort"
+    pw_strong: "Très fort"
+    pw_match: "✓ Les mots de passe correspondent"
+    pw_no_match: "✗ Les mots de passe ne correspondent pas"
+    info_id: "Identifiant"
+    info_poste: "Poste"
+    info_roles: "Rôles"
+    info_created: "Membre depuis"
+    info_last_login: "Dernière connexion"
+    flash_csrf_invalid:      "Token de sécurité invalide. Veuillez réessayer."
+    flash_fields_required:   "Le prénom, le nom et l'email sont obligatoires."
+    flash_email_invalid:     "L'adresse email saisie n'est pas valide."
+    flash_email_taken:       "Cette adresse email est déjà utilisée par un autre compte."
+    flash_info_updated:      "Vos informations ont été mises à jour avec succès."
+    flash_pw_current_wrong:  "Le mot de passe actuel est incorrect."
+    flash_pw_too_short:      "Le nouveau mot de passe doit contenir au moins 8 caractères."
+    flash_pw_mismatch:       "La confirmation du mot de passe ne correspond pas."
+    flash_pw_updated:        "Votre mot de passe a été modifié avec succès."
+    flash_photo_missing:     "Aucune photo sélectionnée."
+    flash_photo_format:      "Format non supporté. Utilisez JPG, PNG ou WebP."
+    flash_photo_size:        "La photo ne doit pas dépasser 3 Mo."
+    flash_photo_updated:     "Photo de profil mise à jour avec succès."
+    flash_photo_deleted:     "Photo de profil supprimée."
+    # Ajouter à la fin de translations/messages.fr.yaml
+
+orp:
+  page_title: Gestion des Orphelins
+  page_title_ar: قائمة طلبات الأيتام
+  breadcrumb_par: Parrainages
+  breadcrumb: Orphelins
+  btn_new: Nouveau dossier
+  stat_total: Total dossiers
+  stat_nouveau: جديد · En attente
+  stat_approuve: معتمدة · Approuvés
+  stat_actif: مكفول · Actifs
+  stat_annule: ملغي · Annulés
+  filter_all_statuts: Tous les statuts
+  filter_s_nouveau: جديد — En attente
+  filter_s_approuve: معتمدة — Approuvé
+  filter_s_actif: مكفول — Actif
+  filter_s_annule: ملغي — Annulé
+  filter_all_types: 'Type d''orphelin'
+  filter_t_pere: Père décédé
+  filter_t_mere: Mère décédée
+  filter_t_deux: Les deux parents
+  filter_all_assoc: Toutes les associations
+  col_orphelin: Orphelin — اليتيم
+  col_type: Type — نوع
+  col_parrain: Parrain — الكافل
+  col_statut: Statut
+  col_scolarite: Scolarité
+  col_actions: Actions
+  no_dossiers: Aucun dossier orphelin pour cette association
+  btn_creer_premier: Créer le premier
+  btn_voir: Voir le dossier
+  btn_modifier: Modifier
+  btn_approuver_tbl: Approuver — معتمدة
+  btn_activer_tbl: Activer — مكفول
+  btn_supprimer: Supprimer
+  btn_annuler: Annuler
+  lbl_assoc: Association
+  lbl_parrain: Parrain (كافل)
+  opt_choisir: — Choisir —
+  lbl_montant: Montant périodique (MRU)
+  lbl_periodicite: Périodicité
+  opt_annuel: Annuel — سنوي
+  opt_semestriel: Semestriel — نصف سنوي
+  opt_trimestriel: Trimestriel — ربع سنوي
+  opt_mensuel: Mensuel — شهري
+  opt_unique: Versement unique
+  lbl_date_debut: Date de début
+  sec_donnees: 'Données de l''orphelin — بيانات اليتيم'
+  lbl_nom_complet: Nom complet
+  lbl_cin: N° national — الرقم الوطني
+  lbl_cin_court: N° national
+  lbl_date_naissance: Date de naissance
+  lbl_lieu_naissance: Lieu de naissance
+  lbl_genre: Genre — الجنس
+  lbl_genre_court: Genre
+  opt_masculin: Masculin — ذكر
+  opt_feminin: Féminin — أنثى
+  lbl_type: Type — نوع اليتيم
+  lbl_type_court: 'Type d''orphelin'
+  opt_pere_decede: Père décédé — فقد الأب
+  opt_mere_decedee: Mère décédée — فقد الأم
+  opt_deux_parents: Les deux parents — فقد الوالدين
+  lbl_adresse: Adresse — عنوان اليتيم
+  lbl_adresse_court: Adresse
+  lbl_telephone: Téléphone — الهاتف
+  lbl_telephone_court: Téléphone
+  lbl_etat_sante: État de santé
+  sec_famille: Famille — معلومات الأسرة
+  sec_famille_court: Famille
+  lbl_nom_mere: Nom de la mère — اسم الأم
+  lbl_nom_mere_court: Nom de la mère
+  lbl_mere_remariee: Mère remariée — الأم متزوجة
+  lbl_mere_remariee_court: Mère remariée
+  opt_oui: Oui
+  opt_oui_mere: Oui — الأم متزوجة
+  opt_non: Non
+  lbl_date_deces_pere: Date décès du père
+  lbl_date_deces_mere: Décès de la mère
+  lbl_nom_tuteur: Nom du tuteur — اسم ولي الأمر
+  lbl_nom_tuteur_court: Nom du tuteur
+  lbl_relation: Relation — صلة القرابة
+  lbl_relation_court: Relation tuteur
+  opt_relation_vide: —
+  opt_mere: Mère — الأم
+  opt_frere: Frère — الأخ
+  opt_oncle: Oncle — العم
+  opt_grand_pere: Grand-père — الجد
+  opt_autre: Autre — أخرى
+  opt_autre_court: Autre
+  lbl_fratrie: Frères / Sœurs
+  lbl_freres: Frères
+  lbl_soeurs: Sœurs
+  lbl_nb_freres: Nb frères
+  lbl_nb_soeurs: Nb sœurs
+  sec_scolarite: Scolarité — المرحلة الدراسية
+  sec_scolarite_court: Scolarité
+  lbl_ecole: École — اسم المدرسة
+  lbl_ecole_court: École
+  lbl_niveau: Niveau — المرحلة الدراسية
+  lbl_niveau_court: Niveau scolaire
+  lbl_raison: Raison non-scolarisation
+  lbl_raison_court: Raison non-scol.
+  non_scolarise: Non scolarisé ou non renseigné
+  sec_photo: 'Photo de l''orphelin'
+  photo_click: Cliquer ou glisser une photo
+  photo_types: JPG · PNG · WebP · max 5 Mo
+  photo_ok: Photo sélectionnée
+  photo_changer: Changer
+  photo_vide_hint: '(laisser vide = conserver l''actuelle)'
+  sec_photo_modif: Nouvelle photo
+  btn_enregistrer: Enregistrer le dossier
+  btn_enreg_modif: Enregistrer les modifications
+  mo_new_title: Nouveau dossier orphelin
+  mo_new_sub: استمارة طلب كفالة يتيم
+  mo_edit_title: Modifier le dossier
+  mo_edit_loading: Chargement…
+  mo_app_title: Approuver le dossier
+  app_transition: 'Transition : جديد → معتمدة'
+  app_desc: 'Le dossier sera approuvé. Vous pourrez ensuite l''activer (مكفول) pour démarrer le parrainage.'
+  btn_app_confirm: Approuver — معتمدة
+  mo_act_title: Activer le parrainage
+  act_transition: 'Transition : معتمدة → مكفول'
+  act_desc: 'L''orphelin sera pris en charge à compter d''aujourd''hui. La date de début est enregistrée automatiquement.'
+  btn_act_confirm: Activer — مكفول
+  mo_ann_title: Annuler le parrainage
+  ann_transition: Transition → ملغي
+  ann_desc: Le parrainage sera annulé. Cette action ne peut pas être inversée.
+  lbl_raison_ann: 'Raison de l''annulation (optionnel)'
+  btn_ann_confirm: 'Confirmer l''annulation'
+  mo_del_title: Supprimer le dossier
+  del_irrev: Action irréversible
+  del_warn_index: La fiche orphelin, tous les versements associés et les rapports semestriels seront définitivement supprimés. Cette action ne peut pas être annulée.
+  del_warn_show: La fiche, tous les versements et tous les rapports semestriels seront définitivement supprimés. Cette action ne peut pas être annulée.
+  btn_del_confirm: Supprimer définitivement
+  show_non_renseigne: Non renseigné
+  show_masculin: Masculin — ذكر
+  show_feminin: Féminin — أنثى
+  show_lbl_deces_pere: Décès du père
+  show_lbl_deces_mere: Décès de la mère
+  show_lbl_tuteur: Tuteur légal
+  show_am_mariee: الأم متزوجة
+  show_sec_donnees: 'Données de l''orphelin'
+  show_sec_donnees_ar: بيانات اليتيم
+  show_sec_famille: Informations famille
+  show_sec_famille_ar: معلومات الأسرة
+  show_sec_scolarite_ar: المرحلة الدراسية
+  tab_versements: Versements
+  tab_rapports: Rapports
+  btn_add_versement: Ajouter un versement
+  no_versements: Aucun versement enregistré
+  col_date: Date
+  col_montant: Montant (MRU)
+  col_mode: Mode
+  col_periode: Période
+  btn_del_vers: Supprimer ce versement
+  justif_voir: Justificatif
+  btn_creer_rapport: Créer un rapport
+  no_rapports: Aucun rapport rédigé
+  col_annee: Année
+  col_semestre: Semestre
+  btn_del_rapport: Supprimer ce rapport
+  fin_montant: Montant périodique
+  fin_total: Total versé
+  fin_pct: '% versé'
+  parrain_titre: Parrain — الكافل
+  lbl_pays: Pays
+  lbl_email: Email
+  lbl_bp: Boîte postale
+  dossier_titre: Dossier
+  lbl_statut: Statut
+  lbl_ref: Référence
+  lbl_annee_d: Année
+  lbl_date_debut_d: Date début
+  lbl_date_fin: Date fin
+  lbl_cree_le: Créé le
+  lbl_cree_par: Créé par
+  lbl_valide_par: Validé par
+  sidebar_btn_approuver: Approuver — معتمدة
+  sidebar_btn_activer: Activer — مكفول
+  sidebar_btn_annuler: Annuler — ملغي
+  photo_titre: Photo
+  mo_versement_title: Enregistrer un versement
+  lbl_montant_req: Montant (MRU)
+  lbl_date_req: Date
+  lbl_mode_pai: Mode de paiement
+  opt_virement: Virement — تحويل مصرفي
+  opt_cheque: Chèque — شيك
+  opt_especes: Espèces — نقداً
+  opt_mobile: Mobile — دفع إلكتروني
+  opt_autre_pai: Autre
+  lbl_periode_vers: Période concernée
+  lbl_reference: Référence / N° chèque
+  lbl_justif: Justificatif (PDF / image)
+  lbl_notes: Notes
+  btn_enreg_vers: Enregistrer le versement
+  mo_del_pay_title: Supprimer le versement
+  del_pay_titre: Confirmer la suppression
+  del_pay_desc: Ce versement sera définitivement supprimé et le total versé sera recalculé.
+  btn_del_vers_confirm: Supprimer ce versement
+  mo_rapport_title: Créer un rapport semestriel
+  lbl_annee_req: Année
+  lbl_semestre_req: Semestre
+  opt_s1: S1 — 1er semestre (Janv–Juin)
+  opt_s2: S2 — 2ème semestre (Juil–Déc)
+  lbl_situation: Situation générale
+  lbl_scolarite_rpt: Résultats scolarité
+  lbl_sante_rpt: Situation santé
+  lbl_msg_parrain: Message au parrain
+  lbl_doc: Document PDF (optionnel)
+  btn_creer_rpt: Créer le rapport
+  mo_del_rpt_title: Supprimer le rapport
+  del_rpt_desc: Ce rapport et son document PDF seront définitivement supprimés.
+  btn_del_rpt_confirm: Supprimer le rapport
+  opt_mere_simple: Mère
+  opt_frere_simple: Frère
+  opt_oncle_simple: Oncle
+  opt_grand_pere_simple: Grand-père
+  show_btn_approuver: Approuver
+  show_btn_versement: Versement

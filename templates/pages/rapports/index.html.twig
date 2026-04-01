@@ -1,0 +1,49 @@
+{# templates/pages/rapports/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SIGAF — {{ 'reports.title'|trans|default('Rapports') }}{% endblock %}
+
+{% block body %}
+<div class="page-title-row">
+    <div>
+        <h2>{{ 'reports.title'|trans|default('Rapports') }}</h2>
+        <div class="subtitle">{{ 'reports.subtitle'|trans|default('Validation obligatoire par le Directeur') }}</div>
+    </div>
+</div>
+
+<div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    {# Parrainages #}
+    <div class="panel" style="margin:0">
+        <div class="panel-header"><h3>{{ 'reports.sponsor'|trans|default('Parrainages') }}</h3></div>
+        <div class="panel-body">
+            <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Social (Semest.)</span><span class="badge-s ok">Validé</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Scolaire (Trim.)</span><span class="badge-s wait">En attente</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Financier (Mens.)</span><span class="badge-s ok">Validé</span></div>
+            </div>
+        </div>
+    </div>
+    {# Projets #}
+    <div class="panel" style="margin:0">
+        <div class="panel-header"><h3>{{ 'reports.project'|trans|default('Projets') }}</h3></div>
+        <div class="panel-body">
+            <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Intermédiaire</span><span class="badge-s wait">En attente</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Financier</span><span class="badge-s ok">Validé</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Final</span><span class="badge-s no">Non soumis</span></div>
+            </div>
+        </div>
+    </div>
+    {# Caisse #}
+    <div class="panel" style="margin:0">
+        <div class="panel-header"><h3>{{ 'reports.cash'|trans|default('Caisse') }}</h3></div>
+        <div class="panel-body">
+            <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Clôture Journalière</span><span class="badge-s ok">Validé</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Clôture Mensuelle</span><span class="badge-s wait">En attente</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:.82rem">Export PDF/Word</span><span class="badge-s info">Disponible</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

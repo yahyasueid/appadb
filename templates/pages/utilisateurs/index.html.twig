@@ -1,0 +1,452 @@
+{# templates/pages/utilisateurs/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'utilisateurs.title'|trans }} — ADB{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* ============================================
+   PAGE UTILISATEURS — SIGAF DESIGN
+   ============================================ */
+
+/* --- Stats cards --- */
+.u-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.u-stat {
+    background: #fff;
+    border: 1.5px solid var(--brd, #f1f5f9);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all .25s;
+    cursor: default;
+}
+.u-stat:hover {
+    border-color: var(--ac, #14532D);
+    box-shadow: 0 6px 20px rgba(20,83,45,.06);
+    transform: translateY(-2px);
+}
+.u-stat__ico {
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+}
+.u-stat__lbl {
+    font-size: .72rem;
+    color: var(--t3, #94a3b8);
+    margin-bottom: 1px;
+    line-height: 1.3;
+}
+.u-stat__num {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--t1, #1e293b);
+    line-height: 1;
+}
+
+/* --- Panel header ameliore --- */
+.panel-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1.5px solid var(--brd, #f1f5f9);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.panel-top__left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.panel-top__title {
+    font-size: .92rem;
+    font-weight: 650;
+    color: var(--t1, #1e293b);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.panel-top__title i {
+    color: var(--ac, #14532D);
+    font-size: 1rem;
+}
+.panel-top__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px; height: 22px;
+    padding: 0 8px;
+    border-radius: 7px;
+    font-size: .72rem;
+    font-weight: 600;
+    background: rgba(20,83,45,.07);
+    color: var(--ac, #14532D);
+}
+.panel-top__subtitle {
+    font-size: .72rem;
+    color: var(--t3, #94a3b8);
+    margin: 2px 0 0;
+}
+
+/* Bouton ajout vert */
+.btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    background: linear-gradient(135deg, #14532D 0%, #166534 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: .82rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .25s;
+    box-shadow: 0 2px 8px rgba(20,83,45,.15);
+}
+.btn-add:hover {
+    box-shadow: 0 6px 20px rgba(20,83,45,.25);
+    transform: translateY(-1px);
+}
+.btn-add i { font-size: .88rem; }
+
+/* --- User cell dans le tableau --- */
+.u-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.u-cell__img {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.u-cell__ini {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .78rem;
+    flex-shrink: 0;
+}
+.u-cell__name {
+    font-weight: 600;
+    font-size: .84rem;
+    color: var(--t1, #1e293b);
+}
+.u-cell__sub {
+    font-size: .7rem;
+    color: var(--t3, #94a3b8);
+    margin-top: 1px;
+}
+
+/* --- Poste badge --- */
+.poste-b {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: .76rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* --- Status indicator --- */
+.st-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .78rem;
+    font-weight: 500;
+}
+.st-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.st-badge.on  .st-dot { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,.4); }
+.st-badge.on  { color: #16a34a; }
+.st-badge.off .st-dot { background: #ef4444; }
+.st-badge.off { color: #dc2626; }
+
+/* --- Action buttons --- */
+.act-btns {
+    display: flex;
+    gap: 2px;
+}
+.act-btns .ab {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all .15s;
+    font-size: .85rem;
+    color: var(--t3, #94a3b8);
+}
+.act-btns .ab:hover {
+    background: rgba(20,83,45,.06);
+    color: var(--ac, #14532D);
+}
+.act-btns .ab.edit { color: var(--ac, #14532D); }
+.act-btns .ab.warn { color: #d97706; }
+.act-btns .ab.warn:hover { background: rgba(217,119,6,.06); }
+.act-btns .ab.danger { color: #dc2626; }
+.act-btns .ab.danger:hover { background: rgba(220,38,38,.06); }
+
+/* Row inactive */
+tr.row-off td { opacity: .4; }
+tr.row-off td:last-child { opacity: 1; }
+
+/* Email col */
+.col-email { font-size: .82rem; color: var(--t2, #475569); }
+.col-phone { font-size: .82rem; color: var(--t2, #475569); }
+.col-date  { font-size: .78rem; color: var(--t3, #94a3b8); }
+
+/* Empty state */
+.empty-box {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--t3, #94a3b8);
+}
+.empty-box i { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+.empty-box p { font-size: .88rem; margin: 0; }
+</style>
+{% endblock %}
+
+{% block body %}
+
+{# Mapping role -> cle de traduction #}
+{% set poste_trans = {
+    'ROLE_ADMIN':                'poste.admin',
+    'ROLE_DIRECTEUR_PROJETS':    'poste.dir_projets',
+    'ROLE_EMPLOYE_PROJETS':      'poste.emp_projets',
+    'ROLE_DIRECTEUR_PARRAINAGES':'poste.dir_parrainages',
+    'ROLE_EMPLOYE_PARRAINAGES':  'poste.emp_parrainages',
+    'ROLE_COMPTABLE':            'poste.comptable',
+} %}
+
+{# === FLASH === #}
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+    <div class="toast-flash toast-flash--{{ label }}" style="margin-bottom:12px">
+        <i class="bi bi-{{ label == 'success' ? 'check-circle-fill' : (label == 'error' ? 'exclamation-circle-fill' : 'exclamation-triangle-fill') }}"></i>
+        <span>{{ message }}</span>
+        <button class="toast-flash__close" onclick="this.parentElement.remove()"><i class="bi bi-x"></i></button>
+    </div>
+    {% endfor %}
+{% endfor %}
+
+{# === STATS PAR POSTE === #}
+<div class="u-stats">
+    {% for role, stat in stats %}
+    <div class="u-stat">
+        <div class="u-stat__ico" style="background:{{ stat.couleur }}12;color:{{ stat.couleur }}">
+            <i class="bi {{ stat.icone }}"></i>
+        </div>
+        <div>
+            <div class="u-stat__lbl">{{ (poste_trans[role] ?? stat.label)|trans }}</div>
+            <div class="u-stat__num">{{ stat.count }}</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{# === TABLEAU DANS PANEL === #}
+<div class="panel">
+
+    {# --- Header du panel : titre + count + bouton ajouter --- #}
+    <div class="panel-top">
+        <div class="panel-top__left">
+            <h3 class="panel-top__title">
+                <i class="bi bi-people-fill"></i>
+                {{ 'utilisateurs.list_title'|trans }}
+            </h3>
+            <span class="panel-top__count">{{ total }}</span>
+        </div>
+        <button class="btn-add" onclick="openModal('newUserModal')">
+            <i class="bi bi-plus-lg"></i>
+            {{ 'utilisateurs.btn_new'|trans }}
+        </button>
+    </div>
+
+    {# --- Corps du panel : DataTable --- #}
+    <div class="panel-body np">
+        <div class="table-responsive">
+            <table class="dtable" data-no-sort="6" data-page-length="10">
+                <thead>
+                    <tr>
+                        <th>{{ 'utilisateurs.col_user'|trans }}</th>
+                        <th>{{ 'utilisateurs.col_email'|trans }}</th>
+                        <th>{{ 'utilisateurs.col_poste'|trans }}</th>
+                        <th>{{ 'utilisateurs.col_phone'|trans }}</th>
+                        <th>{{ 'utilisateurs.col_status'|trans }}</th>
+                        <th>{{ 'utilisateurs.col_last_login'|trans }}</th>
+                        <th>{{ 'utilisateurs.col_actions'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for u in utilisateurs %}
+                    <tr{% if not u.isActive %} class="row-off"{% endif %}>
+
+                        {# Utilisateur : avatar + nom + date creation #}
+                        <td>
+                            <div class="u-cell">
+                                {% if u.hasPhoto %}
+                                    <img src="{{ asset(u.photoPath) }}" class="u-cell__img" alt="">
+                                {% else %}
+                                    <div class="u-cell__ini" style="background:{{ u.posteCouleur }}">{{ u.initials }}</div>
+                                {% endif %}
+                                <div>
+                                    <div class="u-cell__name">{{ u.fullName }}</div>
+                                    <div class="u-cell__sub">{{ u.createdAt|date('d/m/Y') }}</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        {# Email #}
+                        <td class="col-email">{{ u.email }}</td>
+
+                        {# Badge poste traduit #}
+                        <td>
+                            <span class="poste-b" style="background:{{ u.posteCouleur }}12;color:{{ u.posteCouleur }}">
+                                <i class="bi {{ u.posteIcone }}"></i>
+                                {{ (poste_trans[u.poste] ?? u.posteLabel)|trans }}
+                            </span>
+                        </td>
+
+                        {# Telephone #}
+                        <td class="col-phone">{{ u.telephone ?? '—' }}</td>
+
+                        {# Statut actif/inactif #}
+                        <td>
+                            <span class="st-badge {{ u.isActive ? 'on' : 'off' }}">
+                                <span class="st-dot"></span>
+                                {{ u.isActive ? 'utilisateurs.active'|trans : 'utilisateurs.inactive'|trans }}
+                            </span>
+                        </td>
+
+                        {# Derniere connexion #}
+                        <td class="col-date">
+                            {{ u.lastLogin ? u.lastLogin|date('d/m/Y H:i') : 'utilisateurs.never'|trans }}
+                        </td>
+
+                        {# Actions #}
+                        <td>
+                            <div class="act-btns">
+                                <button class="ab edit" onclick="openModal('editUserModal-{{ u.id }}')" title="{{ 'action.edit'|trans }}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <form method="post" action="{{ path('app_utilisateur_toggle', {id: u.id}) }}" style="display:inline"
+                                      onsubmit="return confirm('{{ 'utilisateurs.confirm_toggle'|trans }}')">
+                                    <button class="ab" type="submit"
+                                            title="{{ u.isActive ? 'utilisateurs.deactivate'|trans : 'utilisateurs.activate'|trans }}">
+                                        <i class="bi bi-toggle-{{ u.isActive ? 'on' : 'off' }}"></i>
+                                    </button>
+                                </form>
+                                <form method="post" action="{{ path('app_utilisateur_reset_password', {id: u.id}) }}" style="display:inline"
+                                      onsubmit="return confirm('{{ 'utilisateurs.confirm_reset'|trans }}')">
+                                    <button class="ab warn" type="submit" title="{{ 'utilisateurs.reset_pwd'|trans }}">
+                                        <i class="bi bi-key"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-box">
+                                <i class="bi bi-people"></i>
+                                <p>{{ 'action.no_data'|trans }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{# === MODALES === #}
+{% block modals %}
+    {% include 'components/utilisateurs/_modal_new.html.twig' %}
+    {% for u in utilisateurs %}
+        {% include 'components/utilisateurs/_modal_edit.html.twig' with {
+            'user': u,
+            'editForm': editForms[u.id]
+        } %}
+    {% endfor %}
+{% endblock %}
+
+{# === JS === #}
+{% block javascripts %}
+<script>
+function openModal(id){
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow='hidden';
+}
+function closeModal(id){
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow='';
+}
+function closeAllModals(){
+    document.querySelectorAll('.modal-overlay').forEach(function(m){ m.classList.remove('open'); });
+    document.body.style.overflow='';
+}
+
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeAllModals(); });
+
+document.querySelectorAll('.photo-input').forEach(function(input){
+    input.addEventListener('change',function(){
+        var file=this.files[0];
+        if(!file) return;
+        if(file.size>2*1024*1024){ alert('Max 2 Mo'); this.value=''; return; }
+        var reader=new FileReader();
+        var target=this.dataset.preview;
+        reader.onload=function(e){
+            document.getElementById(target).innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:10px">';
+        };
+        reader.readAsDataURL(file);
+    });
+});
+
+document.querySelectorAll('.remove-photo-cb').forEach(function(cb){
+    cb.addEventListener('change',function(){
+        var target=this.dataset.preview;
+        if(this.checked){
+            document.getElementById(target).innerHTML='<i class="bi bi-camera" style="font-size:1.5rem;color:var(--t3)"></i>';
+        }
+    });
+});
+
+{% if openModal is defined %}
+    {% if openModal == 'new' %}
+        document.addEventListener('DOMContentLoaded',function(){ openModal('newUserModal'); });
+    {% elseif openModal starts with 'edit-' %}
+        document.addEventListener('DOMContentLoaded',function(){ openModal('editUserModal-{{ openModal|replace({"edit-":""}) }}'); });
+    {% endif %}
+{% endif %}
+
+document.querySelectorAll('.toast-flash').forEach(function(el){
+    setTimeout(function(){ el.style.opacity='0'; el.style.transform='translateY(-10px)'; setTimeout(function(){ el.remove(); },300); },5000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{# templates/components/_modal_projet.html.twig #}
+
+<div class="modal-overlay" id="modalProjet">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="bi bi-kanban me-2"></i>{{ 'modal.new_project'|trans|default('Nouveau projet') }}</h3>
+            <button class="modal-close" onclick="closeModal('modalProjet')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form method="POST" action="{{ path('app_projet_new') }}">
+            <div class="modal-body">
+                <div class="fg">
+                    <label>{{ 'field.project_name'|trans|default('Intitulé du projet') }}</label>
+                    <input type="text" name="nom" required>
+                </div>
+                <div class="fr">
+                    <div class="fg">
+                        <label>{{ 'field.start_date'|trans|default('Date début') }}</label>
+                        <input type="date" name="dateDebut">
+                    </div>
+                    <div class="fg">
+                        <label>{{ 'field.end_date'|trans|default('Date fin prévue') }}</label>
+                        <input type="date" name="dateFin">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.approved_budget'|trans|default('Budget approuvé (MRU)') }}</label>
+                    <input type="number" name="budget" placeholder="2000000">
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.description'|trans|default('Description') }}</label>
+                    <textarea name="description" placeholder="{{ 'field.description_placeholder'|trans|default('Objectifs et détails…') }}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-o" onclick="closeModal('modalProjet')">{{ 'action.cancel'|trans|default('Annuler') }}</button>
+                <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i><span>{{ 'action.register'|trans|default('Enregistrer') }}</span></button>
+            </div>
+        </form>
+    </div>
+</div>

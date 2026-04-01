@@ -1,0 +1,742 @@
+login:
+  title: Login — ADB-MR
+  greeting: Welcome to ADB-MR
+  subtitle: Sign in with your position account
+  email_label: Email address
+  email_placeholder: your@email.mr
+  password_label: Password
+  password_placeholder: ••••••••
+  remember_me: Remember me
+  forgot_password: Forgot password?
+  submit: Sign in
+  postes_title: Association positions
+  lang_divider: Langue / اللغة / Language
+  footer_version: ADB-MR v1.0 — Integrated Management System
+  footer_copyright: © 2026 Association Développement et Bien Faisance
+left:
+  association_name_ar: جمعية التنمية
+  association_highlight_ar: العمل الخيري
+  association_name_fr: Association Développement et Bien Faisance
+  association_subtitle: Integrated Administrative & Financial Management System
+  badge_secure: Secure
+  badge_audit: Full audit
+  badge_multilang: Multilingual
+poste:
+  admin: Admin
+  admin_desc: Full access
+  dir_projets: Project Director
+  dir_projets_desc: Project management & validation
+  emp_projets: Project Employee
+  emp_projets_desc: Project data entry
+  dir_parrainages: Sponsorship Director
+  dir_parrainages_desc: Sponsorship management & validation
+  emp_parrainages: Sponsorship Employee
+  emp_parrainages_desc: Sponsorship data entry
+  comptable: Accountant
+  comptable_desc: Cash & finance
+app:
+  name: ADB-MR
+  full_name: Integrated Administrative & Financial Management System
+sidebar:
+  principal: Main
+  dashboard: Dashboard
+  projets: Projects
+  gestion_projets: Project Management
+  validation_projets: Project Validation
+  parrainages: Sponsorships
+  gestion_parrainages: Sponsorship Management
+  validation_parrainages: Sponsorship Validation
+  finance: Finance
+  caisse: Cash Register
+  rapports_section: Reports
+  rapports: Reports
+  administration: Administration
+  audit: Audit Log
+  utilisateurs: Users
+  parametres: Settings
+  associations: Associations
+  voir_tous: "View all associations"
+  voir_toutes: "All associations"
+  aucune_assoc: "No associations"
+header:
+  search_placeholder: Search for a beneficiary, project, operation…
+  export: Export
+  notifications: Notifications
+  profile: My profile
+  settings: Settings
+  logout: Sign out
+dashboard:
+  title: Dashboard
+  welcome: Welcome
+  total_beneficiaires: Total Beneficiaries
+  projets_actifs: Active Projects
+  solde_caisse: Cash Balance
+  rapports_pending: Pending Reports
+  activite_recente: Recent Activity
+  depenses_mensuelles: Monthly Expenses
+action:
+  save: Save
+  cancel: Cancel
+  edit: Edit
+  delete: Delete
+  validate: Validate
+  reject: Reject
+  export: Export
+  search: Search
+  new: New
+  back: Back
+  print: Print
+  confirm: Confirm
+  close: Close
+  'true': 'Yes'
+  'false': 'No'
+  loading: Loading...
+  no_data: No data
+flash:
+  numero_required: Project number is required.
+  numero_exists: This project number already exists. Choose another.
+  assoc_created: ✓ Association "%nom%" created successfully.
+  assoc_deleted: ✓ Association "%nom%" deleted.
+  assoc_has_projects: 'Cannot delete: %count% linked project(s). Unlink them first.'
+  assoc_not_found: Association not found.
+  assoc_updated: ✓ Association "%nom%" updated.
+  csrf_invalid: Invalid security token. Please try again.
+  deleted: Item deleted
+  error: An error occurred
+  fichier_added: ✓ File "%nom%" added.
+  fichier_deleted: ✓ File deleted.
+  invalid_url: Invalid URL. Please use a valid YouTube link.
+  logo_invalid_type: Logo format not allowed (PNG, JPG, SVG, WEBP only).
+  logo_too_large: Logo exceeds 2 MB.
+  logo_upload_failed: Logo upload failed.
+  no_file: No file selected.
+  not_found: Item not found.
+  paiement_added: ✓ Payment of %montant% MRU recorded.
+  paiement_deleted: ✓ Payment deleted.
+  paiement_invalid_amount: Invalid amount (must be greater than 0).
+  photo_deleted: ✓ Photo deleted.
+  photos_added: ✓ %count% photo(s) added out of %total% selected.
+  photos_added_one: ✓ 1 photo added.
+  photos_limit_reached: 'Limit reached: a project cannot exceed 20 photos.'
+  photos_none_valid: No valid image file selected.
+  photos_partial: ⚠ %added% photo(s) added — 20-photo limit reached (%skipped% skipped).
+  projet_created: ✓ Project "%nom%" created successfully.
+  projet_deleted: ✓ Project "%nom%" deleted.
+  projet_updated: ✓ Project "%nom%" updated.
+  rejected: Rejected
+  saved: Saved successfully
+  statut_updated: ✓ Status and progress updated.
+  success: Operation successful
+  validated: Validated successfully
+  video_added: ✓ Video added.
+  video_deleted: ✓ Video deleted.
+  warning: Warning
+  paiement_depasse_budget: Requested amount (%montant% MRU) exceeds the remaining budget (%restant% MRU).
+common:
+  back: Back
+  print: Print
+  cancel: Cancel
+  close: Close
+  edit: Edit
+  view: View
+  delete: Delete
+  save: Save
+  'true': 'Yes'
+  'false': 'No'
+utilisateurs:
+  title: Users
+  subtitle: '%total% users · %actifs% active'
+  btn_new: New user
+  list_title: User list
+  total: total
+  col_user: User
+  col_email: Email
+  col_poste: Position
+  col_phone: Phone
+  col_status: Status
+  col_last_login: Last login
+  col_actions: Actions
+  active: Active
+  inactive: Inactive
+  never: Never
+  confirm_toggle: Change this user's status?
+  confirm_reset: Reset the password?
+  deactivate: Deactivate
+  activate: Activate
+  reset_pwd: Reset password
+  modal_new_title: New user
+  modal_new_subtitle: Create a new account
+  modal_edit_title: Edit
+  modal_edit_subtitle: Password optional
+  choose_photo: Choose photo
+  change_photo: Change
+  remove_photo: Remove
+  photo_hint: JPG, PNG, WebP · Max 2 MB
+  btn_create: Create
+  pai_count: payment(s) recorded
+  vi_count: video(s)
+  pho_cover_hint: First one is the cover
+  fi_count_hint: 'Reports: %r% · Transfers: %t%'
+  show_created_by: Created by
+  show_validated_by: Validated by
+  show_updated_at: Updated
+  show_statut_card: Status & progress
+  flash_created: User "%name%" created successfully.
+  flash_updated: User "%name%" updated successfully.
+  flash_toggled_on: Account "%name%" activated.
+  flash_toggled_off: Account "%name%" deactivated.
+  flash_reset: Password for "%name%" has been reset.
+  flash_deleted: Account "%name%" deactivated.
+  flash_self_error: You cannot modify your own account.
+  flash_csrf_error: Invalid security token.
+form:
+  prenom: First name
+  prenom_placeholder: First name
+  prenom_required: First name is required.
+  nom: Last name
+  nom_placeholder: Last name
+  nom_required: Last name is required.
+  email: Email
+  email_placeholder: email@association.mr
+  email_required: Email is required.
+  email_invalid: Email is not valid.
+  telephone: Phone
+  telephone_placeholder: +222 XX XX XX XX
+  poste: Position
+  poste_placeholder: — Select a position —
+  poste_required: Position is required.
+  password: Password
+  new_password: New password
+  password_placeholder: Min. 8 characters
+  password_optional: Leave empty = no change
+  password_confirm: Confirm
+  password_confirm_placeholder: Confirm password
+  password_required: Password is required.
+  password_mismatch: Passwords do not match.
+  password_min: Password must be at least {{ limit }} characters.
+  photo: Profile photo
+  photo_max_size: Photo must not exceed 2 MB.
+  photo_mime: 'Accepted formats: JPG, PNG or WebP.'
+  remove_photo: Remove photo
+assoc:
+  page_title: Association Management
+  btn_new: New Association
+  btn_create: Create Association
+  btn_save: Save Changes
+  btn_delete_confirm: Delete Permanently
+  access_denied: Access Denied — Admin role required
+  stat_total: Total
+  stat_active: Active
+  stat_inactive: Inactive
+  stat_projects: Linked Projects
+  search_placeholder: Search for an association...
+  filter_all_status: All statuses
+  filter_all_cities: All cities
+  entries: entries
+  showing: Showing
+  of: of
+  col_name: Association
+  col_responsible: Responsible
+  col_contact: Contact
+  col_city: City
+  col_agrement: Registration
+  col_projects: Projects
+  col_status: Status
+  col_actions: Actions
+  projects_label: project(s)
+  status_active: Active
+  status_inactive: Inactive
+  status_hint: An inactive association cannot manage projects
+  modal_create_title: New Association
+  modal_create_sub: Fill in the association details
+  modal_edit_title: Edit Association
+  modal_view_title: Association Details
+  modal_delete_title: Delete Association
+  modal_delete_sub: This action cannot be undone
+  section_identity: Identity
+  section_contact: Contact Details
+  section_legal: Legal Information
+  section_visual: Visual & Status
+  field_nom: Official name (French)
+  field_nom_ph: 'Ex: Association for Development and Welfare'
+  field_nom_ar: Name in Arabic
+  field_sigle: Acronym
+  field_adresse: Address
+  field_adresse_ph: 'Ex: Ilot K, Tevragh Zeina, Nouakchott'
+  field_ville: City
+  field_pays: Country
+  field_tel: Phone
+  field_email: Email
+  field_web: Website
+  field_agrement: Registration No.
+  field_date_creation: Founding Date
+  field_responsable: Responsible
+  field_responsable_ph: Name of president / director
+  field_logo: Logo
+  field_status: Status
+  upload_click: Click to choose
+  upload_or_drag: or drag here
+  err_nom_required: Name is required
+  delete_confirm_title: Confirm Deletion
+  delete_confirm_text: 'You are about to delete:'
+  delete_warn: Linked projects will also be affected. Verify before continuing.
+  empty_title: No associations registered
+  empty_sub: Create your first association to get started
+proj:
+  page_title: Project Management
+  breadcrumb: Projects
+  rapport_title: Project Report
+  btn_new: New Project
+  btn_save: Save
+  btn_create: Create Project
+  btn_edit: Edit
+  btn_delete: Delete
+  btn_back: Back
+  btn_print: Print
+  btn_rapport: Full Report
+  btn_add: Add
+  btn_send: Upload
+  btn_cancel: Cancel
+  stat_assoc: Associations
+  stat_total: Total Projects
+  stat_in_progress: In Progress
+  stat_budget: Budget MRU
+  stat_done: Completed
+  stat_mru: MRU
+  search_ph: Search a project…
+  filter_statut: All statuses
+  filter_type: All types
+  filter_assoc:  All associations
+  filter_annee: All years
+  results: results
+  view_grid: Grid
+  view_list: List
+  paid: Paid
+  no_projects: No projects for this association.
+  no_results: No results for this search.
+  action_view: View
+  action_report: Full Report
+  action_edit: Edit
+  action_delete: Delete
+  tab_paiements: Payments
+  tab_photos: Photos
+  tab_fichiers: Files
+  tab_videos: Videos
+  tab_infos: Info
+  bilan_title: Financial Summary
+  bilan_budget: Total Budget
+  bilan_paid: Total Paid
+  bilan_remaining: Remaining
+  bilan_rate: Payment Rate
+  bilan_phys: Physical Progress
+  info_title: Information
+  info_number: Project No.
+  info_assoc: Association
+  info_type: Type
+  info_statut: Status
+  info_location: Location
+  info_donor: Donor
+  info_duration: Duration
+  info_contract: Contract
+  info_end_date: Expected End
+  info_created_by: Created by
+  info_validated_by: Validated by
+  info_updated: Last updated
+  info_year: Year
+  info_progression: Progress
+  info_description: Description
+  statut_title: Status & Progress
+  statut_label: Status
+  progression_label: Physical progress
+  create_title: New Project
+  create_sub: Create a project
+  field_assoc: Association
+  field_assoc_ph: — Choose —
+  field_type: Type
+  field_type_ph: — Select —
+  field_numero: Project No.
+  field_numero_ph: e.g. PRJ-2026-001
+  field_numero_hint: Letters, numbers and hyphens only
+  field_annee: Year
+  field_nom: Project Name
+  field_nom_ph: Project title…
+  field_donor: Donor
+  field_budget: Budget (MRU)
+  field_location: Location
+  field_duration: Duration
+  field_duration_ph: e.g. 12 months
+  field_contract_date: Contract Date
+  field_end_date: Expected End Date
+  field_description: Description
+  edit_title: Edit Project
+  delete_title: Confirm Deletion
+  delete_subtitle: This action cannot be undone
+  delete_msg: Delete project <strong>%nom%</strong>? All data (photos, files, payments) will be erased.
+  visu_title: View
+  pai_title: Payment History
+  pai_sub: '%count% payment(s) recorded'
+  pai_none: No payments recorded.
+  pai_add_title: Add Payment
+  pai_field_amount: Amount (MRU)
+  pai_field_date: Date
+  pai_field_mode: Mode
+  pai_field_ref: Reference
+  pai_field_ref_ph: VIR-2026-001
+  pai_field_notes: Notes
+  pai_field_justif: Proof of Payment (PDF)
+  pai_btn_add: Add Payment
+  pai_justif_label: Proof
+  pai_delete_confirm: Delete this payment?
+  pho_title: Project Photos
+  pho_sub: '%count%/20 · First is the cover'
+  pho_none: No photos for this project.
+  pho_add_title: Add Photos
+  pho_add_sub: '%count%/20'
+  pho_drop_label: Click or drag images
+  pho_drop_types: JPG, PNG, WebP — max 5 MB/photo
+  pho_field_legend: Caption
+  pho_field_legend_ph: Photo description…
+  pho_btn_add: Add Photos
+  pho_cover: Cover
+  pho_delete_confirm: Delete this photo?
+  fi_title: PDF Files
+  fi_sub: 'Reports: %rapports% · Transfers: %transferts%'
+  fi_none: No files.
+  fi_add_title: Add File
+  fi_add_sub: PDF only
+  fi_drop_label: Click or drag a PDF
+  fi_drop_types: PDF — max 10 MB
+  fi_field_cat: Category
+  fi_btn_add: Add File
+  fi_download: Download
+  fi_delete_confirm: Delete this file?
+  vi_title: YouTube Videos
+  vi_sub: '%count% video(s)'
+  vi_none: No videos.
+  vi_add_title: Add Video
+  vi_add_sub: YouTube only
+  vi_field_url: YouTube URL
+  vi_field_url_ph: https://youtube.com/watch?v=…
+  vi_field_title: Title
+  vi_field_title_ph: Video title…
+  vi_btn_add: Add Video
+  vi_delete_confirm: Delete this video?
+  pai_count: payment(s) recorded
+  vi_count: video(s)
+  pho_cover_hint: First one is the cover
+  fi_count_hint: 'Reports: %r% · Transfers: %t%'
+  show_created_by: Created by
+  show_validated_by: Validated by
+  show_updated_at: Updated
+  show_statut_card: Status & progress
+  flash_created: ✓ Project '%nom%' created successfully.
+  flash_updated: ✓ Project '%nom%' updated.
+  flash_deleted: ✓ Project '%nom%' deleted.
+  flash_statut_updated: ✓ Status updated.
+  flash_paiement_added: ✓ Payment of %montant% MRU recorded.
+  flash_paiement_deleted: ✓ Payment deleted.
+  flash_photos_added: ✓ %count% photo(s) added.
+  flash_photo_deleted: ✓ Photo deleted.
+  flash_fichier_added: ✓ File '%nom%' added.
+  flash_fichier_deleted: ✓ File deleted.
+  flash_video_added: ✓ Video added.
+  flash_video_deleted: ✓ Video deleted.
+  flash_not_found: Item not found.
+  flash_invalid_amount: Invalid amount.
+  flash_invalid_url: Invalid URL.
+  flash_no_file: No file selected.
+  pho_slots_hint: '%slots% slot(s) available out of 20'
+  pho_limit_warning: Limit reached — This project already has 20 photos.
+  pho_types_hint: JPG, PNG, WebP · Max 5 MB per photo
+  pho_multi_hint: You can select multiple photos at once
+  photos_partial_warn: Only %slots% more photo(s) can be added to this project.
+  filter_results: project(s)
+  
+  # Status labels — individual keys for multilingual support
+  statut_brouillon: Draft
+  statut_en_attente: Pending
+  statut_valide: Validated
+  statut_en_cours: In Progress
+  statut_termine: Completed
+  statut_rejete: Rejected
+  # Missing keys
+  fi_cat_ph: Report, Transfer, Other…
+  pho_slots_left: slot(s) remaining
+  btn_clear: Clear
+
+profile:
+    title: "My Profile"
+    link_profile: "My profile"
+    change_photo: "Change photo"
+    delete_photo: "Delete photo"
+    confirm_delete_photo: "Delete profile photo?"
+    section_info: "Personal information"
+    section_info_sub: "Name, email, phone and biography"
+    section_password: "Password"
+    section_password_sub: "Change your login password"
+    section_photo: "Profile photo"
+    section_photo_sub: "JPG, PNG or WebP — max 3 MB"
+    section_account: "Account information"
+    section_account_sub: "Read-only data"
+    field_prenom: "First name"
+    field_prenom_ph: "Your first name"
+    field_nom: "Last name"
+    field_nom_ph: "Your last name"
+    field_email: "Email address"
+    field_tel: "Phone"
+    field_bio: "Biography"
+    field_bio_ph: "A few words about you..."
+    field_poste: "Position / Role"
+    field_current_pw: "Current password"
+    field_new_pw: "New password"
+    field_confirm_pw: "Confirm new password"
+    btn_save_info: "Save"
+    btn_change_pw: "Change password"
+    btn_upload_photo: "Save photo"
+    photo_click: "Click to choose"
+    photo_drag: " or drag & drop an image"
+    pw_weak: "Too weak"
+    pw_fair: "Fair"
+    pw_good: "Strong"
+    pw_strong: "Very strong"
+    pw_match: "✓ Passwords match"
+    pw_no_match: "✗ Passwords do not match"
+    info_id: "ID"
+    info_poste: "Position"
+    info_roles: "Roles"
+    info_created: "Member since"
+    info_last_login: "Last login"
+    flash_csrf_invalid:      "Invalid security token. Please try again."
+    flash_fields_required:   "First name, last name and email are required."
+    flash_email_invalid:     "The email address entered is not valid."
+    flash_email_taken:       "This email address is already used by another account."
+    flash_info_updated:      "Your information has been updated successfully."
+    flash_pw_current_wrong:  "The current password is incorrect."
+    flash_pw_too_short:      "The new password must contain at least 8 characters."
+    flash_pw_mismatch:       "The password confirmation does not match."
+    flash_pw_updated:        "Your password has been changed successfully."
+    flash_photo_missing:     "No photo selected."
+    flash_photo_format:      "Unsupported format. Use JPG, PNG or WebP."
+    flash_photo_size:        "The photo must not exceed 3 MB."
+    flash_photo_updated:     "Profile photo updated successfully."
+    flash_photo_deleted:     "Profile photo deleted."
+    # Ajouter à la fin de translations/messages.en.yaml
+
+orp:
+  page_title: Orphan Management
+  page_title_ar: قائمة طلبات الأيتام
+  breadcrumb_par: Sponsorships
+  breadcrumb: Orphans
+  btn_new: New file
+  stat_total: Total files
+  stat_nouveau: جديد · Pending
+  stat_approuve: معتمدة · Approved
+  stat_actif: مكفول · Active
+  stat_annule: ملغي · Cancelled
+  filter_all_statuts: All statuses
+  filter_s_nouveau: جديد — Pending
+  filter_s_approuve: معتمدة — Approved
+  filter_s_actif: مكفول — Active
+  filter_s_annule: ملغي — Cancelled
+  filter_all_types: Orphan type
+  filter_t_pere: Father deceased
+  filter_t_mere: Mother deceased
+  filter_t_deux: Both parents
+  filter_all_assoc: All associations
+  col_orphelin: Orphan — اليتيم
+  col_type: Type — نوع
+  col_parrain: Sponsor — الكافل
+  col_statut: Status
+  col_scolarite: Schooling
+  col_actions: Actions
+  no_dossiers: No orphan file for this association
+  btn_creer_premier: Create the first one
+  btn_voir: View file
+  btn_modifier: Edit
+  btn_approuver_tbl: Approve — معتمدة
+  btn_activer_tbl: Activate — مكفول
+  btn_supprimer: Delete
+  btn_annuler: Cancel
+  lbl_assoc: Association
+  lbl_parrain: Sponsor (كافل)
+  opt_choisir: — Select —
+  lbl_montant: Periodic amount (MRU)
+  lbl_periodicite: Frequency
+  opt_annuel: Annual — سنوي
+  opt_semestriel: Semi-annual — نصف سنوي
+  opt_trimestriel: Quarterly — ربع سنوي
+  opt_mensuel: Monthly — شهري
+  opt_unique: One-time payment
+  lbl_date_debut: Start date
+  sec_donnees: Orphan data — بيانات اليتيم
+  lbl_nom_complet: Full name
+  lbl_cin: National ID — الرقم الوطني
+  lbl_cin_court: National ID
+  lbl_date_naissance: Date of birth
+  lbl_lieu_naissance: Place of birth
+  lbl_genre: Gender — الجنس
+  lbl_genre_court: Gender
+  opt_masculin: Male — ذكر
+  opt_feminin: Female — أنثى
+  lbl_type: Type — نوع اليتيم
+  lbl_type_court: Orphan type
+  opt_pere_decede: Father deceased — فقد الأب
+  opt_mere_decedee: Mother deceased — فقد الأم
+  opt_deux_parents: Both parents — فقد الوالدين
+  lbl_adresse: Address — عنوان اليتيم
+  lbl_adresse_court: Address
+  lbl_telephone: Phone — الهاتف
+  lbl_telephone_court: Phone
+  lbl_etat_sante: Health status
+  sec_famille: Family — معلومات الأسرة
+  sec_famille_court: Family
+  lbl_nom_mere: 'Mother''s name — اسم الأم'
+  lbl_nom_mere_court: 'Mother''s name'
+  lbl_mere_remariee: Mother remarried — الأم متزوجة
+  lbl_mere_remariee_court: Mother remarried
+  opt_oui: True
+  opt_oui_mere: Yes — الأم متزوجة
+  opt_non: False
+  lbl_date_deces_pere: 'Father''s death date'
+  lbl_date_deces_mere: 'Mother''s death date'
+  lbl_nom_tuteur: Guardian — اسم ولي الأمر
+  lbl_nom_tuteur_court: Guardian
+  lbl_relation: Relation — صلة القرابة
+  lbl_relation_court: Guardian relation
+  opt_relation_vide: —
+  opt_mere: Mother — الأم
+  opt_frere: Brother — الأخ
+  opt_oncle: Uncle — العم
+  opt_grand_pere: Grandfather — الجد
+  opt_autre: Other — أخرى
+  opt_autre_court: Other
+  lbl_fratrie: Brothers / Sisters
+  lbl_freres: Brothers
+  lbl_soeurs: Sisters
+  lbl_nb_freres: Nb brothers
+  lbl_nb_soeurs: Nb sisters
+  sec_scolarite: Schooling — المرحلة الدراسية
+  sec_scolarite_court: Schooling
+  lbl_ecole: School — اسم المدرسة
+  lbl_ecole_court: School
+  lbl_niveau: Level — المرحلة الدراسية
+  lbl_niveau_court: School level
+  lbl_raison: Reason not in school
+  lbl_raison_court: Reason not in school
+  non_scolarise: Not in school or not specified
+  sec_photo: Orphan photo
+  photo_click: Click or drag a photo
+  photo_types: JPG · PNG · WebP · max 5 MB
+  photo_ok: Photo selected
+  photo_changer: Change
+  photo_vide_hint: (leave empty to keep current photo)
+  sec_photo_modif: New photo
+  btn_enregistrer: Save file
+  btn_enreg_modif: Save changes
+  mo_new_title: New orphan file
+  mo_new_sub: استمارة طلب كفالة يتيم
+  mo_edit_title: Edit file
+  mo_edit_loading: Loading…
+  mo_app_title: Approve file
+  app_transition: 'Transition: جديد → معتمدة'
+  app_desc: The file will be approved. You can then activate it (مكفول) to start the sponsorship.
+  btn_app_confirm: Approve — معتمدة
+  mo_act_title: Activate sponsorship
+  act_transition: 'Transition: معتمدة → مكفول'
+  act_desc: The orphan will be sponsored as of today. The start date is automatically recorded.
+  btn_act_confirm: Activate — مكفول
+  mo_ann_title: Cancel sponsorship
+  ann_transition: Transition → ملغي
+  ann_desc: The sponsorship will be cancelled. This action cannot be reversed.
+  lbl_raison_ann: Reason for cancellation (optional)
+  btn_ann_confirm: Confirm cancellation
+  mo_del_title: Delete file
+  del_irrev: Irreversible action
+  del_warn_index: The orphan file, all payments and all semester reports will be permanently deleted. This action cannot be undone.
+  del_warn_show: The file, all payments and all semester reports will be permanently deleted. This action cannot be undone.
+  btn_del_confirm: Permanently delete
+  show_non_renseigne: Not specified
+  show_masculin: Male — ذكر
+  show_feminin: Female — أنثى
+  show_lbl_deces_pere: 'Father''s death'
+  show_lbl_deces_mere: 'Mother''s death'
+  show_lbl_tuteur: Legal guardian
+  show_am_mariee: Mother remarried
+  show_sec_donnees: Orphan data
+  show_sec_donnees_ar: بيانات اليتيم
+  show_sec_famille: Family information
+  show_sec_famille_ar: معلومات الأسرة
+  show_sec_scolarite_ar: المرحلة الدراسية
+  tab_versements: Payments
+  tab_rapports: Reports
+  btn_add_versement: Add a payment
+  no_versements: No payment recorded
+  col_date: Date
+  col_montant: Amount (MRU)
+  col_mode: Method
+  col_periode: Period
+  btn_del_vers: Delete this payment
+  justif_voir: Document
+  btn_creer_rapport: Create report
+  no_rapports: No report written
+  col_annee: Year
+  col_semestre: Semester
+  btn_del_rapport: Delete this report
+  fin_montant: Periodic amount
+  fin_total: Total paid
+  fin_pct: '% paid'
+  parrain_titre: Sponsor — الكافل
+  lbl_pays: Country
+  lbl_email: Email
+  lbl_bp: P.O. Box
+  dossier_titre: File
+  lbl_statut: Status
+  lbl_ref: Reference
+  lbl_annee_d: Year
+  lbl_date_debut_d: Start date
+  lbl_date_fin: End date
+  lbl_cree_le: Created on
+  lbl_cree_par: Created by
+  lbl_valide_par: Validated by
+  sidebar_btn_approuver: Approve — معتمدة
+  sidebar_btn_activer: Activate — مكفول
+  sidebar_btn_annuler: Cancel — ملغي
+  photo_titre: Photo
+  mo_versement_title: Record a payment
+  lbl_montant_req: Amount (MRU)
+  lbl_date_req: Date
+  lbl_mode_pai: Payment method
+  opt_virement: Wire transfer — تحويل مصرفي
+  opt_cheque: Cheque — شيك
+  opt_especes: Cash — نقداً
+  opt_mobile: Mobile — دفع إلكتروني
+  opt_autre_pai: Other
+  lbl_periode_vers: Period covered
+  lbl_reference: Reference / Cheque no.
+  lbl_justif: Supporting document (PDF / image)
+  lbl_notes: Notes
+  btn_enreg_vers: Record payment
+  mo_del_pay_title: Delete payment
+  del_pay_titre: Confirm deletion
+  del_pay_desc: This payment will be permanently deleted and the total will be recalculated.
+  btn_del_vers_confirm: Delete this payment
+  mo_rapport_title: Create semester report
+  lbl_annee_req: Year
+  lbl_semestre_req: Semester
+  opt_s1: S1 — 1st semester (Jan–Jun)
+  opt_s2: S2 — 2nd semester (Jul–Dec)
+  lbl_situation: General situation
+  lbl_scolarite_rpt: Schooling results
+  lbl_sante_rpt: Health situation
+  lbl_msg_parrain: Message to sponsor
+  lbl_doc: PDF document (optional)
+  btn_creer_rpt: Create report
+  mo_del_rpt_title: Delete report
+  del_rpt_desc: This report and its PDF document will be permanently deleted.
+  btn_del_rpt_confirm: Delete report
+  opt_mere_simple: Mother
+  opt_frere_simple: Brother
+  opt_oncle_simple: Uncle
+  opt_grand_pere_simple: Grandfather
+  show_btn_approuver: Approve
+  show_btn_versement: Payment

@@ -1,0 +1,745 @@
+login:
+  title: تسجيل الدخول — ADB-MR
+  greeting: مرحبًا بكم في ADB-MR
+  subtitle: قم بتسجيل الدخول بحساب منصبك
+  email_label: البريد الإلكتروني
+  email_placeholder: بريدك@email.mr
+  password_label: كلمة المرور
+  password_placeholder: ••••••••
+  remember_me: تذكرني
+  forgot_password: نسيت كلمة المرور؟
+  submit: تسجيل الدخول
+  postes_title: مناصب الجمعية
+  lang_divider: Langue / اللغة / Language
+  footer_version: ADB-MR v1.0 — النظام المتكامل للتسيير
+  footer_copyright: © 2026 جمعية التنمية والعمل الخيري
+left:
+  association_name_ar: جمعية التنمية
+  association_highlight_ar: العمل الخيري
+  association_name_fr: Association Développement et Bien Faisance
+  association_subtitle: النظام المتكامل للتسيير الإداري والمالي
+  badge_secure: آمن
+  badge_audit: تدقيق كامل
+  badge_multilang: متعدد اللغات
+poste:
+  admin: المدير العام
+  admin_desc: وصول كامل
+  dir_projets: مدير المشاريع
+  dir_projets_desc: إدارة ومصادقة المشاريع
+  emp_projets: موظف المشاريع
+  emp_projets_desc: إدخال المشاريع
+  dir_parrainages: مدير الكفالات
+  dir_parrainages_desc: إدارة ومصادقة الكفالات
+  emp_parrainages: موظف الكفالات
+  emp_parrainages_desc: إدخال الكفالات
+  comptable: المحاسب
+  comptable_desc: الصندوق والمالية
+app:
+  name: ADB-MR
+  full_name: النظام المتكامل للتسيير الإداري والمالي
+sidebar:
+  principal: الرئيسية
+  dashboard: لوحة القيادة
+  projets: المشاريع
+  gestion_projets: إدارة المشاريع
+  validation_projets: مصادقة المشاريع
+  parrainages: الكفالات
+  gestion_parrainages: إدارة الكفالات
+  validation_parrainages: مصادقة الكفالات
+  finance: المالية
+  caisse: الصندوق
+  rapports_section: التقارير
+  rapports: التقارير
+  administration: الإدارة
+  audit: سجل التدقيق
+  utilisateurs: المستخدمون
+  parametres: الإعدادات
+  associations: الجمعيات
+  voir_tous: "عرض جميع الجمعيات"
+  voir_toutes: "جميع الجمعيات"
+  aucune_assoc: "لا توجد جمعيات"
+header:
+  search_placeholder: البحث عن مستفيد، مشروع، عملية...
+  export: تصدير
+  notifications: الإشعارات
+  profile: ملفي الشخصي
+  settings: الإعدادات
+  logout: تسجيل الخروج
+dashboard:
+  title: لوحة القيادة
+  welcome: مرحبًا
+  total_beneficiaires: إجمالي المستفيدين
+  projets_actifs: المشاريع النشطة
+  solde_caisse: رصيد الصندوق
+  rapports_pending: تقارير في الانتظار
+  activite_recente: النشاط الأخير
+  depenses_mensuelles: المصروفات الشهرية
+action:
+  save: حفظ
+  cancel: إلغاء
+  edit: تعديل
+  delete: حذف
+  validate: مصادقة
+  reject: رفض
+  export: تصدير
+  search: بحث
+  new: جديد
+  back: رجوع
+  print: طباعة
+  confirm: تأكيد
+  close: إغلاق
+  'true': نعم
+  'false': لا
+  loading: جاري التحميل...
+  no_data: لا توجد بيانات
+flash:
+  numero_required: رقم المشروع إلزامي.
+  numero_exists: هذا الرقم موجود مسبقاً. اختر رقماً آخر.
+  assoc_created: ✓ تم إنشاء الجمعية « %nom% » بنجاح.
+  assoc_deleted: ✓ تم حذف الجمعية « %nom% ».
+  assoc_has_projects: 'لا يمكن الحذف: %count% مشروع مرتبط. افصلها أولاً.'
+  assoc_not_found: الجمعية غير موجودة.
+  assoc_updated: ✓ تم تحديث الجمعية « %nom% ».
+  csrf_invalid: رمز الأمان غير صالح. او الملف غير مقبول حاول مرة أخرى.
+  deleted: تم الحذف
+  error: حدث خطأ
+  fichier_added: ✓ تم إضافة الملف « %nom% ».
+  fichier_deleted: ✓ تم حذف الملف.
+  invalid_url: رابط غير صالح. استخدم رابط يوتيوب صحيح.
+  logo_invalid_type: صيغة الشعار غير مسموح بها (PNG أو JPG أو SVG فقط).
+  logo_too_large: الشعار يتجاوز 2 ميجابايت.
+  logo_upload_failed: فشل رفع الشعار.
+  no_file: لم يتم اختيار أي ملف.
+  not_found: العنصر غير موجود.
+  paiement_added: ✓ تم تسجيل دفعة بقيمة %montant% أوقية.
+  paiement_deleted: ✓ تم حذف الدفعة.
+  paiement_invalid_amount: المبلغ غير صالح (يجب أن يكون أكبر من 0).
+  photo_deleted: ✓ تم حذف الصورة.
+  photos_added: ✓ تم إضافة %count% صورة من أصل %total% مختارة.
+  photos_added_one: ✓ تم إضافة صورة واحدة.
+  photos_limit_reached: 'تم الوصول إلى الحد الأقصى: لا يمكن للمشروع تجاوز 20 صورة.'
+  photos_none_valid: لم يتم اختيار أي صورة صالحة.
+  photos_partial: ⚠ تم إضافة %added% صورة — تم بلوغ الحد الأقصى 20 (%skipped% تم تجاهلها).
+  projet_created: ✓ تم إنشاء المشروع « %nom% » بنجاح.
+  projet_deleted: ✓ تم حذف المشروع « %nom% ».
+  projet_updated: ✓ تم تحديث المشروع « %nom% ».
+  rejected: تم الرفض
+  saved: تم الحفظ بنجاح
+  statut_updated: ✓ تم تحديث الحالة والتقدم.
+  success: تمت العملية بنجاح
+  validated: تمت المصادقة بنجاح
+  video_added: ✓ تم إضافة الفيديو.
+  video_deleted: ✓ تم حذف الفيديو.
+  warning: تنبيه
+  paiement_depasse_budget: المبلغ المطلوب (%montant% أوقية) يتجاوز الميزانية المتبقية (%restant% أوقية).
+common:
+  back: رجوع
+  print: طباعة
+  cancel: إلغاء
+  close: إغلاق
+  edit: تعديل
+  view: عرض
+  delete: حذف
+  save: حفظ
+  'true': نعم
+  'false': لا
+utilisateurs:
+  title: المستخدمون
+  subtitle: '%total% مستخدم · %actifs% نشط'
+  btn_new: مستخدم جديد
+  list_title: قائمة المستخدمين
+  total: المجموع
+  col_user: المستخدم
+  col_email: البريد الإلكتروني
+  col_poste: المنصب
+  col_phone: الهاتف
+  col_status: الحالة
+  col_last_login: آخر دخول
+  col_actions: الإجراءات
+  active: نشط
+  inactive: غير نشط
+  never: أبداً
+  confirm_toggle: تغيير حالة هذا المستخدم؟
+  confirm_reset: إعادة تعيين كلمة المرور؟
+  deactivate: تعطيل
+  activate: تفعيل
+  reset_pwd: إعادة تعيين كلمة المرور
+  modal_new_title: مستخدم جديد
+  modal_new_subtitle: إنشاء حساب جديد
+  modal_edit_title: تعديل
+  modal_edit_subtitle: كلمة المرور اختيارية
+  choose_photo: اختيار صورة
+  change_photo: تغيير
+  remove_photo: حذف
+  photo_hint: JPG, PNG, WebP · أقصى حجم 2 ميغا
+  btn_create: إنشاء
+  pai_count: دفعة(ت) مسجلة
+  vi_count: مقطع(ات)
+  pho_cover_hint: الأولى هي الغلاف
+  fi_count_hint: 'تقارير: %r% · تحويلات: %t%'
+  show_created_by: أنشأ بواسطة
+  show_validated_by: تحقق بواسطة
+  show_updated_at: آخر تحديث
+  show_statut_card: الحالة والتقدم
+  flash_created: تم إنشاء المستخدم "%name%" بنجاح.
+  flash_updated: تم تعديل المستخدم "%name%" بنجاح.
+  flash_toggled_on: تم تفعيل حساب "%name%".
+  flash_toggled_off: تم تعطيل حساب "%name%".
+  flash_reset: تم إعادة تعيين كلمة مرور "%name%".
+  flash_deleted: تم تعطيل حساب "%name%".
+  flash_self_error: لا يمكنك تعديل حسابك الخاص.
+  flash_csrf_error: رمز الأمان غير صالح.
+form:
+  prenom: الاسم الأول
+  prenom_placeholder: الاسم الأول
+  prenom_required: الاسم الأول مطلوب.
+  nom: اللقب
+  nom_placeholder: اسم العائلة
+  nom_required: اللقب مطلوب.
+  email: البريد الإلكتروني
+  email_placeholder: email@association.mr
+  email_required: البريد الإلكتروني مطلوب.
+  email_invalid: البريد الإلكتروني غير صالح.
+  telephone: الهاتف
+  telephone_placeholder: +222 XX XX XX XX
+  poste: المنصب
+  poste_placeholder: — اختر منصبًا —
+  poste_required: المنصب مطلوب.
+  password: كلمة المرور
+  new_password: كلمة مرور جديدة
+  password_placeholder: 8 أحرف على الأقل
+  password_optional: اتركه فارغًا = لا تغيير
+  password_confirm: تأكيد
+  password_confirm_placeholder: تأكيد كلمة المرور
+  password_required: كلمة المرور مطلوبة.
+  password_mismatch: كلمتا المرور غير متطابقتين.
+  password_min: يجب أن تحتوي كلمة المرور على {{ limit }} أحرف على الأقل.
+  photo: صورة الملف الشخصي
+  photo_max_size: يجب ألا تتجاوز الصورة 2 ميغا.
+  photo_mime: 'الصيغ المقبولة: JPG، PNG أو WebP.'
+  remove_photo: حذف الصورة
+  header: null
+  profile: ملفي الشخصي
+  settings: الإعدادات
+  logout: تسجيل الخروج
+assoc:
+  page_title: إدارة الجمعيات
+  btn_new: جمعية جديدة
+  btn_create: إنشاء الجمعية
+  btn_save: حفظ التعديلات
+  btn_delete_confirm: حذف نهائي
+  access_denied: غير مصرح — يلزم دور المدير
+  stat_total: الإجمالي
+  stat_active: نشطة
+  stat_inactive: غير نشطة
+  stat_projects: مشاريع مرتبطة
+  search_placeholder: البحث عن جمعية...
+  filter_all_status: جميع الحالات
+  filter_all_cities: جميع المدن
+  entries: سجلات
+  showing: عرض
+  of: من
+  col_name: الجمعية
+  col_responsible: المسؤول
+  col_contact: التواصل
+  col_city: المدينة
+  col_agrement: الاعتماد
+  col_projects: المشاريع
+  col_status: الحالة
+  col_actions: الإجراءات
+  projects_label: مشروع
+  status_active: نشطة
+  status_inactive: غير نشطة
+  status_hint: الجمعية غير النشطة لا يمكنها إدارة المشاريع
+  modal_create_title: جمعية جديدة
+  modal_create_sub: أدخل معلومات الجمعية
+  modal_edit_title: تعديل الجمعية
+  modal_view_title: تفاصيل الجمعية
+  modal_delete_title: حذف الجمعية
+  modal_delete_sub: هذا الإجراء لا يمكن التراجع عنه
+  section_identity: الهوية
+  section_contact: معلومات الاتصال
+  section_legal: المعلومات القانونية
+  section_visual: المظهر والحالة
+  field_nom: الاسم الرسمي (بالفرنسية)
+  field_nom_ph: 'مثال: Association Développement et Bien Faisance'
+  field_nom_ar: الاسم بالعربية
+  field_sigle: الاختصار
+  field_adresse: العنوان
+  field_adresse_ph: 'مثال: حي التبرة زينة، نواكشوط'
+  field_ville: المدينة
+  field_pays: البلد
+  field_tel: الهاتف
+  field_email: البريد الإلكتروني
+  field_web: الموقع الإلكتروني
+  field_agrement: رقم الاعتماد
+  field_date_creation: تاريخ التأسيس
+  field_responsable: المسؤول
+  field_responsable_ph: اسم الرئيس / المسؤول
+  field_logo: الشعار
+  field_status: الحالة
+  upload_click: انقر للاختيار
+  upload_or_drag: أو اسحب هنا
+  err_nom_required: الاسم مطلوب
+  delete_confirm_title: تأكيد الحذف
+  delete_confirm_text: 'أنت على وشك حذف:'
+  delete_warn: المشاريع المرتبطة ستتأثر أيضاً. تحقق قبل المتابعة.
+  empty_title: لا توجد جمعيات مسجلة
+  empty_sub: أنشئ أول جمعية للبدء
+proj:
+  page_title: إدارة المشاريع
+  breadcrumb: المشاريع
+  rapport_title: تقرير المشروع
+  btn_new: مشروع جديد
+  btn_save: حفظ
+  btn_create: إنشاء المشروع
+  btn_edit: تعديل
+  btn_delete: حذف
+  btn_back: رجوع
+  btn_print: طباعة
+  btn_rapport: التقرير الكامل
+  btn_add: إضافة
+  btn_send: إرسال
+  btn_cancel: إلغاء
+  stat_assoc: الجمعيات
+  stat_total: إجمالي المشاريع
+  stat_in_progress: قيد التنفيذ
+  stat_budget: الميزانية أوقية
+  stat_done: مكتملة
+  stat_mru: أوقية
+  search_ph: البحث عن مشروع…
+  filter_statut: جميع الحالات
+  filter_type: جميع الأنواع
+  filter_assoc:  جميع الجمعيات
+  filter_annee: كل السنوات
+  results: نتائج
+  view_grid: شبكة
+  view_list: قائمة
+  paid: مدفوع
+  no_projects: لا توجد مشاريع لهذه الجمعية.
+  no_results: لا توجد نتائج لهذا البحث.
+  action_view: عرض
+  action_report: التقرير الكامل
+  action_edit: تعديل
+  action_delete: حذف
+  tab_paiements: المدفوعات
+  tab_photos: الصور
+  tab_fichiers: الملفات
+  tab_videos: الفيديوهات
+  tab_infos: معلومات
+  bilan_title: الميزانية المالية
+  bilan_budget: إجمالي الميزانية
+  bilan_paid: إجمالي المدفوع
+  bilan_remaining: المتبقي
+  bilan_rate: نسبة الدفع
+  bilan_phys: التقدم الفعلي
+  info_title: معلومات
+  info_number: رقم المشروع
+  info_assoc: الجمعية
+  info_type: النوع
+  info_statut: الحالة
+  info_location: الموقع
+  info_donor: المتبرع
+  info_duration: المدة
+  info_contract: العقد
+  info_end_date: تاريخ الانتهاء
+  info_created_by: أُنشئ بواسطة
+  info_validated_by: تمت المصادقة بواسطة
+  info_updated: آخر تحديث
+  info_year: السنة
+  info_progression: التقدم
+  info_description: الوصف
+  statut_title: الحالة والتقدم
+  statut_label: الحالة
+  progression_label: التقدم الفعلي
+  create_title: مشروع جديد
+  create_sub: إنشاء مشروع
+  field_assoc: الجمعية
+  field_assoc_ph: — اختر —
+  field_type: النوع
+  field_type_ph: — اختر —
+  field_numero: رقم المشروع
+  field_numero_ph: PRJ-2026-001
+  field_numero_hint: أحرف وأرقام وشرطات فقط
+  field_annee: السنة
+  field_nom: اسم المشروع
+  field_nom_ph: عنوان المشروع…
+  field_donor: المتبرع
+  field_budget: الميزانية (أوقية)
+  field_location: الموقع
+  field_duration: المدة
+  field_duration_ph: 'مثال: 12 شهراً'
+  field_contract_date: تاريخ العقد
+  field_end_date: تاريخ الانتهاء المتوقع
+  field_description: الوصف
+  edit_title: تعديل المشروع
+  delete_title: تأكيد الحذف
+  delete_subtitle: هذا الإجراء لا يمكن التراجع عنه
+  delete_msg: حذف المشروع <strong>%nom%</strong>؟ ستُمسح جميع البيانات (الصور، الملفات، المدفوعات).
+  visu_title: عرض
+  pai_title: سجل المدفوعات
+  pai_sub: '%count% دفعة مسجلة'
+  pai_none: لا توجد مدفوعات مسجلة.
+  pai_add_title: إضافة دفعة
+  pai_field_amount: المبلغ (أوقية)
+  pai_field_date: التاريخ
+  pai_field_mode: طريقة الدفع
+  pai_field_ref: المرجع
+  pai_field_ref_ph: VIR-2026-001
+  pai_field_notes: ملاحظات
+  pai_field_justif: إثبات الدفع (PDF)
+  pai_btn_add: إضافة دفعة
+  pai_justif_label: إثبات
+  pai_delete_confirm: حذف هذه الدفعة؟
+  pho_title: صور المشروع
+  pho_sub: '%count%/20 · الأولى هي الغلاف'
+  pho_none: لا توجد صور لهذا المشروع.
+  pho_add_title: إضافة صور
+  pho_add_sub: '%count%/20'
+  pho_drop_label: انقر أو اسحب الصور
+  pho_drop_types: JPG أو PNG أو WebP — الحد 5 ميجا للصورة
+  pho_field_legend: التعليق
+  pho_field_legend_ph: وصف الصور…
+  pho_btn_add: إضافة صور
+  pho_cover: غلاف
+  pho_delete_confirm: حذف هذه الصورة؟
+  fi_title: ملفات PDF
+  fi_sub: 'تقارير: %rapports% · تحويلات: %transferts%'
+  fi_none: لا توجد ملفات.
+  fi_add_title: إضافة ملف
+  fi_add_sub: PDF فقط
+  fi_drop_label: انقر أو اسحب ملف PDF
+  fi_drop_types: PDF — الحد 10 ميجا
+  fi_field_cat: الفئة
+  fi_btn_add: إضافة ملف
+  fi_download: تنزيل
+  fi_delete_confirm: حذف هذا الملف؟
+  vi_title: فيديوهات YouTube
+  vi_sub: '%count% فيديو'
+  vi_none: لا توجد فيديوهات.
+  vi_add_title: إضافة فيديو
+  vi_add_sub: YouTube فقط
+  vi_field_url: رابط YouTube
+  vi_field_url_ph: https://youtube.com/watch?v=…
+  vi_field_title: العنوان
+  vi_field_title_ph: عنوان الفيديو…
+  vi_btn_add: إضافة فيديو
+  vi_delete_confirm: حذف هذا الفيديو؟
+  pai_count: دفعة(ت) مسجلة
+  vi_count: مقطع(ات)
+  pho_cover_hint: الأولى هي الغلاف
+  fi_count_hint: 'تقارير: %r% · تحويلات: %t%'
+  show_created_by: أنشأ بواسطة
+  show_validated_by: تحقق بواسطة
+  show_updated_at: آخر تحديث
+  show_statut_card: الحالة والتقدم
+  flash_created: ✓ تم إنشاء المشروع « %nom% » بنجاح.
+  flash_updated: ✓ تم تحديث المشروع « %nom% ».
+  flash_deleted: ✓ تم حذف المشروع « %nom% ».
+  flash_statut_updated: ✓ تم تحديث الحالة.
+  flash_paiement_added: ✓ تم تسجيل دفعة %montant% أوقية.
+  flash_paiement_deleted: ✓ تم حذف الدفعة.
+  flash_photos_added: ✓ تم إضافة %count% صورة.
+  flash_photo_deleted: ✓ تم حذف الصورة.
+  flash_fichier_added: ✓ تم إضافة الملف « %nom% ».
+  flash_fichier_deleted: ✓ تم حذف الملف.
+  flash_video_added: ✓ تم إضافة الفيديو.
+  flash_video_deleted: ✓ تم حذف الفيديو.
+  flash_not_found: العنصر غير موجود.
+  flash_invalid_amount: مبلغ غير صالح.
+  flash_invalid_url: رابط غير صالح.
+  flash_no_file: لم يُختر أي ملف.
+  pho_slots_hint: '%slots% مكان(مكانة) متاح من أصل 20'
+  pho_limit_warning: تم الوصول إلى الحد — يحتوي هذا المشروع بالفعل على 20 صورة.
+  pho_types_hint: JPG، PNG، WebP · الحجم الأقصى 5 ميغابايت للصورة
+  pho_multi_hint: يمكنك اختيار عدة صور في وقت واحد
+  photos_partial_warn: يمكن إضافة %slots% صورة فقط لهذا المشروع.
+  filter_results: مشروع(مشاريع)
+  
+  # الحالات — ترجمة فردية للغات المتعددة
+  statut_brouillon: مسودة
+  statut_en_attente: في الانتظار
+  statut_valide: تمت المصادقة
+  statut_en_cours: قيد التنفيذ
+  statut_termine: منتهي
+  statut_rejete: مرفوض
+  # المفاتيح الناقصة
+  fi_cat_ph: تقرير، تحويل، أخرى…
+  pho_slots_left: مكان(مكانة) متبقية
+  btn_clear: مسح
+profile:
+    title: "ملفي الشخصي"
+    link_profile: "ملفي الشخصي"
+    change_photo: "تغيير الصورة"
+    delete_photo: "حذف الصورة"
+    confirm_delete_photo: "حذف صورة الملف الشخصي؟"
+    section_info: "المعلومات الشخصية"
+    section_info_sub: "الاسم والبريد الإلكتروني والهاتف والسيرة الذاتية"
+    section_password: "كلمة المرور"
+    section_password_sub: "تعديل كلمة مرور تسجيل الدخول"
+    section_photo: "صورة الملف الشخصي"
+    section_photo_sub: "JPG أو PNG أو WebP — بحد أقصى 3 ميجابايت"
+    section_account: "معلومات الحساب"
+    section_account_sub: "بيانات غير قابلة للتعديل"
+    field_prenom: "الاسم الأول"
+    field_prenom_ph: "اسمك الأول"
+    field_nom: "اللقب"
+    field_nom_ph: "اسم عائلتك"
+    field_email: "البريد الإلكتروني"
+    field_tel: "الهاتف"
+    field_bio: "نبذة شخصية"
+    field_bio_ph: "بضع كلمات عنك..."
+    field_poste: "المنصب / الوظيفة"
+    field_current_pw: "كلمة المرور الحالية"
+    field_new_pw: "كلمة المرور الجديدة"
+    field_confirm_pw: "تأكيد كلمة المرور الجديدة"
+    btn_save_info: "حفظ"
+    btn_change_pw: "تغيير كلمة المرور"
+    btn_upload_photo: "حفظ الصورة"
+    photo_click: "انقر للاختيار"
+    photo_drag: " أو اسحب وأفلت صورة"
+    pw_weak: "ضعيفة جداً"
+    pw_fair: "متوسطة"
+    pw_good: "قوية"
+    pw_strong: "قوية جداً"
+    pw_match: "✓ كلمتا المرور متطابقتان"
+    pw_no_match: "✗ كلمتا المرور غير متطابقتين"
+    info_id: "المعرّف"
+    info_poste: "المنصب"
+    info_roles: "الأدوار"
+    info_created: "عضو منذ"
+    info_last_login: "آخر تسجيل دخول"
+    flash_csrf_invalid:      "رمز الأمان غير صالح. يرجى المحاولة مرة أخرى."
+    flash_fields_required:   "الاسم الأول واللقب والبريد الإلكتروني إلزامية."
+    flash_email_invalid:     "عنوان البريد الإلكتروني المُدخل غير صالح."
+    flash_email_taken:       "عنوان البريد الإلكتروني هذا مستخدم بالفعل من قِبل حساب آخر."
+    flash_info_updated:      "تم تحديث معلوماتك بنجاح."
+    flash_pw_current_wrong:  "كلمة المرور الحالية غير صحيحة."
+    flash_pw_too_short:      "يجب أن تحتوي كلمة المرور الجديدة على 8 أحرف على الأقل."
+    flash_pw_mismatch:       "تأكيد كلمة المرور غير مطابق."
+    flash_pw_updated:        "تم تغيير كلمة المرور بنجاح."
+    flash_photo_missing:     "لم يتم اختيار أي صورة."
+    flash_photo_format:      "الصيغة غير مدعومة. استخدم JPG أو PNG أو WebP."
+    flash_photo_size:        "يجب ألا يتجاوز حجم الصورة 3 ميجابايت."
+    flash_photo_updated:     "تم تحديث صورة الملف الشخصي بنجاح."
+    flash_photo_deleted:     "تم حذف صورة الملف الشخصي."
+    # Ajouter à la fin de translations/messages.ar.yaml
+
+orp:
+  page_title: إدارة الأيتام
+  page_title_ar: قائمة طلبات الأيتام
+  breadcrumb_par: الكفالات
+  breadcrumb: الأيتام
+  btn_new: ملف جديد
+  stat_total: إجمالي الملفات
+  stat_nouveau: جديد · قيد الانتظار
+  stat_approuve: معتمدة · موافق عليها
+  stat_actif: مكفول · نشطة
+  stat_annule: ملغي · ملغاة
+  filter_all_statuts: جميع الحالات
+  filter_s_nouveau: جديد — قيد الانتظار
+  filter_s_approuve: معتمدة — موافق عليه
+  filter_s_actif: مكفول — نشط
+  filter_s_annule: ملغي — ملغى
+  filter_all_types: نوع اليتيم
+  filter_t_pere: فقد الأب
+  filter_t_mere: فقد الأم
+  filter_t_deux: فقد الوالدين
+  filter_all_assoc: جميع الجمعيات
+  col_orphelin: اليتيم — Orphelin
+  col_type: النوع — Type
+  col_parrain: الكافل — Parrain
+  col_statut: الحالة
+  col_scolarite: الدراسة
+  col_actions: الإجراءات
+  no_dossiers: لا يوجد ملف يتيم لهذه الجمعية
+  btn_creer_premier: إنشاء أول ملف
+  btn_voir: عرض الملف
+  btn_modifier: تعديل
+  btn_approuver_tbl: اعتماد — معتمدة
+  btn_activer_tbl: تفعيل — مكفول
+  btn_supprimer: حذف
+  btn_annuler: إلغاء
+  lbl_assoc: الجمعية
+  lbl_parrain: الكافل
+  opt_choisir: — اختر —
+  lbl_montant: المبلغ الدوري (أوقية)
+  lbl_periodicite: الدورية
+  opt_annuel: سنوي — Annuel
+  opt_semestriel: نصف سنوي — Semestriel
+  opt_trimestriel: ربع سنوي — Trimestriel
+  opt_mensuel: شهري — Mensuel
+  opt_unique: دفعة واحدة
+  lbl_date_debut: تاريخ البداية
+  sec_donnees: بيانات اليتيم
+  lbl_nom_complet: الاسم الكامل
+  lbl_cin: الرقم الوطني
+  lbl_cin_court: الرقم الوطني
+  lbl_date_naissance: تاريخ الميلاد
+  lbl_lieu_naissance: مكان الميلاد
+  lbl_genre: الجنس
+  lbl_genre_court: الجنس
+  opt_masculin: ذكر — Masculin
+  opt_feminin: أنثى — Féminin
+  lbl_type: نوع اليتيم
+  lbl_type_court: نوع اليتيم
+  opt_pere_decede: فقد الأب — Père décédé
+  opt_mere_decedee: فقد الأم — Mère décédée
+  opt_deux_parents: فقد الوالدين — Les deux parents
+  lbl_adresse: العنوان
+  lbl_adresse_court: العنوان
+  lbl_telephone: الهاتف
+  lbl_telephone_court: الهاتف
+  lbl_etat_sante: الحالة الصحية
+  sec_famille: معلومات الأسرة
+  sec_famille_court: الأسرة
+  lbl_nom_mere: اسم الأم
+  lbl_nom_mere_court: اسم الأم
+  lbl_mere_remariee: الأم متزوجة
+  lbl_mere_remariee_court: الأم متزوجة
+  opt_oui: نعم
+  opt_oui_mere: نعم — الأم متزوجة
+  opt_non: لا
+  lbl_date_deces_pere: تاريخ وفاة الأب
+  lbl_date_deces_mere: تاريخ وفاة الأم
+  lbl_nom_tuteur: اسم ولي الأمر
+  lbl_nom_tuteur_court: اسم الولي
+  lbl_relation: صلة القرابة
+  lbl_relation_court: صلة القرابة
+  opt_relation_vide: —
+  opt_mere: الأم
+  opt_frere: الأخ
+  opt_oncle: العم
+  opt_grand_pere: الجد
+  opt_autre: أخرى
+  opt_autre_court: أخرى
+  lbl_fratrie: الأخوة
+  lbl_freres: إخوة
+  lbl_soeurs: أخوات
+  lbl_nb_freres: عدد الإخوة
+  lbl_nb_soeurs: عدد الأخوات
+  sec_scolarite: المرحلة الدراسية
+  sec_scolarite_court: الدراسة
+  lbl_ecole: اسم المدرسة
+  lbl_ecole_court: المدرسة
+  lbl_niveau: المرحلة الدراسية
+  lbl_niveau_court: المرحلة الدراسية
+  lbl_raison: سبب عدم الدراسة
+  lbl_raison_court: سبب عدم الدراسة
+  non_scolarise: غير ملتحق أو غير محدد
+  sec_photo: صورة اليتيم
+  photo_click: انقر أو اسحب صورة
+  photo_types: JPG · PNG · WebP · الحجم الأقصى 5 ميغابايت
+  photo_ok: تم اختيار الصورة
+  photo_changer: تغيير
+  photo_vide_hint: (اتركه فارغاً للإبقاء على الصورة الحالية)
+  sec_photo_modif: صورة جديدة
+  btn_enregistrer: حفظ الملف
+  btn_enreg_modif: حفظ التعديلات
+  mo_new_title: ملف يتيم جديد
+  mo_new_sub: استمارة طلب كفالة يتيم
+  mo_edit_title: تعديل الملف
+  mo_edit_loading: جاري التحميل…
+  mo_app_title: اعتماد الملف
+  app_transition: 'الانتقال : جديد → معتمدة'
+  app_desc: سيتم اعتماد الملف. يمكنك بعد ذلك تفعيله (مكفول) لبدء الكفالة.
+  btn_app_confirm: اعتماد — معتمدة
+  mo_act_title: تفعيل الكفالة
+  act_transition: 'الانتقال : معتمدة → مكفول'
+  act_desc: سيتم كفالة اليتيم اعتباراً من اليوم. يتم تسجيل تاريخ البداية تلقائياً.
+  btn_act_confirm: تفعيل — مكفول
+  mo_ann_title: إلغاء الكفالة
+  ann_transition: الانتقال → ملغي
+  ann_desc: سيتم إلغاء الكفالة. هذا الإجراء لا يمكن عكسه.
+  lbl_raison_ann: سبب الإلغاء (اختياري)
+  btn_ann_confirm: تأكيد الإلغاء
+  mo_del_title: حذف الملف
+  del_irrev: إجراء لا يمكن التراجع عنه
+  del_warn_index: ستُحذف بطاقة اليتيم وجميع الدفعات والتقارير الفصلية نهائياً. لا يمكن التراجع عن هذا الإجراء.
+  del_warn_show: ستُحذف بطاقة اليتيم وجميع الدفعات والتقارير الفصلية نهائياً.
+  btn_del_confirm: حذف نهائي
+  show_non_renseigne: غير محدد
+  show_masculin: ذكر — Masculin
+  show_feminin: أنثى — Féminin
+  show_lbl_deces_pere: تاريخ وفاة الأب
+  show_lbl_deces_mere: تاريخ وفاة الأم
+  show_lbl_tuteur: ولي الأمر
+  show_am_mariee: الأم متزوجة
+  show_sec_donnees: بيانات اليتيم
+  show_sec_donnees_ar: بيانات اليتيم
+  show_sec_famille: معلومات الأسرة
+  show_sec_famille_ar: معلومات الأسرة
+  show_sec_scolarite_ar: المرحلة الدراسية
+  tab_versements: الدفعات
+  tab_rapports: التقارير
+  btn_add_versement: إضافة دفعة
+  no_versements: لا توجد دفعات مسجلة
+  col_date: التاريخ
+  col_montant: المبلغ (أوقية)
+  col_mode: طريقة الدفع
+  col_periode: الفترة
+  btn_del_vers: حذف هذه الدفعة
+  justif_voir: الوثيقة
+  btn_creer_rapport: إنشاء تقرير
+  no_rapports: لا توجد تقارير
+  col_annee: السنة
+  col_semestre: الفصل
+  btn_del_rapport: حذف هذا التقرير
+  fin_montant: المبلغ الدوري
+  fin_total: إجمالي المدفوع
+  fin_pct: '% مدفوع'
+  parrain_titre: الكافل — Parrain
+  lbl_pays: الدولة
+  lbl_email: البريد الإلكتروني
+  lbl_bp: صندوق البريد
+  dossier_titre: الملف
+  lbl_statut: الحالة
+  lbl_ref: المرجع
+  lbl_annee_d: السنة
+  lbl_date_debut_d: تاريخ البداية
+  lbl_date_fin: تاريخ النهاية
+  lbl_cree_le: تاريخ الإنشاء
+  lbl_cree_par: أنشئ بواسطة
+  lbl_valide_par: اعتمد بواسطة
+  sidebar_btn_approuver: اعتماد — معتمدة
+  sidebar_btn_activer: تفعيل — مكفول
+  sidebar_btn_annuler: إلغاء — ملغي
+  photo_titre: الصورة
+  mo_versement_title: تسجيل دفعة
+  lbl_montant_req: المبلغ (أوقية)
+  lbl_date_req: التاريخ
+  lbl_mode_pai: طريقة الدفع
+  opt_virement: تحويل مصرفي — Virement
+  opt_cheque: شيك — Chèque
+  opt_especes: نقداً — Espèces
+  opt_mobile: دفع إلكتروني — Mobile
+  opt_autre_pai: أخرى
+  lbl_periode_vers: الفترة المعنية
+  lbl_reference: المرجع / رقم الشيك
+  lbl_justif: وثيقة مؤيدة (PDF / صورة)
+  lbl_notes: ملاحظات
+  btn_enreg_vers: تسجيل الدفعة
+  mo_del_pay_title: حذف الدفعة
+  del_pay_titre: تأكيد الحذف
+  del_pay_desc: ستُحذف هذه الدفعة نهائياً وسيتم إعادة حساب الإجمالي.
+  btn_del_vers_confirm: حذف هذه الدفعة
+  mo_rapport_title: إنشاء تقرير فصلي
+  lbl_annee_req: السنة
+  lbl_semestre_req: الفصل
+  opt_s1: S1 — الفصل الأول (يناير–يونيو)
+  opt_s2: S2 — الفصل الثاني (يوليو–ديسمبر)
+  lbl_situation: الوضع العام
+  lbl_scolarite_rpt: نتائج الدراسة
+  lbl_sante_rpt: الحالة الصحية
+  lbl_msg_parrain: رسالة إلى الكافل
+  lbl_doc: وثيقة PDF (اختياري)
+  btn_creer_rpt: إنشاء التقرير
+  mo_del_rpt_title: حذف التقرير
+  del_rpt_desc: سيُحذف هذا التقرير ووثيقة PDF الخاصة به نهائياً.
+  btn_del_rpt_confirm: حذف التقرير
+  opt_mere_simple: الأم
+  opt_frere_simple: الأخ
+  opt_oncle_simple: العم
+  opt_grand_pere_simple: الجد
+  show_btn_approuver: اعتماد
+  show_btn_versement: دفعة

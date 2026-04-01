@@ -1,0 +1,342 @@
+{# templates/layout/_header.html.twig #}
+
+<header class="top-header">
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="{{ 'header.search_placeholder'|trans }}">
+    </div>
+
+    <div class="header-actions">
+
+        {# === Langue === #}
+        <div class="lang-sw">
+            <a href="{{ path(app.current_route ?? 'app_dashboard', app.current_route_parameters|merge({'_locale': 'fr'})) }}"
+               class="lang-btn {{ app.request.locale == 'fr' ? 'active' : '' }}">FR</a>
+            <a href="{{ path(app.current_route ?? 'app_dashboard', app.current_route_parameters|merge({'_locale': 'ar'})) }}"
+               class="lang-btn {{ app.request.locale == 'ar' ? 'active' : '' }}">عر</a>
+            <a href="{{ path(app.current_route ?? 'app_dashboard', app.current_route_parameters|merge({'_locale': 'en'})) }}"
+               class="lang-btn {{ app.request.locale == 'en' ? 'active' : '' }}">EN</a>
+        </div>
+
+        {# === Notifications === #}
+        <button class="hdr-btn" id="notifBtn" aria-label="{{ 'header.notifications'|trans|default('Notifications') }}">
+            <i class="bi bi-bell"></i>
+            {% if notifications_count is defined and notifications_count > 0 %}
+                <span class="notif-dot"></span>
+            {% endif %}
+        </button>
+
+        {# === Export (masqué sur mobile, visible tablette+) === #}
+        <button class="hdr-btn hdr-btn--desktop" id="exportBtn" title="{{ 'header.export'|trans }}">
+            <i class="bi bi-download"></i>
+        </button>
+
+        {# === Separateur (masqué sur mobile) === #}
+        <div class="hdr-sep"></div>
+
+        {# === User connecte === #}
+        {% if app.user %}
+        <div class="header-user" id="headerUser">
+            <button class="header-user__trigger" onclick="document.getElementById('userDropdown').classList.toggle('open')" aria-haspopup="true">
+                {% if app.user.hasPhoto %}
+                    <img src="{{ asset(app.user.photoPath) }}" alt="{{ app.user.fullName }}" class="header-user__avatar">
+                {% else %}
+                    <div class="header-user__initials" style="background:{{ app.user.posteCouleur }}">
+                        {{ app.user.initials }}
+                    </div>
+                {% endif %}
+                <i class="bi bi-chevron-down header-user__chevron"></i>
+            </button>
+
+            {# --- Dropdown --- #}
+            <div class="header-user__dropdown" id="userDropdown" role="menu">
+                <div class="header-user__dp-header">
+                    {% if app.user.hasPhoto %}
+                        <img src="{{ asset(app.user.photoPath) }}" alt="" class="header-user__dp-avatar">
+                    {% else %}
+                        <div class="header-user__dp-initials" style="background:{{ app.user.posteCouleur }}">
+                            {{ app.user.initials }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <div class="header-user__dp-name">{{ app.user.fullName }}</div>
+                        <div class="header-user__dp-email">{{ app.user.email }}</div>
+                    </div>
+                </div>
+
+                <div class="header-user__dp-sep"></div>
+
+                <a href="{{ path('app_profile_show') }}" class="header-user__dp-item" role="menuitem">
+                    <i class="bi bi-person"></i>
+                    {{ 'header.profile'|trans({}, 'messages', app.request.locale)|default('Mon profil') }}
+                </a>
+
+                <div class="header-user__dp-sep"></div>
+
+                <a href="{{ path('app_logout') }}" class="header-user__dp-item header-user__dp-item--danger" role="menuitem">
+                    <i class="bi bi-box-arrow-right"></i>
+                    {{ 'header.logout'|trans({}, 'messages', app.request.locale)|default('Déconnexion') }}
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</header>
+
+{# === STYLES HEADER === #}
+<style>
+/* ── Top Header layout ── */
+.top-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;          /* 1 seule ligne par défaut */
+    min-height: var(--hh, 68px);
+    padding: 0 24px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--brd);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+/* Search box : flex-shrink pour qu'elle rétrécisse sans casser le layout */
+.top-header .search-box {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 420px;
+}
+
+/* Actions : ne grandissent jamais */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+}
+
+/* Séparateur vertical */
+.hdr-sep {
+    width: 1px;
+    height: 28px;
+    background: var(--brd, #e2e8f0);
+    flex-shrink: 0;
+}
+
+/* ── Lang switcher ── */
+.lang-sw {
+    display: flex;
+    gap: 3px;
+    background: #fff;
+    border: 1px solid var(--brd);
+    border-radius: 10px;
+    padding: 3px;
+    flex-shrink: 0;
+}
+.lang-btn {
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    color: var(--t3);
+    font-size: .72rem;
+    font-weight: 700;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: .2s;
+    font-family: var(--fb);
+    letter-spacing: .04em;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.lang-btn:hover  { color: var(--t2); }
+.lang-btn.active { background: var(--ac); color: #fff; }
+
+/* ── Boutons icône header ── */
+.hdr-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--brd);
+    background: transparent;
+    color: var(--t2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: .2s;
+    flex-shrink: 0;
+}
+.hdr-btn:hover { background: var(--hover); color: var(--t1); }
+
+.notif-dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 8px; height: 8px;
+    background: var(--warn);
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+/* ── User trigger ── */
+.header-user { position: relative; }
+.header-user__trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px 5px 5px;
+    border: 1.5px solid var(--brd, #e2e8f0);
+    border-radius: 14px;
+    background: var(--bg, #fff);
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+    flex-shrink: 0;
+}
+.header-user__trigger:hover {
+    border-color: var(--ac, #14532D);
+    box-shadow: 0 2px 8px rgba(20,83,45,.08);
+}
+.header-user__avatar,
+.header-user__initials {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+.header-user__avatar    { object-fit: cover; }
+.header-user__initials  { color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .75rem; }
+.header-user__chevron   { font-size: .65rem; color: var(--t3, #94a3b8); transition: transform .2s; }
+
+/* ── Dropdown ── */
+.header-user__dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 240px;
+    background: #fff;
+    border: 1.5px solid var(--brd, #e2e8f0);
+    border-radius: 14px;
+    box-shadow: 0 12px 36px rgba(0,0,0,.1), 0 4px 12px rgba(0,0,0,.04);
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all .2s;
+    overflow: hidden;
+}
+html[dir="rtl"] .header-user__dropdown { right: auto; left: 0; }
+.header-user__dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.header-user__dp-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+}
+.header-user__dp-avatar   { width: 40px; height: 40px; border-radius: 11px; object-fit: cover; }
+.header-user__dp-initials { width: 40px; height: 40px; border-radius: 11px; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .82rem; }
+.header-user__dp-name     { font-weight: 600; font-size: .86rem; color: var(--t1, #1e293b); }
+.header-user__dp-email    { font-size: .73rem; color: var(--t3, #94a3b8); margin-top: 2px; }
+.header-user__dp-sep      { height: 1px; background: var(--brd, #f1f5f9); }
+.header-user__dp-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    font-size: .84rem;
+    color: var(--t2, #475569);
+    text-decoration: none;
+    transition: background .15s;
+}
+.header-user__dp-item:hover         { background: rgba(20,83,45,.04); color: var(--ac, #14532D); }
+.header-user__dp-item i             { font-size: 1rem; width: 20px; text-align: center; }
+.header-user__dp-item--danger       { color: #DC2626; }
+.header-user__dp-item--danger:hover { background: rgba(220,38,38,.05); color: #DC2626; }
+
+/* ════════════════════════════════════════════════
+   RESPONSIVE HEADER
+   ════════════════════════════════════════════════ */
+
+/* Tablette 769–992 px : header compact */
+@media (min-width: 769px) and (max-width: 992px) {
+    .top-header { padding: 0 18px; gap: 8px; }
+    .top-header .search-box { max-width: 280px; }
+    .lang-btn { padding: 4px 8px; font-size: .68rem; }
+}
+
+/* Mobile ≤ 768 px */
+@media (max-width: 768px) {
+    .top-header {
+        padding: 0 12px;
+        gap: 8px;
+        min-height: 56px;
+    }
+
+    /* Search box masquée : chaque page a sa propre barre de recherche */
+    .top-header .search-box { display: none; }
+
+    /* Export masqué (pas utile sans souris) */
+    .hdr-btn--desktop { display: none; }
+
+    /* Séparateur masqué */
+    .hdr-sep { display: none; }
+
+    /* Lang switcher plus compact */
+    .lang-sw   { padding: 2px; border-radius: 8px; }
+    .lang-btn  { padding: 4px 7px; font-size: .65rem; border-radius: 5px; }
+
+    /* Notification : taille tactile minimum */
+    .hdr-btn   { width: 38px; height: 38px; border-radius: 9px; }
+
+    /* User trigger : avatar seul, sans chevron */
+    .header-user__trigger {
+        padding: 4px;
+        border: none;
+        background: transparent;
+        gap: 0;
+    }
+    .header-user__chevron { display: none; }
+
+    /* Dropdown : à gauche sur mobile pour ne pas sortir de l'écran */
+    .header-user__dropdown {
+        right: 0;
+        left: auto;
+        min-width: 220px;
+    }
+    html[dir="rtl"] .header-user__dropdown { right: auto; left: 0; }
+}
+
+/* Très petit mobile ≤ 400 px */
+@media (max-width: 400px) {
+    .top-header { padding: 0 10px; gap: 6px; }
+    .lang-btn   { padding: 3px 5px; font-size: .6rem; }
+    .hdr-btn    { width: 34px; height: 34px; }
+}
+</style>
+
+{# === JS : Fermer dropdown au clic extérieur + Escape === #}
+<script>
+document.addEventListener('click', function(e) {
+    var dd = document.getElementById('userDropdown');
+    var hu = document.getElementById('headerUser');
+    if (dd && hu && !hu.contains(e.target)) dd.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        var dd = document.getElementById('userDropdown');
+        if (dd) dd.classList.remove('open');
+    }
+});
+</script>

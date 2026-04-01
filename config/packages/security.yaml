@@ -1,0 +1,94 @@
+# config/packages/security.yaml
+# ============================================
+# SIGAF - 6 Rôles de l'association
+#
+#   ADMIN
+#     ├── DIRECTEUR_PROJETS
+#     │     └── EMPLOYE_PROJETS
+#     ├── DIRECTEUR_PARRAINAGES
+#     │     └── EMPLOYE_PARRAINAGES
+#     └── COMPTABLE
+#
+# ============================================
+
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_dashboard
+                enable_csrf: true
+            logout:
+                path: app_logout
+                target: app_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+
+    # ╔══════════════════════════════════════════════════╗
+    # ║  HIÉRARCHIE DES RÔLES                           ║
+    # ║                                                  ║
+    # ║  Admin hérite de TOUT                            ║
+    # ║  Dir. Projets hérite de Employé Projets          ║
+    # ║  Dir. Parrainages hérite de Employé Parrainages  ║
+    # ╚══════════════════════════════════════════════════╝
+
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_DIRECTEUR_PROJETS, ROLE_DIRECTEUR_PARRAINAGES, ROLE_COMPTABLE]
+        ROLE_DIRECTEUR_PROJETS: [ROLE_EMPLOYE_PROJETS]
+        ROLE_DIRECTEUR_PARRAINAGES: [ROLE_EMPLOYE_PARRAINAGES]
+        ROLE_EMPLOYE_PROJETS: [ROLE_USER]
+        ROLE_EMPLOYE_PARRAINAGES: [ROLE_USER]
+        ROLE_COMPTABLE: [ROLE_USER]
+
+    # ╔══════════════════════════════════════════════════╗
+    # ║  CONTRÔLE D'ACCÈS PAR PAGE                       ║
+    # ╚══════════════════════════════════════════════════╝
+
+    access_control:
+        # Login = public
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+
+        # Admin uniquement
+        - { path: ^/utilisateurs, roles: ROLE_ADMIN }
+        - { path: ^/parametres, roles: ROLE_ADMIN }
+        - { path: ^/audit, roles: ROLE_ADMIN }
+
+        # Module Projets → Employé Projets ou supérieur
+        - { path: ^/projets, roles: ROLE_EMPLOYE_PROJETS }
+
+        # Module Parrainages → Employé Parrainages ou supérieur
+        - { path: ^/parrainages, roles: ROLE_EMPLOYE_PARRAINAGES }
+
+        # Caisse → Comptable ou Admin
+        - { path: ^/caisse, roles: ROLE_COMPTABLE }
+
+        # Rapports → tous les connectés
+        - { path: ^/rapports, roles: ROLE_USER }
+
+        # Tout le reste → connecté
+        - { path: ^/, roles: ROLE_USER }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4

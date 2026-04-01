@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ParrainageImam index{% endblock %}
+
+{% block body %}
+    <h1>ParrainageImam index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomComplet</th>
+                <th>Cin</th>
+                <th>DateNaissance</th>
+                <th>LieuNaissance</th>
+                <th>Genre</th>
+                <th>Metier</th>
+                <th>InstitutionFormation</th>
+                <th>Diplome</th>
+                <th>Specialite</th>
+                <th>AnneeObtentionDiplome</th>
+                <th>DateDebutFonction</th>
+                <th>Experiences</th>
+                <th>Competences</th>
+                <th>TypeEmploi</th>
+                <th>FonctionActuelle</th>
+                <th>RevenuMensuel</th>
+                <th>RevenuFamilleTotal</th>
+                <th>SituationSociale</th>
+                <th>NbGarcons</th>
+                <th>NbFilles</th>
+                <th>NombrePersonnesCharge</th>
+                <th>Adresse</th>
+                <th>Besoins</th>
+                <th>Telephone</th>
+                <th>Telephone2</th>
+                <th>Photo</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for parrainage_imam in parrainage_imams %}
+            <tr>
+                <td>{{ parrainage_imam.id }}</td>
+                <td>{{ parrainage_imam.nomComplet }}</td>
+                <td>{{ parrainage_imam.cin }}</td>
+                <td>{{ parrainage_imam.dateNaissance ? parrainage_imam.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ parrainage_imam.lieuNaissance }}</td>
+                <td>{{ parrainage_imam.genre }}</td>
+                <td>{{ parrainage_imam.metier }}</td>
+                <td>{{ parrainage_imam.institutionFormation }}</td>
+                <td>{{ parrainage_imam.diplome }}</td>
+                <td>{{ parrainage_imam.specialite }}</td>
+                <td>{{ parrainage_imam.anneeObtentionDiplome }}</td>
+                <td>{{ parrainage_imam.dateDebutFonction ? parrainage_imam.dateDebutFonction|date('Y-m-d') : '' }}</td>
+                <td>{{ parrainage_imam.experiences }}</td>
+                <td>{{ parrainage_imam.competences }}</td>
+                <td>{{ parrainage_imam.typeEmploi }}</td>
+                <td>{{ parrainage_imam.fonctionActuelle }}</td>
+                <td>{{ parrainage_imam.revenuMensuel }}</td>
+                <td>{{ parrainage_imam.revenuFamilleTotal }}</td>
+                <td>{{ parrainage_imam.situationSociale }}</td>
+                <td>{{ parrainage_imam.nbGarcons }}</td>
+                <td>{{ parrainage_imam.nbFilles }}</td>
+                <td>{{ parrainage_imam.nombrePersonnesCharge }}</td>
+                <td>{{ parrainage_imam.adresse }}</td>
+                <td>{{ parrainage_imam.besoins }}</td>
+                <td>{{ parrainage_imam.telephone }}</td>
+                <td>{{ parrainage_imam.telephone2 }}</td>
+                <td>{{ parrainage_imam.photo }}</td>
+                <td>{{ parrainage_imam.createdAt ? parrainage_imam.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ parrainage_imam.updatedAt ? parrainage_imam.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_parrainage_imam_show', {'id': parrainage_imam.id}) }}">show</a>
+                    <a href="{{ path('app_parrainage_imam_edit', {'id': parrainage_imam.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="30">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_parrainage_imam_new') }}">Create new</a>
+{% endblock %}

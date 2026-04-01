@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ParrainageFamille{% endblock %}
+
+{% block body %}
+    <h1>ParrainageFamille</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ parrainage_famille.id }}</td>
+            </tr>
+            <tr>
+                <th>DateNaissance</th>
+                <td>{{ parrainage_famille.dateNaissance ? parrainage_famille.dateNaissance|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Genre</th>
+                <td>{{ parrainage_famille.genre }}</td>
+            </tr>
+            <tr>
+                <th>NomChef</th>
+                <td>{{ parrainage_famille.nomChef }}</td>
+            </tr>
+            <tr>
+                <th>CinChef</th>
+                <td>{{ parrainage_famille.cinChef }}</td>
+            </tr>
+            <tr>
+                <th>NiveauEducatif</th>
+                <td>{{ parrainage_famille.niveauEducatif }}</td>
+            </tr>
+            <tr>
+                <th>AdresseSкn</th>
+                <td>{{ parrainage_famille.adresseSкn }}</td>
+            </tr>
+            <tr>
+                <th>TypeLogement</th>
+                <td>{{ parrainage_famille.typeLogement }}</td>
+            </tr>
+            <tr>
+                <th>EtatLogement</th>
+                <td>{{ parrainage_famille.etatLogement }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ parrainage_famille.telephone }}</td>
+            </tr>
+            <tr>
+                <th>Telephone2</th>
+                <td>{{ parrainage_famille.telephone2 }}</td>
+            </tr>
+            <tr>
+                <th>RevenuMensuelTotal</th>
+                <td>{{ parrainage_famille.revenuMensuelTotal }}</td>
+            </tr>
+            <tr>
+                <th>EmploiChef</th>
+                <td>{{ parrainage_famille.emploiChef }}</td>
+            </tr>
+            <tr>
+                <th>SourceRevenu</th>
+                <td>{{ parrainage_famille.sourceRevenu }}</td>
+            </tr>
+            <tr>
+                <th>RaisonDemande</th>
+                <td>{{ parrainage_famille.raisonDemande }}</td>
+            </tr>
+            <tr>
+                <th>EtatSante</th>
+                <td>{{ parrainage_famille.etatSante }}</td>
+            </tr>
+            <tr>
+                <th>NombreMembres</th>
+                <td>{{ parrainage_famille.nombreMembres }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ parrainage_famille.createdAt ? parrainage_famille.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ parrainage_famille.updatedAt ? parrainage_famille.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_parrainage_famille_index') }}">back to list</a>
+
+    <a href="{{ path('app_parrainage_famille_edit', {'id': parrainage_famille.id}) }}">edit</a>
+
+    {{ include('parrainage_famille/_delete_form.html.twig') }}
+{% endblock %}

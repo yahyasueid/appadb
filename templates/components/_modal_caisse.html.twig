@@ -1,0 +1,97 @@
+{# templates/components/_modal_caisse.html.twig #}
+
+{# === MODAL ALIMENTATION === #}
+<div class="modal-overlay" id="modalAli">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="bi bi-plus-circle me-2" style="color:var(--ac2)"></i>{{ 'modal.funding'|trans|default('Alimentation de caisse') }}</h3>
+            <button class="modal-close" onclick="closeModal('modalAli')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form method="POST" action="{{ path('app_caisse_alimentation') }}">
+            <div class="modal-body">
+                <div class="fr">
+                    <div class="fg">
+                        <label>{{ 'field.date'|trans|default('Date') }}</label>
+                        <input type="date" name="date" value="{{ 'now'|date('Y-m-d') }}">
+                    </div>
+                    <div class="fg">
+                        <label>{{ 'field.reference'|trans|default('Référence') }}</label>
+                        <input type="text" name="reference" value="AUTO-ALI-{{ random(1000, 9999) }}" readonly style="opacity:.6">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.amount'|trans|default('Montant (MRU)') }}</label>
+                    <input type="number" name="montant" required>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.payment_mode'|trans|default('Mode de paiement') }}</label>
+                    <select name="modePaiement">
+                        <option value="especes">{{ 'payment.cash'|trans|default('Espèces') }}</option>
+                        <option value="virement">{{ 'payment.bank_transfer'|trans|default('Virement bancaire') }}</option>
+                        <option value="cheque">{{ 'payment.check'|trans|default('Chèque') }}</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.reason'|trans|default('Motif') }}</label>
+                    <input type="text" name="motif" placeholder="{{ 'field.reason_funding_placeholder'|trans|default('Source / motif') }}">
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.receipt'|trans|default('Justificatif') }}</label>
+                    <input type="file" name="justificatif">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-o" onclick="closeModal('modalAli')">{{ 'action.cancel'|trans|default('Annuler') }}</button>
+                <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i><span>{{ 'action.register'|trans|default('Enregistrer') }}</span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# === MODAL DÉPENSE === #}
+<div class="modal-overlay" id="modalDep">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="bi bi-dash-circle me-2" style="color:var(--warn)"></i>{{ 'modal.expense'|trans|default('Enregistrer une dépense') }}</h3>
+            <button class="modal-close" onclick="closeModal('modalDep')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form method="POST" action="{{ path('app_caisse_depense') }}">
+            <div class="modal-body">
+                <div class="fr">
+                    <div class="fg">
+                        <label>{{ 'field.date'|trans|default('Date') }}</label>
+                        <input type="date" name="date" value="{{ 'now'|date('Y-m-d') }}">
+                    </div>
+                    <div class="fg">
+                        <label>{{ 'field.reference'|trans|default('Référence') }}</label>
+                        <input type="text" name="reference" value="AUTO-DEP-{{ random(1000, 9999) }}" readonly style="opacity:.6">
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.amount'|trans|default('Montant (MRU)') }}</label>
+                    <input type="number" name="montant" required>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.payment_mode'|trans|default('Mode de paiement') }}</label>
+                    <select name="modePaiement">
+                        <option value="especes">{{ 'payment.cash'|trans|default('Espèces') }}</option>
+                        <option value="virement">{{ 'payment.bank_transfer'|trans|default('Virement bancaire') }}</option>
+                        <option value="cheque">{{ 'payment.check'|trans|default('Chèque') }}</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.reason'|trans|default('Motif') }}</label>
+                    <input type="text" name="motif" placeholder="{{ 'field.reason_expense_placeholder'|trans|default('Objet de la dépense') }}">
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.receipt_required'|trans|default('Justificatif (obligatoire)') }}</label>
+                    <input type="file" name="justificatif" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-o" onclick="closeModal('modalDep')">{{ 'action.cancel'|trans|default('Annuler') }}</button>
+                <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i><span>{{ 'action.register'|trans|default('Enregistrer') }}</span></button>
+            </div>
+        </form>
+    </div>
+</div>

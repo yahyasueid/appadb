@@ -1,0 +1,603 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'profile.title'|trans }} — SIGAF{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* ═══════════════════════════════════════════════════
+   PAGE PROFIL
+═══════════════════════════════════════════════════ */
+:root {
+  --pc: var(--ac, #2E7D32);
+  --pcs: rgba(46,125,50,.1);
+}
+
+.profile-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px 24px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ── Hero card ── */
+.pr-hero {
+  background: linear-gradient(140deg, #0f3d18 0%, #1B5E20 45%, #2E7D32 100%);
+  border-radius: 20px;
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(20,83,45,.22);
+}
+.pr-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.06), transparent 70%);
+  pointer-events: none;
+}
+.pr-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: 20%;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.04), transparent 70%);
+  pointer-events: none;
+}
+
+/* Avatar hero */
+.pr-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.pr-avatar {
+  width: 96px; height: 96px;
+  border-radius: 22px;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 800; color: #fff;
+  background: rgba(255,255,255,.15);
+  overflow: hidden;
+}
+.pr-avatar img { width: 100%; height: 100%; object-fit: cover }
+.pr-avatar-edit {
+  position: absolute;
+  bottom: -5px; right: -5px;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: #fff;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; color: var(--ac, #2E7D32);
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  transition: .15s;
+}
+.pr-avatar-edit:hover { transform: scale(1.1) }
+
+.pr-hero-info { flex: 1; min-width: 0; z-index: 1 }
+.pr-hero-name {
+  font-size: 1.65rem; font-weight: 900; color: #fff;
+  letter-spacing: -.03em; line-height: 1.1; margin-bottom: 4px;
+}
+.pr-hero-role {
+  font-size: .78rem; font-weight: 600; color: rgba(255,255,255,.65);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.pr-hero-role i { font-size: .7rem }
+.pr-hero-chips { display: flex; gap: 8px; flex-wrap: wrap }
+.pr-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: .68rem; font-weight: 600;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.9);
+}
+
+/* ── Grille 2 colonnes ── */
+.pr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 640px) {
+  .pr-grid { grid-template-columns: 1fr }
+  .pr-hero { flex-direction: column; text-align: center }
+  .pr-hero-chips { justify-content: center }
+  .pr-avatar-edit { right: -5px }
+}
+
+/* ── Cards sections ── */
+.pr-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1.5px solid rgba(46,125,50,.1);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.04);
+}
+.pr-card.full { grid-column: 1 / -1 }
+
+.pr-card-hd {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid rgba(46,125,50,.08);
+  display: flex; align-items: center; gap: 10px;
+}
+.pr-card-ico {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; flex-shrink: 0;
+}
+.pr-card-ico.g { background: rgba(46,125,50,.1); color: var(--ac, #2E7D32) }
+.pr-card-ico.b { background: rgba(2,136,209,.1); color: #0288D1 }
+.pr-card-ico.o { background: rgba(212,160,23,.1); color: #D4A017 }
+.pr-card-ico.r { background: rgba(211,47,47,.1); color: #D32F2F }
+.pr-card-title { font-size: .9rem; font-weight: 700; color: var(--t1, #1B2A1B) }
+.pr-card-sub { font-size: .7rem; color: var(--t3, #7A8F7A); margin-top: 1px }
+
+.pr-card-body { padding: 20px }
+
+/* Champs formulaire */
+.pf-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px }
+.pf-row:last-child { margin-bottom: 0 }
+.pf-row.c2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.pf-row.c2 > div { display: flex; flex-direction: column; gap: 5px }
+.pf-lbl {
+  font-size: .72rem; font-weight: 600;
+  color: var(--t2, #4A6B4A);
+  display: flex; align-items: center; gap: 4px;
+}
+.pf-inp {
+  background: rgba(245,240,232,.6);
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-size: .85rem; font-family: inherit;
+  color: var(--t1, #1B2A1B);
+  outline: none; transition: .2s; width: 100%;
+}
+.pf-inp:focus {
+  background: #fff;
+  border-color: var(--ac, #2E7D32);
+  box-shadow: 0 0 0 3px rgba(46,125,50,.07);
+}
+.pf-inp::placeholder { color: var(--t3, #7A8F7A); font-weight: 300 }
+.pf-inp.readonly { opacity: .65; cursor: default }
+textarea.pf-inp { resize: vertical; min-height: 70px }
+
+/* Bouton submit */
+.pf-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 20px; border-radius: 10px; border: none;
+  font-size: .82rem; font-weight: 700; font-family: inherit;
+  cursor: pointer; transition: .2s;
+}
+.pf-btn.primary {
+  background: linear-gradient(135deg, #1B5E20, #2E7D32);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(46,125,50,.25);
+}
+.pf-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(46,125,50,.32) }
+.pf-btn.danger { background: rgba(211,47,47,.1); color: #D32F2F }
+.pf-btn.danger:hover { background: rgba(211,47,47,.18) }
+
+/* Séparateur form footer */
+.pf-footer {
+  padding: 14px 20px;
+  background: rgba(245,240,232,.5);
+  border-top: 1px solid rgba(46,125,50,.08);
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+}
+
+/* ── Password strength ── */
+.pw-strength {
+  height: 3px; border-radius: 10px;
+  background: rgba(0,0,0,.08); margin-top: 5px; overflow: hidden;
+}
+.pw-bar {
+  height: 100%; border-radius: 10px;
+  width: 0; transition: width .3s, background .3s;
+}
+
+/* ── Upload zone photo ── */
+.ph-drop {
+  border: 2px dashed rgba(46,125,50,.25);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+  position: relative;
+}
+.ph-drop:hover, .ph-drop.over {
+  border-color: var(--ac, #2E7D32);
+  background: rgba(46,125,50,.04);
+}
+.ph-drop input[type="file"] {
+  position: fixed; left: -9999px; opacity: 0;
+}
+.ph-drop-ico { font-size: 1.8rem; color: rgba(46,125,50,.4); margin-bottom: 8px }
+.ph-drop-txt { font-size: .78rem; color: var(--t3, #7A8F7A) }
+.ph-drop-txt strong { color: var(--ac, #2E7D32) }
+.ph-preview {
+  display: none;
+  align-items: center; gap: 12px; margin-top: 12px;
+}
+.ph-preview.vis { display: flex }
+.ph-preview img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover }
+.ph-preview-name { font-size: .78rem; font-weight: 600; color: var(--t1, #1B2A1B) }
+.ph-preview-size { font-size: .68rem; color: var(--t3, #7A8F7A) }
+.ph-preview-rm {
+  margin-left: auto; background: none; border: none;
+  color: var(--t3, #7A8F7A); cursor: pointer; font-size: .85rem;
+  transition: color .15s;
+}
+.ph-preview-rm:hover { color: #D32F2F }
+
+/* ── Info readonly card ── */
+.pr-info-list { display: flex; flex-direction: column; gap: 0 }
+.pr-info-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(46,125,50,.07);
+}
+.pr-info-row:last-child { border-bottom: none }
+.pr-info-ico {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(46,125,50,.08); color: var(--ac, #2E7D32);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; flex-shrink: 0;
+}
+.pr-info-lbl { font-size: .68rem; color: var(--t3, #7A8F7A); margin-bottom: 1px }
+.pr-info-val { font-size: .84rem; font-weight: 600; color: var(--t1, #1B2A1B) }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="profile-wrap">
+
+  {# ── Hero card ── #}
+  <div class="pr-hero">
+    <div class="pr-avatar-wrap">
+      <div class="pr-avatar">
+        {% if user.hasPhoto %}
+          <img src="{{ asset(user.photoPath) }}" alt="{{ user.fullName }}">
+        {% else %}
+          {{ user.initials }}
+        {% endif %}
+      </div>
+      <button class="pr-avatar-edit" onclick="document.getElementById('photoInput').click()"
+              title="{{ 'profile.change_photo'|trans }}">
+        <i class="bi bi-camera-fill"></i>
+      </button>
+    </div>
+    <div class="pr-hero-info">
+      <div class="pr-hero-name">{{ user.fullName }}</div>
+      <div class="pr-hero-role">
+        <i class="bi bi-briefcase"></i>
+        {{ user.posteLabel }}
+      </div>
+      <div class="pr-hero-chips">
+        <span class="pr-chip"><i class="bi bi-envelope"></i>{{ user.email }}</span>
+        {% if user.roles|length > 0 %}
+          <span class="pr-chip"><i class="bi bi-shield-check"></i>
+            {% for role in user.roles %}
+              {% if role != 'ROLE_USER' %}{{ role|replace({'ROLE_': ''})|title }}{% endif %}
+            {% endfor %}
+          </span>
+        {% endif %}
+        {% if user.hasPhoto %}
+          <form method="POST" action="{{ path('app_profile_photo_delete') }}" style="margin:0">
+            <input type="hidden" name="_token" value="{{ csrf_token('profile_photo_del') }}">
+            <button type="submit" class="pr-chip" style="border:none;cursor:pointer;background:rgba(211,47,47,.25);color:#ffcdd2"
+                    onclick="return confirm('{{ 'profile.confirm_delete_photo'|trans }}')">
+              <i class="bi bi-trash3"></i>{{ 'profile.delete_photo'|trans }}
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="pr-grid">
+
+    {# ── Informations personnelles ── #}
+    <div class="pr-card full">
+      <div class="pr-card-hd">
+        <div class="pr-card-ico g"><i class="bi bi-person-lines-fill"></i></div>
+        <div>
+          <div class="pr-card-title">{{ 'profile.section_info'|trans }}</div>
+          <div class="pr-card-sub">{{ 'profile.section_info_sub'|trans }}</div>
+        </div>
+      </div>
+      <form method="POST" action="{{ path('app_profile_edit') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('profile_edit') }}">
+        <div class="pr-card-body">
+          <div class="pf-row c2">
+            <div>
+              <label class="pf-lbl">{{ 'profile.field_prenom'|trans }} <span style="color:#D32F2F">*</span></label>
+              <input type="text" name="prenom" class="pf-inp"
+                     value="{{ user.prenom }}" required
+                     placeholder="{{ 'profile.field_prenom_ph'|trans }}">
+            </div>
+            <div>
+              <label class="pf-lbl">{{ 'profile.field_nom'|trans }} <span style="color:#D32F2F">*</span></label>
+              <input type="text" name="nom" class="pf-inp"
+                     value="{{ user.nom }}" required
+                     placeholder="{{ 'profile.field_nom_ph'|trans }}">
+            </div>
+          </div>
+          <div class="pf-row c2">
+            <div>
+              <label class="pf-lbl"><i class="bi bi-envelope" style="color:#0288D1"></i> {{ 'profile.field_email'|trans }} <span style="color:#D32F2F">*</span></label>
+              <input type="email" name="email" class="pf-inp"
+                     value="{{ user.email }}" required
+                     placeholder="exemple@domaine.com">
+            </div>
+            <div>
+              <label class="pf-lbl"><i class="bi bi-telephone" style="color:#D4A017"></i> {{ 'profile.field_tel'|trans }}</label>
+              <input type="tel" name="telephone" class="pf-inp"
+                     value="{{ user.telephone ?? '' }}"
+                     placeholder="+222 XX XX XX XX">
+            </div>
+          </div>
+          <div class="pf-row">
+            <label class="pf-lbl"><i class="bi bi-chat-square-text" style="color:#7B1FA2"></i> {{ 'profile.field_bio'|trans }}</label>
+            <textarea name="bio" class="pf-inp" placeholder="{{ 'profile.field_bio_ph'|trans }}">{{ user.bio ?? '' }}</textarea>
+          </div>
+          <div class="pf-row">
+            <label class="pf-lbl"><i class="bi bi-person-badge"></i> {{ 'profile.field_poste'|trans }}</label>
+            <input type="text" class="pf-inp readonly"
+                   value="{{ user.posteLabel }}" readonly tabindex="-1">
+          </div>
+        </div>
+        <div class="pf-footer">
+          <button type="submit" class="pf-btn primary">
+            <i class="bi bi-check-lg"></i>{{ 'profile.btn_save_info'|trans }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {# ── Changer mot de passe ── #}
+    <div class="pr-card">
+      <div class="pr-card-hd">
+        <div class="pr-card-ico b"><i class="bi bi-lock-fill"></i></div>
+        <div>
+          <div class="pr-card-title">{{ 'profile.section_password'|trans }}</div>
+          <div class="pr-card-sub">{{ 'profile.section_password_sub'|trans }}</div>
+        </div>
+      </div>
+      <form method="POST" action="{{ path('app_profile_password') }}" id="pwForm">
+        <input type="hidden" name="_token" value="{{ csrf_token('profile_password') }}">
+        <div class="pr-card-body">
+          <div class="pf-row">
+            <label class="pf-lbl"><i class="bi bi-key" style="color:#D4A017"></i> {{ 'profile.field_current_pw'|trans }}</label>
+            <input type="password" name="current_password" id="pwCurrent" class="pf-inp" required
+                   placeholder="••••••••" autocomplete="current-password">
+          </div>
+          <div class="pf-row">
+            <label class="pf-lbl"><i class="bi bi-lock" style="color:#0288D1"></i> {{ 'profile.field_new_pw'|trans }}</label>
+            <input type="password" name="new_password" id="pwNew" class="pf-inp" required
+                   placeholder="••••••••" minlength="8" autocomplete="new-password"
+                   oninput="pwStrength(this.value)">
+            <div class="pw-strength"><div class="pw-bar" id="pwBar"></div></div>
+            <div id="pwHint" style="font-size:.66rem;color:var(--t3);margin-top:3px"></div>
+          </div>
+          <div class="pf-row">
+            <label class="pf-lbl"><i class="bi bi-shield-lock" style="color:#2E7D32"></i> {{ 'profile.field_confirm_pw'|trans }}</label>
+            <input type="password" name="confirm_password" id="pwConfirm" class="pf-inp" required
+                   placeholder="••••••••" autocomplete="new-password"
+                   oninput="pwMatch()">
+            <div id="pwMatchHint" style="font-size:.66rem;margin-top:3px"></div>
+          </div>
+        </div>
+        <div class="pf-footer">
+          <button type="submit" class="pf-btn primary" id="pwSubmit">
+            <i class="bi bi-shield-check"></i>{{ 'profile.btn_change_pw'|trans }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {# ── Photo de profil ── #}
+    <div class="pr-card">
+      <div class="pr-card-hd">
+        <div class="pr-card-ico o"><i class="bi bi-camera-fill"></i></div>
+        <div>
+          <div class="pr-card-title">{{ 'profile.section_photo'|trans }}</div>
+          <div class="pr-card-sub">{{ 'profile.section_photo_sub'|trans }}</div>
+        </div>
+      </div>
+      <form method="POST" action="{{ path('app_profile_photo') }}"
+            enctype="multipart/form-data" id="photoForm">
+        <input type="hidden" name="_token" value="{{ csrf_token('profile_photo') }}">
+        <div class="pr-card-body">
+          <div class="ph-drop" id="phDrop"
+               onclick="document.getElementById('photoInput').click()"
+               ondragover="phOver(event)" ondragleave="phLeave(event)" ondrop="phDrop(event)">
+            <input type="file" name="photo" id="photoInput"
+                   accept="image/jpeg,image/png,image/webp"
+                   onchange="phSelect(this.files[0])">
+            <div class="ph-drop-ico"><i class="bi bi-cloud-arrow-up"></i></div>
+            <div class="ph-drop-txt">
+              <strong>{{ 'profile.photo_click'|trans }}</strong>
+              {{ 'profile.photo_drag'|trans }}<br>
+              <span style="font-size:.64rem">JPG, PNG, WebP — max 3 Mo</span>
+            </div>
+          </div>
+          <div class="ph-preview" id="phPreview">
+            <img id="phThumb" src="" alt="">
+            <div>
+              <div class="ph-preview-name" id="phName"></div>
+              <div class="ph-preview-size" id="phSize"></div>
+            </div>
+            <button type="button" class="ph-preview-rm" onclick="phReset()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+        <div class="pf-footer">
+          <button type="submit" class="pf-btn primary" id="phSubmit" disabled>
+            <i class="bi bi-upload"></i>{{ 'profile.btn_upload_photo'|trans }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {# ── Informations du compte (readonly) ── #}
+    <div class="pr-card full">
+      <div class="pr-card-hd">
+        <div class="pr-card-ico g"><i class="bi bi-info-circle-fill"></i></div>
+        <div>
+          <div class="pr-card-title">{{ 'profile.section_account'|trans }}</div>
+          <div class="pr-card-sub">{{ 'profile.section_account_sub'|trans }}</div>
+        </div>
+      </div>
+      <div class="pr-card-body">
+        <div class="pr-info-list">
+          <div class="pr-info-row">
+            <div class="pr-info-ico"><i class="bi bi-hash"></i></div>
+            <div>
+              <div class="pr-info-lbl">{{ 'profile.info_id'|trans }}</div>
+              <div class="pr-info-val">#{{ user.id }}</div>
+            </div>
+          </div>
+          <div class="pr-info-row">
+            <div class="pr-info-ico"><i class="bi bi-person-badge"></i></div>
+            <div>
+              <div class="pr-info-lbl">{{ 'profile.info_poste'|trans }}</div>
+              <div class="pr-info-val">{{ user.posteLabel }}</div>
+            </div>
+          </div>
+          <div class="pr-info-row">
+            <div class="pr-info-ico"><i class="bi bi-shield-check"></i></div>
+            <div>
+              <div class="pr-info-lbl">{{ 'profile.info_roles'|trans }}</div>
+              <div class="pr-info-val" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:3px">
+                {% for role in user.roles %}
+                  {% if role != 'ROLE_USER' %}
+                  <span style="background:rgba(46,125,50,.1);color:#2E7D32;padding:2px 9px;border-radius:20px;font-size:.7rem;font-weight:700">
+                    {{ role|replace({'ROLE_': ''})|title }}
+                  </span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% if user.createdAt is defined and user.createdAt %}
+          <div class="pr-info-row">
+            <div class="pr-info-ico"><i class="bi bi-calendar3"></i></div>
+            <div>
+              <div class="pr-info-lbl">{{ 'profile.info_created'|trans }}</div>
+              <div class="pr-info-val">{{ user.createdAt|date('d/m/Y') }}</div>
+            </div>
+          </div>
+          {% endif %}
+          {% if user.lastLogin is defined and user.lastLogin %}
+          <div class="pr-info-row">
+            <div class="pr-info-ico"><i class="bi bi-clock-history"></i></div>
+            <div>
+              <div class="pr-info-lbl">{{ 'profile.info_last_login'|trans }}</div>
+              <div class="pr-info-val">{{ user.lastLogin|date('d/m/Y H:i') }}</div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>{# /pr-grid #}
+</div>{# /profile-wrap #}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// ── Strength mot de passe ──
+function pwStrength(v) {
+  const bar  = document.getElementById('pwBar');
+  const hint = document.getElementById('pwHint');
+  if (!bar) return;
+  let score = 0;
+  if (v.length >= 8)                   score++;
+  if (/[A-Z]/.test(v))                 score++;
+  if (/[0-9]/.test(v))                 score++;
+  if (/[^A-Za-z0-9]/.test(v))          score++;
+  if (v.length >= 12)                  score++;
+  const colors = ['#D32F2F','#D4A017','#D4A017','#2E7D32','#1B5E20'];
+  const labels = [
+    '{{ 'profile.pw_weak'|trans }}',
+    '{{ 'profile.pw_fair'|trans }}',
+    '{{ 'profile.pw_fair'|trans }}',
+    '{{ 'profile.pw_good'|trans }}',
+    '{{ 'profile.pw_strong'|trans }}'
+  ];
+  bar.style.width   = (score * 20) + '%';
+  bar.style.background = colors[Math.max(0, score - 1)] || '#D32F2F';
+  hint.textContent  = v.length ? labels[Math.max(0, score - 1)] : '';
+  hint.style.color  = colors[Math.max(0, score - 1)] || '#D32F2F';
+}
+
+// ── Correspondance mot de passe ──
+function pwMatch() {
+  const nw  = document.getElementById('pwNew')?.value;
+  const cf  = document.getElementById('pwConfirm')?.value;
+  const el  = document.getElementById('pwMatchHint');
+  if (!el || !cf) return;
+  if (nw === cf) {
+    el.textContent = '{{ 'profile.pw_match'|trans }}';
+    el.style.color = '#2E7D32';
+  } else {
+    el.textContent = '{{ 'profile.pw_no_match'|trans }}';
+    el.style.color = '#D32F2F';
+  }
+}
+
+// ── Upload photo ──
+function phSelect(file) {
+  if (!file) return;
+  const preview = document.getElementById('phPreview');
+  const thumb   = document.getElementById('phThumb');
+  const name    = document.getElementById('phName');
+  const size    = document.getElementById('phSize');
+  const submit  = document.getElementById('phSubmit');
+  const reader  = new FileReader();
+  reader.onload = e => { thumb.src = e.target.result; preview.classList.add('vis'); };
+  reader.readAsDataURL(file);
+  name.textContent = file.name;
+  size.textContent = (file.size / 1024 / 1024).toFixed(2) + ' Mo';
+  if (submit) submit.disabled = false;
+}
+
+function phReset() {
+  document.getElementById('photoInput').value = '';
+  document.getElementById('phPreview').classList.remove('vis');
+  const s = document.getElementById('phSubmit');
+  if (s) s.disabled = true;
+}
+
+function phOver(e)  { e.preventDefault(); document.getElementById('phDrop').classList.add('over') }
+function phLeave(e) { document.getElementById('phDrop').classList.remove('over') }
+function phDrop(e) {
+  e.preventDefault();
+  document.getElementById('phDrop').classList.remove('over');
+  const files = e.dataTransfer.files;
+  if (files.length) {
+    // Injecter dans l'input
+    const input = document.getElementById('photoInput');
+    const dt = new DataTransfer();
+    dt.items.add(files[0]);
+    input.files = dt.files;
+    phSelect(files[0]);
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,1390 @@
+{# templates/projet/index.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}Projets — ADB-MR{% endblock %}
+
+{% block stylesheets %}
+<style>
+:root{
+  --gd:#14532D;--gk:#166534;--gm:#2E7D32;--gl:#4CAF50;--gp:#A5D6A7;
+  --bl:#0288D1;--bl2:rgba(2,136,209,.1);
+  --go:#D4A017;--go2:rgba(212,160,23,.1);
+  --rd:#D32F2F;--rd2:rgba(211,47,47,.1);
+  --pu:#7B1FA2;--pu2:rgba(123,31,162,.1);
+  --sand:#FBF7F0;--sand2:#F0E8D8;
+  --txt:#1B2A1B;--txt2:#4A6B4A;--txt3:#7A8F7A;
+  --bg:#F2F6F2;
+  --r:14px;--rs:10px;--rx:7px;
+  --sh:0 2px 12px rgba(20,83,45,.07);
+  --shm:0 8px 32px rgba(20,83,45,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Outfit',sans-serif}
+
+/* ── HEADER ── */
+.ph{background:linear-gradient(135deg,var(--gd),var(--gk) 55%,var(--gm));
+    padding:26px 36px 22px;position:relative;overflow:hidden}
+.ph::before{content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='8' fill='%23fff' fill-opacity='.03'/%3E%3C/svg%3E")}
+.ph-inner{position:relative;z-index:1}
+.ph-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px}
+.ph-crumb{font-size:.65rem;color:rgba(255,255,255,.5);display:flex;gap:5px;align-items:center;margin-bottom:6px}
+.ph-crumb a{color:rgba(255,255,255,.5);text-decoration:none}.ph-crumb a:hover{color:#fff}
+.ph-h{font-size:1.45rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:9px}
+.ph-sub{font-size:.78rem;color:rgba(255,255,255,.6);margin-top:3px}
+.btn-hero{padding:9px 18px;border-radius:var(--rx);font-size:.78rem;font-weight:600;
+  border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;
+  background:rgba(255,255,255,.13);backdrop-filter:blur(8px);
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:.2s}
+.btn-hero:hover{background:rgba(255,255,255,.23);color:#fff}
+.btn-hero.primary{background:rgba(255,255,255,.95);color:var(--gd);border-color:transparent}
+.btn-hero.primary:hover{background:#fff}
+
+/* stats strip */
+.sstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+  background:rgba(255,255,255,.1);border-radius:var(--rs);overflow:hidden}
+.sc{background:rgba(255,255,255,.08);padding:10px 15px;display:flex;align-items:center;gap:10px}
+.sc-ico{font-size:1.1rem;opacity:.8}
+.sc-v{font-size:1rem;font-weight:800;color:#fff}
+.sc-l{font-size:.6rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.07em}
+
+/* ── TOOLBAR ── */
+.tb{background:#fff;border-bottom:1px solid rgba(46,125,50,.08);
+  padding:12px 36px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(20,83,45,.06)}
+.sbx{display:flex;align-items:center;gap:7px;background:var(--sand);
+  border:1.5px solid rgba(46,125,50,.15);border-radius:var(--rx);
+  padding:0 11px;flex:1;min-width:180px;max-width:300px}
+.sbx i{color:var(--txt3);font-size:.78rem}
+.sbx input{border:none;background:none;padding:8px 0;font-size:.78rem;
+  color:var(--txt);font-family:inherit;width:100%;outline:none}
+.fsel{padding:8px 11px;border-radius:var(--rx);border:1.5px solid rgba(46,125,50,.15);
+  background:var(--sand);font-size:.76rem;color:var(--txt2);
+  font-family:inherit;cursor:pointer;outline:none}
+.fsel:focus{border-color:var(--gm)}
+.tb-cnt{font-size:.71rem;color:var(--txt3);margin-left:auto;white-space:nowrap}
+.vtg{display:flex;gap:3px;background:var(--sand);border-radius:var(--rx);padding:3px}
+.vb{width:30px;height:30px;border:none;border-radius:5px;background:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--txt3);transition:.15s}
+.vb.active{background:#fff;color:var(--gm);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+/* ── FLASH ── */
+.flashes{padding:14px 36px 0}
+.fmsg{padding:10px 16px;border-radius:var(--rx);font-size:.77rem;font-weight:500;
+  display:flex;align-items:center;gap:8px;margin-bottom:8px;animation:fup .3s ease}
+.fmsg.success{background:rgba(46,125,50,.1);color:var(--gd);border:1px solid rgba(46,125,50,.2)}
+.fmsg.error{background:var(--rd2);color:var(--rd);border:1px solid rgba(211,47,47,.2)}
+@keyframes fup{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* ── CONTENT ── */
+.content{padding:22px 36px 80px}
+
+/* GROUPE ASSOCIATION */
+.ag{margin-bottom:34px}
+.ag[data-vis="0"]{display:none}
+.ah{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}
+.ah-l{display:flex;align-items:center;gap:12px}
+.alogo{width:42px;height:42px;border-radius:10px;overflow:hidden;flex-shrink:0;
+  background:rgba(46,125,50,.1);display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:var(--gm);border:2px solid rgba(46,125,50,.15)}
+.alogo img{width:100%;height:100%;object-fit:cover}
+.aname{font-size:.98rem;font-weight:800;color:var(--gd)}
+.ameta{font-size:.68rem;color:var(--txt3);display:flex;align-items:center;gap:6px;margin-top:2px}
+.ah-r{display:flex;gap:7px;flex-shrink:0}
+.abadge{display:inline-flex;align-items:center;gap:4px;
+  font-size:.64rem;font-weight:700;padding:3px 10px;border-radius:10px}
+.adiv{height:1px;background:linear-gradient(90deg,rgba(46,125,50,.25),transparent);
+  margin-bottom:12px;position:relative}
+.adiv::before{content:'';position:absolute;left:0;top:-1px;
+  width:38px;height:3px;border-radius:2px;background:var(--gm)}
+
+/* GRID */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:13px}
+.plist{display:flex;flex-direction:column;gap:7px}
+
+/* CARD */
+.pc{background:#fff;border-radius:var(--r);border:1.5px solid rgba(46,125,50,.08);
+  box-shadow:var(--sh);overflow:hidden;transition:.2s;
+  display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.pc:hover{box-shadow:var(--shm);transform:translateY(-2px);border-color:rgba(46,125,50,.2)}
+.pc[data-vis="0"]{display:none}
+.pcover{height:115px;position:relative;overflow:hidden}
+.pcover img{width:100%;height:100%;object-fit:cover}
+.pcover-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,83,45,.65),transparent)}
+.pcover-top{position:absolute;top:8px;left:8px;right:8px;
+  display:flex;align-items:center;justify-content:space-between}
+.ptype-ico{width:27px;height:27px;border-radius:7px;background:rgba(255,255,255,.15);
+  backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;color:#fff}
+.pstatut{font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:10px;
+  backdrop-filter:blur(6px);border:1px solid transparent}
+.pnum{position:absolute;bottom:7px;left:9px;
+  font-size:.63rem;font-weight:700;color:rgba(255,255,255,.75);font-family:monospace}
+.pbody{padding:11px 13px;flex:1;display:flex;flex-direction:column;gap:5px}
+.pnom{font-size:.83rem;font-weight:700;color:var(--txt);line-height:1.3}
+.plieu{font-size:.67rem;color:var(--txt3);display:flex;align-items:center;gap:4px}
+.pbar-bg{height:4px;background:rgba(46,125,50,.1);border-radius:10px;overflow:hidden;margin-top:3px}
+.pbar-f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--gm),var(--gl));transition:width .7s ease}
+.pbar-lbl{display:flex;justify-content:space-between;font-size:.6rem;color:var(--txt3);margin-top:2px}
+.pfoot{padding:7px 13px;border-top:1px solid rgba(46,125,50,.06);
+  display:flex;align-items:center;justify-content:space-between}
+.pfstats{display:flex;gap:9px}
+.pfi{font-size:.63rem;color:var(--txt3);display:flex;align-items:center;gap:3px}
+/* actions sur carte */
+.pcard-actions{display:flex;gap:5px;margin-left:auto}
+.pac{width:27px;height:27px;border-radius:6px;border:1px solid rgba(46,125,50,.12);
+  background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;color:var(--txt3);transition:.15s;text-decoration:none}
+.pac:hover{background:var(--sand);color:var(--gm)}
+.pac.rd:hover{background:var(--rd2);color:var(--rd);border-color:rgba(211,47,47,.2)}
+
+/* ROW */
+.pr{background:#fff;border-radius:var(--rs);border:1.5px solid rgba(46,125,50,.08);
+  box-shadow:var(--sh);padding:11px 14px;display:flex;align-items:center;gap:13px;
+  text-decoration:none;color:inherit;transition:.15s}
+.pr:hover{box-shadow:var(--shm);border-color:rgba(46,125,50,.2)}
+.pr[data-vis="0"]{display:none}
+.prtype{width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.88rem}
+.prmain{flex:1;min-width:0}
+.prnom{font-size:.8rem;font-weight:700;color:var(--txt);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.prsub{font-size:.65rem;color:var(--txt3);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.prfin{width:150px;flex-shrink:0}
+.prfin-l{display:flex;justify-content:space-between;font-size:.6rem;color:var(--txt3);margin-bottom:2px}
+.prfin-bg{height:4px;background:rgba(46,125,50,.1);border-radius:10px;overflow:hidden}
+.prfin-f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--gm),var(--gl))}
+.practions{display:flex;gap:4px;margin-left:auto}
+
+/* EMPTY */
+.eg{text-align:center;padding:55px 20px;color:var(--txt3);display:none}
+.eg.vis{display:block}
+.eg i{font-size:2.8rem;opacity:.18;margin-bottom:10px;display:block}
+.eg p{font-size:.8rem}
+.np{grid-column:1/-1;text-align:center;padding:22px;color:var(--txt3);
+  font-size:.76rem;background:var(--sand);border-radius:var(--rs);
+  border:1.5px dashed rgba(46,125,50,.14)}
+
+/* ── MODALES ── */
+.mo{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.48);
+  backdrop-filter:blur(4px);display:flex;align-items:center;
+  justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.mo.open{opacity:1;pointer-events:all}
+.md{background:#fff;border-radius:18px;box-shadow:var(--shm);
+  width:100%;max-width:580px;max-height:92vh;overflow-y:auto;
+  transform:translateY(20px) scale(.97);transition:transform .25s}
+.mo.open .md{transform:none}
+.md-sm{max-width:420px}
+.md-lg{max-width:700px}
+.md-xl{max-width:860px}
+
+.mh{padding:18px 22px 14px;border-bottom:1px solid rgba(46,125,50,.08);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:0;background:#fff;z-index:2;border-radius:18px 18px 0 0}
+.mh-l{display:flex;align-items:center;gap:11px}
+.mi{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:.95rem;flex-shrink:0}
+.mi.g{background:rgba(46,125,50,.12);color:var(--gm)}
+.mi.b{background:var(--bl2);color:var(--bl)}
+.mi.o{background:var(--go2);color:var(--go)}
+.mi.r{background:var(--rd2);color:var(--rd)}
+.mi.p{background:var(--pu2);color:var(--pu)}
+.mt{font-size:.92rem;font-weight:800;color:var(--txt)}
+.ms{font-size:.68rem;color:var(--txt3);margin-top:1px}
+.mcls{width:30px;height:30px;border-radius:7px;border:1px solid rgba(46,125,50,.12);
+  background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;color:var(--txt3);transition:.15s;flex-shrink:0}
+.mcls:hover{background:var(--rd2);color:var(--rd);border-color:rgba(211,47,47,.2)}
+.mb{padding:18px 22px}
+.mf{padding:14px 22px;border-top:1px solid rgba(46,125,50,.08);
+  display:flex;gap:9px;justify-content:flex-end}
+
+/* Form */
+.fg{margin-bottom:14px}
+.frow{display:grid;gap:11px;margin-bottom:14px}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:1fr 1fr 1fr}
+label{display:block;font-size:.7rem;font-weight:600;color:var(--txt2);margin-bottom:4px}
+label .req{color:var(--rd)}
+.fc{width:100%;padding:8px 11px;border-radius:var(--rx);
+  border:1.5px solid rgba(46,125,50,.2);background:var(--sand);
+  font-size:.78rem;color:var(--txt);font-family:inherit;transition:.15s}
+.fc:focus{outline:none;border-color:var(--gm);background:#fff;
+  box-shadow:0 0 0 3px rgba(46,125,50,.08)}
+select.fc{appearance:none;cursor:pointer}
+textarea.fc{resize:vertical;min-height:70px}
+.uzn{border:2px dashed rgba(46,125,50,.28);border-radius:var(--rs);padding:22px;
+  text-align:center;cursor:pointer;transition:.2s;background:var(--sand)}
+.uzn:hover,.uzn.drag{border-color:var(--gm);background:rgba(46,125,50,.04)}
+.uzn i{font-size:1.4rem;color:var(--gp);display:block;margin-bottom:5px}
+.uzn .uz-t{font-size:.76rem;color:var(--txt2);font-weight:500}
+.uzn .uz-s{font-size:.65rem;color:var(--txt3);margin-top:2px}
+.uzn input{display:none}
+
+/* Buttons */
+.btn{padding:8px 18px;border-radius:var(--rx);border:none;
+  font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s;
+  display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--gm);color:#fff;box-shadow:0 2px 8px rgba(46,125,50,.22)}
+.btn-p:hover{background:var(--gk)}
+.btn-s{background:var(--sand);color:var(--txt2);border:1px solid rgba(46,125,50,.14)}
+.btn-s:hover{background:var(--sand2)}
+.btn-d{background:var(--rd2);color:var(--rd);border:1px solid rgba(211,47,47,.18)}
+.btn-d:hover{background:var(--rd);color:#fff}
+.btn-sm{padding:6px 13px;font-size:.71rem}
+
+/* MODALE VISUALISATION */
+.visu-tabs{display:flex;gap:4px;background:var(--sand);
+  border-radius:var(--rs);padding:4px;margin-bottom:16px}
+.vtab{flex:1;padding:7px;border:none;border-radius:var(--rx);background:none;
+  font-size:.73rem;font-weight:600;color:var(--txt3);cursor:pointer;transition:.15s;
+  display:flex;align-items:center;justify-content:center;gap:5px}
+.vtab.active{background:#fff;color:var(--gm);box-shadow:0 1px 5px rgba(0,0,0,.08)}
+.vtab-cnt{font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:8px;
+  background:var(--sand2);color:var(--txt3)}
+.vtab.active .vtab-cnt{background:rgba(46,125,50,.12);color:var(--gm)}
+.vpanel{display:none}
+.vpanel.active{display:block;animation:fup .22s ease}
+
+/* Bilan widget dans visu */
+.bilan{background:linear-gradient(135deg,var(--gd),var(--gm));border-radius:var(--rs);
+  padding:16px 18px;color:#fff;margin-bottom:14px}
+.bilan-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.bilan-lbl{font-size:.73rem;color:rgba(255,255,255,.7)}
+.bilan-val{font-size:.86rem;font-weight:700}
+.bilan-sep{height:1px;background:rgba(255,255,255,.15);margin:5px 0}
+.bilan-pg{margin-top:10px}
+.bilan-pg-lbl{display:flex;justify-content:space-between;font-size:.65rem;
+  color:rgba(255,255,255,.6);margin-bottom:4px}
+.bilan-pg-bg{height:7px;background:rgba(255,255,255,.2);border-radius:10px;overflow:hidden}
+.bilan-pg-f{height:100%;background:linear-gradient(90deg,#A5D6A7,#fff);
+  border-radius:10px;transition:width .9s ease}
+
+/* Paiement row dans visu */
+.pair{display:flex;align-items:center;gap:10px;padding:8px 0;
+  border-bottom:1px solid rgba(46,125,50,.06)}
+.pair:last-child{border-bottom:none}
+.pai-ico{width:32px;height:32px;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;font-size:.78rem;flex-shrink:0}
+.pai-info{flex:1;min-width:0}
+.pai-mt{font-size:.88rem;font-weight:700;color:var(--gd)}
+.pai-sub{font-size:.65rem;color:var(--txt3);margin-top:1px}
+.pmode{font-size:.6rem;font-weight:600;padding:2px 7px;border-radius:8px}
+
+/* Photo grid dans visu */
+.pgal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pgal-item{aspect-ratio:1;border-radius:8px;overflow:hidden;position:relative;
+  cursor:zoom-in;background:var(--sand)}
+.pgal-item img{width:100%;height:100%;object-fit:cover}
+.pgal-item:hover img{transform:scale(1.05);transition:.2s}
+
+/* Fichier row */
+.frow2{display:flex;align-items:center;gap:10px;padding:8px 12px;
+  border-radius:var(--rx);background:var(--sand);margin-bottom:6px}
+.frow2:hover{background:var(--sand2)}
+.f-ico{width:34px;height:34px;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.f-name{font-size:.76rem;font-weight:600;color:var(--txt)}
+.f-sub{font-size:.63rem;color:var(--txt3);margin-top:1px}
+
+/* Vidéo item */
+.vid-item{background:var(--sand);border-radius:8px;overflow:hidden;margin-bottom:8px}
+.vid-thumb{position:relative;aspect-ratio:16/9}
+.vid-thumb img{width:100%;height:100%;object-fit:cover}
+.vid-play{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;background:rgba(0,0,0,.28)}
+.vid-playbtn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.88rem;color:var(--rd);padding-left:2px}
+.vid-info{padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.vid-title{font-size:.76rem;font-weight:600;color:var(--txt)}
+
+/* Infos rows */
+.irow{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid rgba(46,125,50,.06)}
+.irow:last-child{border-bottom:none}
+.ilbl{font-size:.66rem;color:var(--txt3);width:90px;flex-shrink:0;padding-top:1px}
+.ival{font-size:.76rem;font-weight:500;color:var(--txt)}
+.spill{display:inline-flex;align-items:center;gap:4px;
+  padding:2px 9px;border-radius:10px;font-size:.68rem;font-weight:700}
+
+/* Confirm delete */
+.del-prev{text-align:center;padding:8px 0 4px}
+.del-prev .di{font-size:2.3rem;margin-bottom:7px}
+.del-prev p{font-size:.8rem;color:var(--txt2);line-height:1.6}
+.del-prev strong{color:var(--rd)}
+
+/* Lightbox */
+.lb{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.9);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.lb.open{opacity:1;pointer-events:all}
+.lb img{max-width:90vw;max-height:85vh;border-radius:var(--r);object-fit:contain}
+.lb-cls{position:fixed;top:18px;right:18px;width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.1);border:none;color:#fff;font-size:.95rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.lb-cls:hover{background:var(--rd)}
+
+/* Prog bar animate */
+@keyframes progIn{from{width:0}to{width:var(--pw)}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .ph,.tb,.content,.flashes{padding-left:16px;padding-right:16px}
+  .sstrip{grid-template-columns:1fr 1fr}
+  .c2,.c3{grid-template-columns:1fr}
+  .pgal{grid-template-columns:repeat(2,1fr)}
+  .prfin{display:none}
+  .ph-row{flex-direction:column;align-items:flex-start}
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div>
+
+{# ─── FLASH ─── #}
+{% for label, messages in app.flashes %}
+  {% for msg in messages %}
+  <div class="flashes">
+    <div class="fmsg {{ label }}">
+      <i class="bi bi-{{ label == 'success' ? 'check-circle' : 'exclamation-circle' }}"></i>{{ msg }}
+    </div>
+  </div>
+  {% endfor %}
+{% endfor %}
+
+{# ─── HEADER ─── #}
+<div class="ph">
+  <div class="ph-inner">
+    <div class="ph-row">
+      <div>
+        <div class="ph-crumb">
+          <a href="{{ path('app_dashboard') }}">ADB-MR</a>
+          <span>/</span><span>Projets</span>
+        </div>
+        <div class="ph-h"><i class="bi bi-folder2-open"></i>Gestion des Projets</div>
+        <div class="ph-sub">{{ associations|length }} associations · {{ totalProjets }} projets</div>
+      </div>
+      <button class="btn-hero primary" onclick="openMo('moCreate')">
+        <i class="bi bi-plus-lg"></i>Nouveau projet
+      </button>
+    </div>
+    <div class="sstrip">
+      <div class="sc"><div class="sc-ico">🏢</div><div><div class="sc-v">{{ associations|length }}</div><div class="sc-l">Associations</div></div></div>
+      <div class="sc"><div class="sc-ico">📋</div><div><div class="sc-v">{{ totalProjets }}</div><div class="sc-l">Total projets</div></div></div>
+      <div class="sc"><div class="sc-ico">⚙️</div><div><div class="sc-v">{{ enCours }}</div><div class="sc-l">En cours</div></div></div>
+      <div class="sc"><div class="sc-ico">💰</div><div><div class="sc-v">{{ (totalBudget/1000000)|number_format(1) }}M</div><div class="sc-l">Budget MRU</div></div></div>
+      <div class="sc"><div class="sc-ico">✅</div><div><div class="sc-v">{{ termines }}</div><div class="sc-l">Terminés</div></div></div>
+    </div>
+  </div>
+</div>
+
+{# ─── TOOLBAR ─── #}
+<div class="tb">
+  <div class="sbx"><i class="bi bi-search"></i>
+    <input id="q" type="text" placeholder="Rechercher un projet…" oninput="filter()">
+  </div>
+  <select class="fsel" id="fStatut" onchange="filter()">
+    <option value="">Tous statuts</option>
+    {% for k,v in constant('App\\Entity\\Projet::STATUTS') %}
+    <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+  </select>
+  <select class="fsel" id="fType" onchange="filter()">
+    <option value="">Tous types</option>
+    {% for k,v in constant('App\\Entity\\Projet::TYPES') %}
+    <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+  </select>
+  <select class="fsel" id="fAssoc" onchange="filter()">
+    <option value="">Toutes associations</option>
+    {% for a in associations %}
+    <option value="{{ a.id }}">{{ a.nom }}</option>{% endfor %}
+  </select>
+  <span class="tb-cnt" id="cnt">{{ totalProjets }} résultats</span>
+  <div class="vtg">
+    <button class="vb active" id="bGrid" onclick="setView('grid')" title="Grille"><i class="bi bi-grid-3x3-gap"></i></button>
+    <button class="vb" id="bList" onclick="setView('list')" title="Liste"><i class="bi bi-list-ul"></i></button>
+  </div>
+</div>
+
+{# ─── CONTENU ─── #}
+<div class="content">
+  <div class="eg" id="eg"><i class="bi bi-search"></i><p>Aucun résultat pour cette recherche.</p></div>
+
+  {% for assoc in associations %}
+  {% set projs = projetsParAssociation[assoc.id] ?? [] %}
+  <div class="ag" id="ag{{ assoc.id }}" data-vis="1" data-aid="{{ assoc.id }}" data-anom="{{ assoc.nom|lower }}">
+
+    <div class="ah">
+      <div class="ah-l">
+        <div class="alogo">
+          {% if assoc.hasLogo %}<img src="{{ asset(assoc.logoPath) }}" alt="">{% else %}🏢{% endif %}
+        </div>
+        <div>
+          <div class="aname">{{ assoc.nom }}</div>
+          <div class="ameta">
+            {% if assoc.sigle %}<strong style="color:var(--gm)">{{ assoc.sigle }}</strong><span>·</span>{% endif %}
+            {% if assoc.ville %}<i class="bi bi-geo-alt" style="font-size:.6rem"></i>{{ assoc.ville }}{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="ah-r">
+        <span class="abadge" style="background:rgba(46,125,50,.1);color:var(--gm)">
+          <i class="bi bi-folder2"></i>{{ projs|length }} projets
+        </span>
+        {% set ba = 0 %}{% for p in projs %}{% set ba = ba + p.coutTotal %}{% endfor %}
+        {% if ba > 0 %}
+        <span class="abadge" style="background:var(--go2);color:var(--go)">
+          <i class="bi bi-cash-stack"></i>{{ (ba/1000)|number_format(0) }}K MRU
+        </span>
+        {% endif %}
+      </div>
+    </div>
+    <div class="adiv"></div>
+
+    {# ─ GRID ─ #}
+    <div class="pgrid" id="pgrid{{ assoc.id }}">
+      {% if projs is empty %}
+      <div class="np"><i class="bi bi-folder2-open" style="margin-right:6px"></i>Aucun projet pour cette association.</div>
+      {% else %}
+      {% for p in projs %}
+      {% set taux = p.coutTotal > 0 ? (p.montantTotalPaye / p.coutTotal * 100)|round(1) : 0 %}
+      <div class="pc" id="c{{ p.id }}"
+           data-vis="1" data-nom="{{ p.nom|lower }}" data-num="{{ p.numero|lower }}"
+           data-statut="{{ p.statut }}" data-type="{{ p.type }}"
+           data-aid="{{ assoc.id }}" data-lieu="{{ p.lieu|lower }}" data-don="{{ p.donateur|lower }}">
+        {# Cover #}
+        <div class="pcover" style="background:linear-gradient(135deg,{{ p.typeCouleur }}cc,{{ p.typeCouleur }}77)">
+          {% if p.coverPhoto %}<img src="{{ asset(p.coverPhoto.path) }}" alt="" loading="lazy">{% endif %}
+          <div class="pcover-ov"></div>
+          <div class="pcover-top">
+            <div class="ptype-ico"><i class="bi {{ p.typeIcone }}"></i></div>
+            <span class="pstatut" style="background:{{ p.statutCouleur }}30;color:#fff;border-color:{{ p.statutCouleur }}55">
+              <i class="bi {{ p.statutIcone }}"></i> {{ p.statutLabel }}
+            </span>
+          </div>
+          <span class="pnum">{{ p.numero }}</span>
+        </div>
+        <div class="pbody">
+          <div class="pnom">{{ p.nom }}</div>
+          <div class="plieu"><i class="bi bi-geo-alt" style="font-size:.6rem"></i>{{ p.lieu }} · {{ p.annee }}</div>
+          <div class="plieu"><i class="bi bi-person" style="font-size:.6rem"></i>{{ p.donateur }}</div>
+          <div>
+            <div class="pbar-bg"><div class="pbar-f" style="--pw:{{ taux }}%;width:0"></div></div>
+            <div class="pbar-lbl">
+              <span>Payé: {{ p.montantTotalPaye|number_format(0,',',' ') }} MRU</span>
+              <span>{{ taux }}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="pfoot">
+          <div class="pfstats">
+            <span class="pfi"><i class="bi bi-images"></i>{{ p.photos|length }}</span>
+            <span class="pfi"><i class="bi bi-file-earmark-pdf"></i>{{ p.fichiers|length }}</span>
+            <span class="pfi"><i class="bi bi-play-circle"></i>{{ p.videos|length }}</span>
+            <span class="pfi"><i class="bi bi-cash"></i>{{ p.paiements|length }}</span>
+          </div>
+          <div class="pcard-actions">
+            {# Voir dans modale #}
+            <button class="pac" title="Visualiser" onclick="ouvrirVisu({{ p.id }})"><i class="bi bi-eye"></i></button>
+            {# Rapport complet (autre page) #}
+            <a href="{{ path('app_projet_show', {id: p.id}) }}" class="pac" title="Rapport complet"><i class="bi bi-file-earmark-text"></i></a>
+            {# Modifier #}
+            <button class="pac" title="Modifier" onclick="ouvrirEdit({{ p.id }})"><i class="bi bi-pencil"></i></button>
+            {# Supprimer #}
+            <button class="pac rd" title="Supprimer" onclick="ouvrirDelete({{ p.id }}, '{{ p.nom|e('js') }}')"><i class="bi bi-trash3"></i></button>
+          </div>
+        </div>
+      </div>
+
+      {# ─ ROW (caché par défaut) ─ #}
+      <div class="pr" id="r{{ p.id }}"
+           style="display:none"
+           data-vis="1" data-nom="{{ p.nom|lower }}" data-num="{{ p.numero|lower }}"
+           data-statut="{{ p.statut }}" data-type="{{ p.type }}"
+           data-aid="{{ assoc.id }}" data-lieu="{{ p.lieu|lower }}" data-don="{{ p.donateur|lower }}">
+        <div class="prtype" style="background:{{ p.typeCouleur }}18">
+          <i class="bi {{ p.typeIcone }}" style="color:{{ p.typeCouleur }}"></i>
+        </div>
+        <div class="prmain">
+          <div class="prnom">{{ p.nom }}</div>
+          <div class="prsub">
+            <span>#{{ p.numero }}</span>
+            <span><i class="bi bi-geo-alt" style="font-size:.6rem"></i>{{ p.lieu }}</span>
+            <span><i class="bi bi-person" style="font-size:.6rem"></i>{{ p.donateur }}</span>
+            <span>{{ p.annee }}</span>
+          </div>
+        </div>
+        <div class="prfin">
+          <div class="prfin-l"><span>{{ (p.coutTotal/1000)|number_format(0) }}K MRU</span><span style="color:var(--gm)">{{ taux }}%</span></div>
+          <div class="prfin-bg"><div class="prfin-f" style="--pw:{{ taux }}%;width:0"></div></div>
+        </div>
+        <span class="spill" style="background:{{ p.statutCouleur }}18;color:{{ p.statutCouleur }}">
+          <i class="bi {{ p.statutIcone }}"></i>{{ p.statutLabel }}
+        </span>
+        <div class="practions">
+          <button class="pac" onclick="ouvrirVisu({{ p.id }})"><i class="bi bi-eye"></i></button>
+          <a href="{{ path('app_projet_show', {id: p.id}) }}" class="pac"><i class="bi bi-file-earmark-text"></i></a>
+          <button class="pac" onclick="ouvrirEdit({{ p.id }})"><i class="bi bi-pencil"></i></button>
+          <button class="pac rd" onclick="ouvrirDelete({{ p.id }}, '{{ p.nom|e('js') }}')"><i class="bi bi-trash3"></i></button>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>{# /pgrid #}
+
+    {# ─ LIST container ─ #}
+    <div class="plist" id="plist{{ assoc.id }}" style="display:none"></div>
+
+  </div>{# /ag #}
+  {% endfor %}
+</div>{# /content #}
+
+{# ═══════════════════════════════════════════════════
+   DONNÉES PROJETS POUR JS (JSON embed)
+═══════════════════════════════════════════════════ #}
+<script>
+const PROJETS = {
+{% for assoc in associations %}
+  {% for p in projetsParAssociation[assoc.id] ?? [] %}
+  {{ p.id }}: {
+    id: {{ p.id }},
+    nom: {{ p.nom|json_encode|raw }},
+    numero: {{ p.numero|json_encode|raw }},
+    type: {{ p.type|json_encode|raw }},
+    typeLabel: {{ p.typeLabel|json_encode|raw }},
+    typeIcone: {{ p.typeIcone|json_encode|raw }},
+    typeCouleur: {{ p.typeCouleur|json_encode|raw }},
+    statut: {{ p.statut|json_encode|raw }},
+    statutLabel: {{ p.statutLabel|json_encode|raw }},
+    statutIcone: {{ p.statutIcone|json_encode|raw }},
+    statutCouleur: {{ p.statutCouleur|json_encode|raw }},
+    lieu: {{ p.lieu|json_encode|raw }},
+    pays: {{ p.pays|json_encode|raw }},
+    donateur: {{ p.donateur|json_encode|raw }},
+    coutTotal: {{ p.coutTotal }},
+    montantPaye: {{ p.montantTotalPaye }},
+    montantRestant: {{ p.montantRestant }},
+    tauxPaiement: {{ p.tauxPaiement }},
+    progression: {{ p.progression }},
+    annee: {{ p.annee }},
+    duree: {{ p.duree|json_encode|raw }},
+    description: {{ (p.description ?? '')|json_encode|raw }},
+    assocNom: {{ assoc.nom|json_encode|raw }},
+    assocId: {{ assoc.id }},
+    dateContrat: {{ p.dateContrat ? p.dateContrat|date('d/m/Y') : 'null'|json_encode|raw }},
+    dateFin: {{ p.dateFin ? p.dateFin|date('d/m/Y')|json_encode|raw : 'null' }},
+    creePar: {{ (p.creePar ? p.creePar.fullName : '—')|json_encode|raw }},
+    paiements: [
+      {% for pai in p.paiements %}{
+        id: {{ pai.id }},
+        montant: {{ pai.montant }},
+        mode: {{ pai.mode|json_encode|raw }},
+        modeLabel: {{ pai.getModeLabel(app.request.locale)|json_encode|raw }},
+        modeIcone: {{ pai.modeIcone|json_encode|raw }},
+        modeCouleur: {{ pai.modeCouleur|json_encode|raw }},
+        date: {{ pai.datePaiement|date('d/m/Y')|json_encode|raw }},
+        reference: {{ (pai.reference ?? '')|json_encode|raw }},
+        justif: {{ pai.hasJustificatif ? asset(pai.justificatifPath)|json_encode|raw : 'null' }},
+        csrfDel: {{ csrf_token('delete_paiement_'~pai.id)|json_encode|raw }}
+      }{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    photos: [
+      {% for ph in p.photos %}{
+        id: {{ ph.id }},
+        path: {{ asset(ph.path)|json_encode|raw }},
+        legende: {{ (ph.legende ?? ph.originalName)|json_encode|raw }},
+        csrfDel: {{ csrf_token('delete_photo_'~ph.id)|json_encode|raw }}
+      }{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    fichiers: [
+      {% for fi in p.fichiers %}{
+        id: {{ fi.id }},
+        nom: {{ fi.originalName|json_encode|raw }},
+        cat: {{ fi.categorieLabel|json_encode|raw }},
+        catCouleur: {{ fi.categorieCouleur|json_encode|raw }},
+        catIcone: {{ fi.categorieIcone|json_encode|raw }},
+        path: {{ asset(fi.path)|json_encode|raw }},
+        taille: {{ (fi.tailleFormatee ?? '')|json_encode|raw }},
+        csrfDel: {{ csrf_token('delete_fichier_'~fi.id)|json_encode|raw }}
+      }{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    videos: [
+      {% for vi in p.videos %}{
+        id: {{ vi.id }},
+        titre: {{ (vi.titre ?? 'Vidéo')|json_encode|raw }},
+        url: {{ vi.url|json_encode|raw }},
+        thumb: {{ (vi.thumbnailUrl ?? '')|json_encode|raw }},
+        csrfDel: {{ csrf_token('delete_video_'~vi.id)|json_encode|raw }}
+      }{% if not loop.last %},{% endif %}{% endfor %}
+    ],
+    csrfEdit: {{ csrf_token('projet_edit_'~p.id)|json_encode|raw }},
+    csrfDel: {{ csrf_token('delete_projet_'~p.id)|json_encode|raw }},
+    csrfStatut: {{ csrf_token('proj_statut_'~p.id)|json_encode|raw }},
+    csrfPaiement: {{ csrf_token('paiement_form_'~p.id)|json_encode|raw }},
+    csrfPhoto: {{ csrf_token('photo_form_'~p.id)|json_encode|raw }},
+    csrfFichier: {{ csrf_token('fichier_form_'~p.id)|json_encode|raw }},
+    csrfVideo: {{ csrf_token('video_form_'~p.id)|json_encode|raw }},
+    urlEdit: {{ path('app_projet_edit', {id: p.id})|json_encode|raw }},
+    urlStatut: {{ path('app_projet_statut', {id: p.id})|json_encode|raw }},
+    urlDel: {{ path('app_projet_delete', {id: p.id})|json_encode|raw }},
+    urlPaiementCreate: {{ path('app_projet_paiement_create', {id: p.id})|json_encode|raw }},
+    urlPhotoCreate: {{ path('app_projet_photo_create', {id: p.id})|json_encode|raw }},
+    urlFichierCreate: {{ path('app_projet_fichier_create', {id: p.id})|json_encode|raw }},
+    urlVideoCreate: {{ path('app_projet_video_create', {id: p.id})|json_encode|raw }}
+  }{% if not loop.last or not loop.last %},{% endif %}
+  {% endfor %}
+{% endfor %}
+};
+const ROUTES_PAIEMENT_DEL = '{{ path('app_projet_paiement_delete', {id: 0})|replace({'0':'__ID__'}) }}';
+const ROUTES_PHOTO_DEL    = '{{ path('app_projet_photo_delete', {id: 0})|replace({'0':'__ID__'}) }}';
+const ROUTES_FICHIER_DEL  = '{{ path('app_projet_fichier_delete', {id: 0})|replace({'0':'__ID__'}) }}';
+const ROUTES_VIDEO_DEL    = '{{ path('app_projet_video_delete', {id: 0})|replace({'0':'__ID__'}) }}';
+</script>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — CRÉER PROJET
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moCreate">
+  <div class="md md-lg">
+    <div class="mh">
+      <div class="mh-l"><div class="mi g"><i class="bi bi-folder-plus"></i></div>
+        <div><div class="mt">Nouveau projet</div><div class="ms">Créer un projet</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moCreate')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" action="{{ path('app_projet_create') }}">
+      <input type="hidden" name="_token" value="{{ csrf_token('projet_create') }}">
+      <div class="mb">
+        <div class="frow c2">
+          <div><label>Association <span class="req">*</span></label>
+            <select name="association_id" class="fc" required>
+              <option value="">— Choisir —</option>
+              {% for a in associations %}<option value="{{ a.id }}">{{ a.nom }}</option>{% endfor %}
+            </select></div>
+          <div><label>Type <span class="req">*</span></label>
+            <select name="type" class="fc">
+              {% for k,v in constant('App\\Entity\\Projet::TYPES') %}
+              <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+            </select></div>
+        </div>
+        <div class="fg"><label>Nom du projet <span class="req">*</span></label>
+          <input type="text" name="nom" class="fc" required placeholder="Titre du projet…"></div>
+        <div class="frow c2">
+          <div><label>Donateur <span class="req">*</span></label>
+            <input type="text" name="donateur" class="fc" required></div>
+          <div><label>Budget (MRU)</label>
+            <input type="number" name="coutTotal" class="fc" min="0" step="0.01" value="0"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>Lieu <span class="req">*</span></label>
+            <input type="text" name="lieu" class="fc" required></div>
+          <div><label>Durée</label>
+            <input type="text" name="duree" class="fc" placeholder="ex: 12 mois"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>Date contrat</label>
+            <input type="date" name="dateContrat" class="fc" value="{{ 'now'|date('Y-m-d') }}"></div>
+          <div><label>Date fin prévue</label>
+            <input type="date" name="dateFin" class="fc"></div>
+        </div>
+        <div class="fg"><label>Description</label>
+          <textarea name="description" class="fc" rows="2" placeholder="Description…"></textarea></div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moCreate')">Annuler</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-check-lg"></i>Créer le projet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — VISUALISER PROJET
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moVisu">
+  <div class="md md-xl">
+    <div class="mh">
+      <div class="mh-l"><div class="mi b" id="visuIcon"><i class="bi bi-eye"></i></div>
+        <div><div class="mt" id="visuTitre">Visualiser</div>
+          <div class="ms" id="visuSub">—</div></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a id="visuRapportLink" href="#" class="btn btn-s btn-sm" target="_blank">
+          <i class="bi bi-file-earmark-text"></i>Rapport complet
+        </a>
+        <button class="mcls" onclick="closeMo('moVisu')"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+    <div class="mb">
+      {# Bilan #}
+      <div class="bilan" id="visuBilan">
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-bottom:10px">Bilan financier</div>
+        <div class="bilan-row"><span class="bilan-lbl">Budget total</span><span class="bilan-val" id="vBudget">—</span></div>
+        <div class="bilan-row"><span class="bilan-lbl">Total payé</span><span class="bilan-val" style="color:#A5D6A7" id="vPaye">—</span></div>
+        <div class="bilan-sep"></div>
+        <div class="bilan-row"><span class="bilan-lbl" style="color:rgba(255,255,255,.9)">Restant</span><span class="bilan-val" style="color:#FFCDD2;font-size:.95rem" id="vRestant">—</span></div>
+        <div class="bilan-pg">
+          <div class="bilan-pg-lbl"><span>Taux paiement</span><span id="vTaux">0%</span></div>
+          <div class="bilan-pg-bg"><div class="bilan-pg-f" id="vProgBar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      {# Onglets #}
+      <div class="visu-tabs">
+        <button class="vtab active" onclick="visuTab('infos',this)"><i class="bi bi-info-circle"></i>Infos</button>
+        <button class="vtab" onclick="visuTab('paiements',this)"><i class="bi bi-cash-stack"></i>Paiements<span class="vtab-cnt" id="vtcPai">0</span></button>
+        <button class="vtab" onclick="visuTab('photos',this)"><i class="bi bi-images"></i>Photos<span class="vtab-cnt" id="vtcPho">0</span></button>
+        <button class="vtab" onclick="visuTab('fichiers',this)"><i class="bi bi-file-earmark-pdf"></i>Fichiers<span class="vtab-cnt" id="vtcFi">0</span></button>
+        <button class="vtab" onclick="visuTab('videos',this)"><i class="bi bi-play-circle"></i>Vidéos<span class="vtab-cnt" id="vtcVi">0</span></button>
+      </div>
+
+      {# Panel Infos #}
+      <div class="vpanel active" id="vp-infos">
+        <div id="visuInfos"></div>
+      </div>
+      {# Panel Paiements #}
+      <div class="vpanel" id="vp-paiements">
+        <button class="btn btn-p btn-sm" style="margin-bottom:12px;width:100%" onclick="ouvrirAddPaiement()">
+          <i class="bi bi-plus-lg"></i>Ajouter un paiement
+        </button>
+        <div id="visuPaiements"></div>
+      </div>
+      {# Panel Photos #}
+      <div class="vpanel" id="vp-photos">
+        <button class="btn btn-p btn-sm" style="margin-bottom:12px;width:100%" onclick="ouvrirAddPhoto()">
+          <i class="bi bi-plus-lg"></i>Ajouter des photos
+        </button>
+        <div id="visuPhotos"></div>
+      </div>
+      {# Panel Fichiers #}
+      <div class="vpanel" id="vp-fichiers">
+        <button class="btn btn-p btn-sm" style="margin-bottom:12px;width:100%" onclick="ouvrirAddFichier()">
+          <i class="bi bi-plus-lg"></i>Ajouter un fichier
+        </button>
+        <div id="visuFichiers"></div>
+      </div>
+      {# Panel Vidéos #}
+      <div class="vpanel" id="vp-videos">
+        <button class="btn btn-p btn-sm" style="margin-bottom:12px;width:100%" onclick="ouvrirAddVideo()">
+          <i class="bi bi-plus-lg"></i>Ajouter une vidéo
+        </button>
+        <div id="visuVideos"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — MODIFIER PROJET
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moEdit">
+  <div class="md md-lg">
+    <div class="mh">
+      <div class="mh-l"><div class="mi g"><i class="bi bi-pencil"></i></div>
+        <div><div class="mt">Modifier le projet</div><div class="ms" id="editSub">—</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moEdit')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" id="editForm">
+      <input type="hidden" name="_token" id="editToken">
+      <input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="frow c2">
+          <div><label>Association</label>
+            <select name="association_id" id="editAssoc" class="fc">
+              {% for a in associations %}<option value="{{ a.id }}">{{ a.nom }}</option>{% endfor %}
+            </select></div>
+          <div><label>Type</label>
+            <select name="type" id="editType" class="fc">
+              {% for k,v in constant('App\\Entity\\Projet::TYPES') %}
+              <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+            </select></div>
+        </div>
+        <div class="fg"><label>Nom <span class="req">*</span></label>
+          <input type="text" name="nom" id="editNom" class="fc" required></div>
+        <div class="frow c2">
+          <div><label>Donateur</label><input type="text" name="donateur" id="editDonateur" class="fc"></div>
+          <div><label>Budget (MRU)</label><input type="number" name="coutTotal" id="editBudget" class="fc" min="0" step="0.01"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>Lieu</label><input type="text" name="lieu" id="editLieu" class="fc"></div>
+          <div><label>Durée</label><input type="text" name="duree" id="editDuree" class="fc"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>Date contrat</label><input type="date" name="dateContrat" id="editDateContrat" class="fc"></div>
+          <div><label>Date fin</label><input type="date" name="dateFin" id="editDateFin" class="fc"></div>
+        </div>
+        <div class="fg"><label>Statut</label>
+          <select name="statut" id="editStatut" class="fc" form="statutForm">
+            {% for k,v in constant('App\\Entity\\Projet::STATUTS') %}
+            <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+          </select></div>
+        <div class="fg">
+          <label>Progression physique: <span id="editProgLabel">0%</span></label>
+          <input type="range" name="progression" id="editProg" min="0" max="100"
+            style="width:100%;accent-color:var(--gm)"
+            oninput="document.getElementById('editProgLabel').textContent=this.value+'%'">
+        </div>
+        <div class="fg"><label>Description</label>
+          <textarea name="description" id="editDesc" class="fc" rows="2"></textarea></div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moEdit')">Annuler</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-check-lg"></i>Enregistrer</button>
+      </div>
+    </form>
+    {# form statut séparé pour avoir les bons champs #}
+    <form id="statutForm" method="POST" style="display:none">
+      <input type="hidden" name="_token" id="statutToken">
+      <input type="hidden" name="_from" value="index">
+    </form>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — AJOUTER PAIEMENT
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moAddPai">
+  <div class="md">
+    <div class="mh">
+      <div class="mh-l"><div class="mi b"><i class="bi bi-cash-stack"></i></div>
+        <div><div class="mt">Ajouter un paiement</div><div class="ms" id="paiSub">—</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moAddPai')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" id="paiForm" enctype="multipart/form-data">
+      <input type="hidden" name="_token" id="paiToken">
+      <input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="frow c2">
+          <div><label>Montant (MRU) <span class="req">*</span></label>
+            <input type="number" name="montant" class="fc" step="0.01" min="0.01" required placeholder="0.00"></div>
+          <div><label>Date <span class="req">*</span></label>
+            <input type="date" name="datePaiement" class="fc" value="{{ 'now'|date('Y-m-d') }}" required></div>
+        </div>
+        <div class="frow c2">
+          <div><label>Mode</label>
+            <select name="mode" class="fc">
+              {% for k,v in constant('App\\Entity\\ProjetPaiement::MODES') %}
+              <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+            </select></div>
+          <div><label>Référence</label>
+            <input type="text" name="reference" class="fc" placeholder="VIR-2026-001"></div>
+        </div>
+        <div class="fg"><label>Notes</label>
+          <textarea name="notes" class="fc" rows="2"></textarea></div>
+        <div class="fg"><label>Justificatif PDF</label>
+          <div class="uzn" onclick="document.getElementById('justifF').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="handleDrop(event,'justifF','uzJustifT')">
+            <i class="bi bi-file-earmark-arrow-up"></i>
+            <div class="uz-t" id="uzJustifT">Cliquer ou glisser un PDF</div>
+            <div class="uz-s">PDF — max 5 Mo</div>
+            <input type="file" id="justifF" name="justificatifFile" accept=".pdf,application/pdf"
+                   onchange="updateUL('justifF','uzJustifT')">
+          </div>
+        </div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moAddPai')">Annuler</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-check-lg"></i>Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — AJOUTER PHOTOS
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moAddPho">
+  <div class="md">
+    <div class="mh">
+      <div class="mh-l"><div class="mi p"><i class="bi bi-images"></i></div>
+        <div><div class="mt">Ajouter des photos</div><div class="ms" id="phoSub">—</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moAddPho')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" id="phoForm" enctype="multipart/form-data">
+      <input type="hidden" name="_token" id="phoToken">
+      <input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="fg"><label>Photos (max 20, 5 Mo/photo)</label>
+          <div class="uzn" onclick="document.getElementById('photoF').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="handleDrop(event,'photoF','uzPhoT')">
+            <i class="bi bi-image"></i>
+            <div class="uz-t" id="uzPhoT">Cliquer ou glisser des images</div>
+            <div class="uz-s">JPG, PNG, WebP</div>
+            <input type="file" id="photoF" name="photoFiles[]" accept="image/jpeg,image/png,image/webp"
+                   multiple onchange="updateUL('photoF','uzPhoT')">
+          </div>
+        </div>
+        <div class="fg"><label>Légende</label>
+          <input type="text" name="legende" class="fc" placeholder="Description des photos…"></div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moAddPho')">Annuler</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-upload"></i>Envoyer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — AJOUTER FICHIER
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moAddFi">
+  <div class="md">
+    <div class="mh">
+      <div class="mh-l"><div class="mi o"><i class="bi bi-file-earmark-arrow-up"></i></div>
+        <div><div class="mt">Ajouter un fichier</div><div class="ms" id="fiSub">—</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moAddFi')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" id="fiForm" enctype="multipart/form-data">
+      <input type="hidden" name="_token" id="fiToken">
+      <input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="fg"><label>Catégorie</label>
+          <select name="categorie" class="fc">
+            {% for k,v in constant('App\\Entity\\ProjetFichier::CATEGORIES') %}
+            <option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}
+          </select></div>
+        <div class="fg"><label>Fichier PDF <span class="req">*</span></label>
+          <div class="uzn" onclick="document.getElementById('fichierF').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="handleDrop(event,'fichierF','uzFiT')">
+            <i class="bi bi-file-earmark-pdf"></i>
+            <div class="uz-t" id="uzFiT">Cliquer ou glisser un PDF</div>
+            <div class="uz-s">PDF — max 10 Mo</div>
+            <input type="file" id="fichierF" name="fichierFile" accept=".pdf,application/pdf"
+                   required onchange="updateUL('fichierF','uzFiT')">
+          </div>
+        </div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moAddFi')">Annuler</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-upload"></i>Envoyer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — AJOUTER VIDÉO
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moAddVi">
+  <div class="md md-sm">
+    <div class="mh">
+      <div class="mh-l"><div class="mi r"><i class="bi bi-youtube"></i></div>
+        <div><div class="mt">Ajouter une vidéo</div><div class="ms" id="viSub">—</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moAddVi')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" id="viForm">
+      <input type="hidden" name="_token" id="viToken">
+      <input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="fg"><label>URL YouTube <span class="req">*</span></label>
+          <input type="url" name="url" class="fc" required placeholder="https://youtube.com/watch?v=…"
+                 oninput="previewYT(this.value)"></div>
+        <div id="ytPrev" style="display:none;margin-bottom:10px">
+          <img id="ytThumb" src="" alt="" style="width:100%;border-radius:var(--rx);aspect-ratio:16/9;object-fit:cover">
+        </div>
+        <div class="fg"><label>Titre</label>
+          <input type="text" name="titre" class="fc" placeholder="Titre de la vidéo…"></div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moAddVi')">Annuler</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-plus-lg"></i>Ajouter</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══════════════════════════════════════════════════
+   MODALE — CONFIRMATION SUPPRESSION
+═══════════════════════════════════════════════════ #}
+<div class="mo" id="moDel">
+  <div class="md md-sm">
+    <div class="mh">
+      <div class="mh-l"><div class="mi r"><i class="bi bi-trash3"></i></div>
+        <div><div class="mt" style="color:var(--rd)">Confirmer la suppression</div>
+          <div class="ms">Action irréversible</div></div>
+      </div>
+      <button class="mcls" onclick="closeMo('moDel')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="mb">
+      <div class="del-prev">
+        <div class="di" id="delIcon">🗑️</div>
+        <p id="delMsg">Confirmer la suppression ?</p>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-s" onclick="closeMo('moDel')">Annuler</button>
+      <form id="delForm" method="POST" style="display:inline">
+        <input type="hidden" name="_token" id="delToken">
+        <button type="submit" class="btn btn-d"><i class="bi bi-trash3"></i>Supprimer</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{# ─── LIGHTBOX ─── #}
+<div class="lb" id="lb" onclick="closeLB()">
+  <button class="lb-cls" onclick="closeLB()"><i class="bi bi-x-lg"></i></button>
+  <img id="lbImg" src="" alt="">
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+// ═══════════════════════════════════════
+// ÉTAT COURANT
+// ═══════════════════════════════════════
+let curView = 'grid';
+let curProjetId = null;
+
+// ═══════════════════════════════════════
+// MODALES
+// ═══════════════════════════════════════
+function openMo(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMo(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.mo').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeMo(m.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.mo.open').forEach(m => closeMo(m.id));
+});
+
+// ═══════════════════════════════════════
+// FILTRE + VUE
+// ═══════════════════════════════════════
+function setView(v) {
+  curView = v;
+  document.getElementById('bGrid').classList.toggle('active', v === 'grid');
+  document.getElementById('bList').classList.toggle('active', v === 'list');
+  filter();
+}
+
+function filter() {
+  const q   = document.getElementById('q').value.toLowerCase();
+  const st  = document.getElementById('fStatut').value;
+  const ty  = document.getElementById('fType').value;
+  const aid = document.getElementById('fAssoc').value;
+  let vis = 0;
+
+  // Projets
+  document.querySelectorAll('[id^="c"]').forEach(el => {
+    if (!/^c\d+$/.test(el.id)) return;
+    const show = (!q || el.dataset.nom.includes(q) || el.dataset.num.includes(q) ||
+                  el.dataset.lieu.includes(q) || el.dataset.don.includes(q)) &&
+                 (!st || el.dataset.statut === st) &&
+                 (!ty || el.dataset.type === ty) &&
+                 (!aid || el.dataset.aid === aid);
+    el.style.display = show && curView === 'grid' ? '' : 'none';
+    if (show) vis++;
+  });
+
+  document.querySelectorAll('[id^="r"]').forEach(el => {
+    if (!/^r\d+$/.test(el.id)) return;
+    const show = (!q || el.dataset.nom.includes(q) || el.dataset.num.includes(q) ||
+                  el.dataset.lieu.includes(q) || el.dataset.don.includes(q)) &&
+                 (!st || el.dataset.statut === st) &&
+                 (!ty || el.dataset.type === ty) &&
+                 (!aid || el.dataset.aid === aid);
+    el.style.display = show && curView === 'list' ? '' : 'none';
+  });
+
+  // Basculer grid/list containers
+  document.querySelectorAll('[id^="pgrid"]').forEach(g => {
+    g.style.display = curView === 'grid' ? 'grid' : 'none';
+  });
+  document.querySelectorAll('[id^="plist"]').forEach(l => {
+    l.style.display = curView === 'list' ? 'flex' : 'none';
+  });
+
+  // Groupes
+  document.querySelectorAll('.ag').forEach(ag => {
+    const aMatch = !aid || ag.dataset.aid === aid;
+    const hasVis = aMatch && Array.from(ag.querySelectorAll('[id^="c"],[id^="r"]')).some(e => e.style.display !== 'none');
+    ag.style.display = hasVis ? '' : 'none';
+  });
+
+  document.getElementById('cnt').textContent = vis + ' résultats';
+  const eg = document.getElementById('eg');
+  eg.classList.toggle('vis', vis === 0);
+}
+
+// ═══════════════════════════════════════
+// VISUALISER PROJET (modale)
+// ═══════════════════════════════════════
+function ouvrirVisu(id) {
+  const p = PROJETS[id];
+  if (!p) return;
+  curProjetId = id;
+
+  // Header
+  document.getElementById('visuTitre').textContent = p.nom;
+  document.getElementById('visuSub').textContent   = p.numero + ' · ' + p.assocNom;
+  document.getElementById('visuRapportLink').href  = `/projet/${id}`;
+
+  // Bilan
+  const fmt = n => Number(n).toLocaleString('fr-FR', {maximumFractionDigits:0}) + ' MRU';
+  document.getElementById('vBudget').textContent  = fmt(p.coutTotal);
+  document.getElementById('vPaye').textContent    = fmt(p.montantPaye);
+  document.getElementById('vRestant').textContent = fmt(p.montantRestant);
+  document.getElementById('vTaux').textContent    = p.tauxPaiement.toFixed(1) + '%';
+  const bar = document.getElementById('vProgBar');
+  bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = p.tauxPaiement + '%'; }, 200);
+
+  // Compteurs tabs
+  document.getElementById('vtcPai').textContent = p.paiements.length;
+  document.getElementById('vtcPho').textContent = p.photos.length;
+  document.getElementById('vtcFi').textContent  = p.fichiers.length;
+  document.getElementById('vtcVi').textContent  = p.videos.length;
+
+  // Infos
+  document.getElementById('visuInfos').innerHTML = `
+    <div class="irow"><span class="ilbl">N° projet</span><span class="ival" style="font-family:monospace;font-weight:700">${p.numero}</span></div>
+    <div class="irow"><span class="ilbl">Association</span><span class="ival">${p.assocNom}</span></div>
+    <div class="irow"><span class="ilbl">Type</span><span class="ival"><i class="bi ${p.typeIcone}" style="color:${p.typeCouleur};margin-right:4px"></i>${p.typeLabel}</span></div>
+    <div class="irow"><span class="ilbl">Statut</span><span class="ival"><span class="spill" style="background:${p.statutCouleur}18;color:${p.statutCouleur}"><i class="bi ${p.statutIcone}"></i>${p.statutLabel}</span></span></div>
+    <div class="irow"><span class="ilbl">Lieu</span><span class="ival">${p.lieu}, ${p.pays}</span></div>
+    <div class="irow"><span class="ilbl">Donateur</span><span class="ival">${p.donateur}</span></div>
+    <div class="irow"><span class="ilbl">Durée</span><span class="ival">${p.duree || '—'}</span></div>
+    <div class="irow"><span class="ilbl">Contrat</span><span class="ival">${p.dateContrat || '—'}</span></div>
+    <div class="irow"><span class="ilbl">Fin prévue</span><span class="ival">${p.dateFin || '—'}</span></div>
+    <div class="irow"><span class="ilbl">Progression</span><span class="ival">${p.progression}%</span></div>
+    ${p.description ? `<div class="irow"><span class="ilbl">Description</span><span class="ival" style="line-height:1.6">${p.description}</span></div>` : ''}
+  `;
+
+  // Paiements
+  let hPai = p.paiements.length === 0
+    ? '<div style="text-align:center;padding:24px;color:var(--txt3);font-size:.78rem"><i class="bi bi-cash" style="font-size:1.8rem;opacity:.2;display:block;margin-bottom:8px"></i>Aucun paiement</div>'
+    : p.paiements.map(pa => `
+      <div class="pair">
+        <div class="pai-ico" style="background:${pa.modeCouleur}18">
+          <i class="bi ${pa.modeIcone}" style="color:${pa.modeCouleur}"></i>
+        </div>
+        <div class="pai-info">
+          <div class="pai-mt">${Number(pa.montant).toLocaleString('fr-FR',{maximumFractionDigits:2})} MRU</div>
+          <div class="pai-sub">${pa.date} · <span class="pmode" style="background:${pa.modeCouleur}18;color:${pa.modeCouleur}">${pa.modeLabel}</span>${pa.reference ? ' · ' + pa.reference : ''}</div>
+        </div>
+        ${pa.justif ? `<a href="${pa.justif}" target="_blank" class="pac" title="Justificatif"><i class="bi bi-file-earmark-pdf"></i></a>` : ''}
+        <form method="POST" action="${ROUTES_PAIEMENT_DEL.replace('__ID__',pa.id)}" style="display:inline">
+          <input type="hidden" name="_token" value="${pa.csrfDel}">
+          <input type="hidden" name="_from" value="index">
+          <button type="submit" class="pac rd" title="Supprimer" onclick="return confirm('Supprimer ce paiement ?')"><i class="bi bi-trash3"></i></button>
+        </form>
+      </div>`).join('');
+  document.getElementById('visuPaiements').innerHTML = hPai;
+
+  // Photos
+  let hPho = p.photos.length === 0
+    ? '<div style="text-align:center;padding:24px;color:var(--txt3);font-size:.78rem"><i class="bi bi-images" style="font-size:1.8rem;opacity:.2;display:block;margin-bottom:8px"></i>Aucune photo</div>'
+    : `<div class="pgal">${p.photos.map((ph,i) => `
+        <div class="pgal-item" onclick="openLB('${ph.path}')">
+          <img src="${ph.path}" alt="${ph.legende}" loading="lazy">
+          ${i===0?'<span style="position:absolute;top:5px;left:5px;background:var(--go);color:#fff;font-size:.58rem;font-weight:700;padding:2px 6px;border-radius:8px">★ Cover</span>':''}
+        </div>`).join('')}</div>`;
+  document.getElementById('visuPhotos').innerHTML = hPho;
+
+  // Fichiers
+  let hFi = p.fichiers.length === 0
+    ? '<div style="text-align:center;padding:24px;color:var(--txt3);font-size:.78rem"><i class="bi bi-file-earmark" style="font-size:1.8rem;opacity:.2;display:block;margin-bottom:8px"></i>Aucun fichier</div>'
+    : p.fichiers.map(fi => `
+      <div class="frow2">
+        <div class="f-ico" style="background:${fi.catCouleur}18"><i class="bi ${fi.catIcone}" style="color:${fi.catCouleur}"></i></div>
+        <div style="flex:1;min-width:0">
+          <div class="f-name">${fi.nom}</div>
+          <div class="f-sub"><span style="background:${fi.catCouleur}18;color:${fi.catCouleur};padding:1px 6px;border-radius:6px;font-size:.6rem">${fi.cat}</span>${fi.taille ? ' · '+fi.taille : ''}</div>
+        </div>
+        <a href="${fi.path}" target="_blank" class="pac"><i class="bi bi-download"></i></a>
+        <form method="POST" action="${ROUTES_FICHIER_DEL.replace('__ID__',fi.id)}" style="display:inline">
+          <input type="hidden" name="_token" value="${fi.csrfDel}">
+          <input type="hidden" name="_from" value="index">
+          <button type="submit" class="pac rd" onclick="return confirm('Supprimer ce fichier ?')"><i class="bi bi-trash3"></i></button>
+        </form>
+      </div>`).join('');
+  document.getElementById('visuFichiers').innerHTML = hFi;
+
+  // Vidéos
+  let hVi = p.videos.length === 0
+    ? '<div style="text-align:center;padding:24px;color:var(--txt3);font-size:.78rem"><i class="bi bi-play-circle" style="font-size:1.8rem;opacity:.2;display:block;margin-bottom:8px"></i>Aucune vidéo</div>'
+    : p.videos.map(vi => {
+        const ytId = ytExtract(vi.url);
+        const thumb = vi.thumb || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '');
+        return `<div class="vid-item">
+          <div class="vid-thumb"><img src="${thumb}" alt="" loading="lazy">
+            <div class="vid-play"><a href="${vi.url}" target="_blank" class="vid-playbtn"><i class="bi bi-play-fill"></i></a></div>
+          </div>
+          <div class="vid-info">
+            <div><div class="vid-title">${vi.titre}</div></div>
+            <form method="POST" action="${ROUTES_VIDEO_DEL.replace('__ID__',vi.id)}" style="display:inline">
+              <input type="hidden" name="_token" value="${vi.csrfDel}">
+              <input type="hidden" name="_from" value="index">
+              <button type="submit" class="pac rd" onclick="return confirm('Supprimer cette vidéo ?')"><i class="bi bi-trash3"></i></button>
+            </form>
+          </div>
+        </div>`;
+      }).join('');
+  document.getElementById('visuVideos').innerHTML = hVi;
+
+  // Reset tab infos
+  visuTab('infos', document.querySelector('.vtab'));
+  openMo('moVisu');
+}
+
+function visuTab(name, btn) {
+  document.querySelectorAll('.vpanel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.vtab').forEach(b => b.classList.remove('active'));
+  document.getElementById('vp-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Boutons "Ajouter" depuis la modale visu
+function ouvrirAddPaiement() {
+  const p = PROJETS[curProjetId]; if (!p) return;
+  document.getElementById('paiSub').textContent = p.nom;
+  document.getElementById('paiToken').value = p.csrfPaiement;
+  document.getElementById('paiForm').action = p.urlPaiementCreate;
+  openMo('moAddPai');
+}
+function ouvrirAddPhoto() {
+  const p = PROJETS[curProjetId]; if (!p) return;
+  document.getElementById('phoSub').textContent = p.nom;
+  document.getElementById('phoToken').value = p.csrfPhoto;
+  document.getElementById('phoForm').action = p.urlPhotoCreate;
+  openMo('moAddPho');
+}
+function ouvrirAddFichier() {
+  const p = PROJETS[curProjetId]; if (!p) return;
+  document.getElementById('fiSub').textContent = p.nom;
+  document.getElementById('fiToken').value = p.csrfFichier;
+  document.getElementById('fiForm').action = p.urlFichierCreate;
+  openMo('moAddFi');
+}
+function ouvrirAddVideo() {
+  const p = PROJETS[curProjetId]; if (!p) return;
+  document.getElementById('viSub').textContent = p.nom;
+  document.getElementById('viToken').value = p.csrfVideo;
+  document.getElementById('viForm').action = p.urlVideoCreate;
+  openMo('moAddVi');
+}
+
+// ═══════════════════════════════════════
+// MODIFIER PROJET
+// ═══════════════════════════════════════
+function ouvrirEdit(id) {
+  const p = PROJETS[id]; if (!p) return;
+  curProjetId = id;
+  document.getElementById('editSub').textContent = p.numero;
+  document.getElementById('editForm').action = p.urlEdit;
+  document.getElementById('editToken').value = p.csrfEdit;
+  document.getElementById('editNom').value = p.nom;
+  document.getElementById('editDonateur').value = p.donateur;
+  document.getElementById('editBudget').value = p.coutTotal;
+  document.getElementById('editLieu').value = p.lieu;
+  document.getElementById('editDuree').value = p.duree || '';
+  document.getElementById('editDesc').value = p.description || '';
+  document.getElementById('editProg').value = p.progression;
+  document.getElementById('editProgLabel').textContent = p.progression + '%';
+
+  // Sélectionner options
+  const sel = (id, val) => {
+    const s = document.getElementById(id);
+    if (s) [...s.options].forEach(o => o.selected = o.value === val);
+  };
+  sel('editAssoc', String(p.assocId));
+  sel('editType', p.type);
+  sel('editStatut', p.statut);
+
+  openMo('moEdit');
+}
+
+// ═══════════════════════════════════════
+// SUPPRIMER PROJET
+// ═══════════════════════════════════════
+function ouvrirDelete(id, nom) {
+  document.getElementById('delIcon').textContent = '🗑️';
+  document.getElementById('delMsg').innerHTML = `Supprimer le projet <strong>${nom}</strong> ? Toutes les données (photos, fichiers, paiements) seront effacées.`;
+  document.getElementById('delForm').action = PROJETS[id]?.urlDel || '#';
+  document.getElementById('delToken').value = PROJETS[id]?.csrfDel || '';
+  openMo('moDel');
+}
+
+// ═══════════════════════════════════════
+// UPLOAD HELPERS
+// ═══════════════════════════════════════
+function updateUL(inputId, labelId) {
+  const i = document.getElementById(inputId);
+  const l = document.getElementById(labelId);
+  if (!i || !l) return;
+  if (i.files.length === 1) l.textContent = i.files[0].name;
+  else if (i.files.length > 1) l.textContent = i.files.length + ' fichiers';
+}
+function handleDrop(e, inputId, labelId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag');
+  const i = document.getElementById(inputId);
+  if (i && e.dataTransfer.files.length) {
+    i.files = e.dataTransfer.files;
+    updateUL(inputId, labelId);
+  }
+}
+
+// ═══════════════════════════════════════
+// YOUTUBE
+// ═══════════════════════════════════════
+function ytExtract(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/);
+  return m ? m[1] : null;
+}
+function previewYT(url) {
+  const id = ytExtract(url);
+  const prev = document.getElementById('ytPrev');
+  const thumb = document.getElementById('ytThumb');
+  if (id) { thumb.src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`; prev.style.display='block'; }
+  else prev.style.display = 'none';
+}
+
+// ═══════════════════════════════════════
+// LIGHTBOX
+// ═══════════════════════════════════════
+function openLB(src) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Animer toutes les barres de progression
+  document.querySelectorAll('.pbar-f,.prfin-f').forEach(b => {
+    const w = getComputedStyle(b).getPropertyValue('--pw').trim() || b.style.width;
+    b.style.width = '0';
+    setTimeout(() => { b.style.width = w; }, 300 + Math.random()*200);
+  });
+});
+</script>
+{% endblock %}

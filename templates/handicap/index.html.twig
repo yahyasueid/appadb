@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ParrainageHandicap index{% endblock %}
+
+{% block body %}
+    <h1>ParrainageHandicap index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomComplet</th>
+                <th>Cin</th>
+                <th>DateNaissance</th>
+                <th>LieuNaissance</th>
+                <th>Genre</th>
+                <th>NiveauScolaire</th>
+                <th>NiveauEducatif</th>
+                <th>TypeHandicap</th>
+                <th>CauseHandicap</th>
+                <th>DateHandicap</th>
+                <th>TauxHandicap</th>
+                <th>TypeTraitement</th>
+                <th>DetailTraitement</th>
+                <th>CoutTraitementMensuel</th>
+                <th>TypeRevenuFixe</th>
+                <th>EmploiActuel</th>
+                <th>RevenuMensuel</th>
+                <th>RevenuFoyerTotal</th>
+                <th>NbGarcons</th>
+                <th>NbFilles</th>
+                <th>Besoins</th>
+                <th>Adresse</th>
+                <th>Telephone</th>
+                <th>Telephone2</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for parrainage_handicap in parrainage_handicaps %}
+            <tr>
+                <td>{{ parrainage_handicap.id }}</td>
+                <td>{{ parrainage_handicap.nomComplet }}</td>
+                <td>{{ parrainage_handicap.cin }}</td>
+                <td>{{ parrainage_handicap.dateNaissance ? parrainage_handicap.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ parrainage_handicap.lieuNaissance }}</td>
+                <td>{{ parrainage_handicap.genre }}</td>
+                <td>{{ parrainage_handicap.niveauScolaire }}</td>
+                <td>{{ parrainage_handicap.niveauEducatif }}</td>
+                <td>{{ parrainage_handicap.typeHandicap }}</td>
+                <td>{{ parrainage_handicap.causeHandicap }}</td>
+                <td>{{ parrainage_handicap.dateHandicap ? parrainage_handicap.dateHandicap|date('Y-m-d') : '' }}</td>
+                <td>{{ parrainage_handicap.tauxHandicap }}</td>
+                <td>{{ parrainage_handicap.typeTraitement }}</td>
+                <td>{{ parrainage_handicap.detailTraitement }}</td>
+                <td>{{ parrainage_handicap.coutTraitementMensuel }}</td>
+                <td>{{ parrainage_handicap.typeRevenuFixe }}</td>
+                <td>{{ parrainage_handicap.emploiActuel }}</td>
+                <td>{{ parrainage_handicap.revenuMensuel }}</td>
+                <td>{{ parrainage_handicap.revenuFoyerTotal }}</td>
+                <td>{{ parrainage_handicap.nbGarcons }}</td>
+                <td>{{ parrainage_handicap.nbFilles }}</td>
+                <td>{{ parrainage_handicap.besoins }}</td>
+                <td>{{ parrainage_handicap.adresse }}</td>
+                <td>{{ parrainage_handicap.telephone }}</td>
+                <td>{{ parrainage_handicap.telephone2 }}</td>
+                <td>{{ parrainage_handicap.createdAt ? parrainage_handicap.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ parrainage_handicap.updatedAt ? parrainage_handicap.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_parrainage_handicap_show', {'id': parrainage_handicap.id}) }}">show</a>
+                    <a href="{{ path('app_parrainage_handicap_edit', {'id': parrainage_handicap.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="28">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_parrainage_handicap_new') }}">Create new</a>
+{% endblock %}

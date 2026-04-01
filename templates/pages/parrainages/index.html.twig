@@ -1,0 +1,112 @@
+{# templates/pages/parrainages/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SIGAF — {{ 'sponsorship.title'|trans|default('Gestion des Parrainages') }}{% endblock %}
+
+{% block body %}
+
+<div class="page-title-row">
+    <div>
+        <h2>{{ 'sponsorship.title'|trans|default('Gestion des Parrainages') }}</h2>
+        <div class="subtitle">{{ 'sponsorship.subtitle'|trans|default('Art. 1-4 — Bénéficiaires, rapports & paiements') }}</div>
+    </div>
+    <button class="btn-p" onclick="openModal('modalBenef')">
+        <i class="bi bi-plus-lg"></i>
+        <span>{{ 'sponsorship.new_beneficiary'|trans|default('Nouveau bénéficiaire') }}</span>
+    </button>
+</div>
+
+{# === TABLE BÉNÉFICIAIRES === #}
+<div class="panel">
+    <div class="panel-header">
+        <div class="filter-bar">
+            <select>
+                <option>{{ 'filter.all_statuses'|trans|default('Tous les statuts') }}</option>
+                <option>{{ 'status.active'|trans|default('Actif') }}</option>
+                <option>{{ 'status.pending'|trans|default('En attente') }}</option>
+            </select>
+            <input type="text" placeholder="{{ 'action.search'|trans|default('Rechercher…') }}">
+        </div>
+        <div style="display:flex;gap:6px">
+            <button class="btn-o"><i class="bi bi-funnel"></i><span>{{ 'action.filter'|trans|default('Filtrer') }}</span></button>
+            <button class="btn-o"><i class="bi bi-download"></i><span>{{ 'action.export'|trans|default('Export') }}</span></button>
+        </div>
+    </div>
+    <div class="panel-body np">
+        <div class="table-responsive">
+            <table class="dtable">
+                <thead>
+                    <tr>
+                        <th>{{ 'table.ref'|trans|default('Réf') }}</th>
+                        <th>{{ 'table.beneficiary'|trans|default('Bénéficiaire') }}</th>
+                        <th>{{ 'table.monthly_amount'|trans|default('Montant/mois') }}</th>
+                        <th>{{ 'table.paid'|trans|default('Payé') }}</th>
+                        <th>{{ 'table.balance'|trans|default('Solde') }}</th>
+                        <th>{{ 'table.status'|trans|default('Statut') }}</th>
+                        <th>{{ 'table.reports'|trans|default('Rapports') }}</th>
+                        <th style="text-align:right">{{ 'table.actions'|trans|default('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if beneficiaires is defined %}
+                        {% for b in beneficiaires %}
+                        <tr>
+                            <td><strong>{{ b.reference }}</strong></td>
+                            <td>{{ b.nom }}</td>
+                            <td class="amount">{{ b.montantMensuel|number_format(0, ',', ' ') }}</td>
+                            <td class="amount pos">{{ b.paye|number_format(0, ',', ' ') }}</td>
+                            <td class="amount {{ (b.montantMensuel - b.paye) > 0 ? 'neg' : 'pos' }}">
+                                {{ (b.montantMensuel - b.paye)|number_format(0, ',', ' ') }}
+                            </td>
+                            <td><span class="badge-s {{ b.statut == 'active' ? 'ok' : 'wait' }}">{{ b.statutLabel }}</span></td>
+                            <td>{{ b.rapports }} <span style="color:var(--t3);font-size:.72rem">soumis</span></td>
+                            <td style="text-align:right">
+                                <a href="{{ path('app_parrainage_show', {id: b.id}) }}" class="btn-i"><i class="bi bi-eye"></i></a>
+                                <button class="btn-i g"><i class="bi bi-check-lg"></i></button>
+                                <a href="{{ path('app_parrainage_edit', {id: b.id}) }}" class="btn-i"><i class="bi bi-pencil"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="8" class="empty-state"><i class="bi bi-people"></i><p>Aucun bénéficiaire enregistré</p></td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{# === ONGLETS RAPPORTS === #}
+<div class="panel">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'tab-social')">{{ 'tab.social'|trans|default('Rapport Social (Semest.)') }}</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-scolaire')">{{ 'tab.school'|trans|default('Rapport Scolaire (Trim.)') }}</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-financier')">{{ 'tab.financial'|trans|default('Rapport Financier (Mens.)') }}</button>
+    </div>
+    <div class="panel-body" id="tab-social">
+        <div class="empty-state">
+            <i class="bi bi-file-earmark-text"></i>
+            <p>{{ 'sponsorship.select_beneficiary'|trans|default('Sélectionnez un bénéficiaire pour voir ses rapports.') }}</p>
+            <p style="font-size:.75rem;margin-top:6px">{{ 'sponsorship.validation_note'|trans|default('Validation obligatoire par le Directeur — Art. 3') }}</p>
+        </div>
+    </div>
+    <div class="panel-body" id="tab-scolaire" style="display:none">
+        <div class="empty-state">
+            <i class="bi bi-book"></i>
+            <p>{{ 'sponsorship.school_reports'|trans|default('Rapports scolaires trimestriels — En attente.') }}</p>
+        </div>
+    </div>
+    <div class="panel-body" id="tab-financier" style="display:none">
+        <div class="empty-state">
+            <i class="bi bi-cash-stack"></i>
+            <p>{{ 'sponsorship.financial_table'|trans|default('Tableau mensuel : Mois – Dû – Payé – Solde – Statut') }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block modals %}
+{# === MODAL NOUVEAU BÉNÉFICIAIRE === #}
+{% include 'components/_modal_beneficiaire.html.twig' %}
+{% endblock %}

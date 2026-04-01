@@ -1,0 +1,29 @@
+# ================================================
+#  .htaccess — RACINE /htdocs/apps.adb-mr.org/
+#  Redirige tout vers public/index.php
+# ================================================
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Fichier statique existant dans public/ → servir directement
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Dossier existant dans public/ → servir directement  
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Tout le reste → Symfony front controller
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>
+
+# Bloquer accès aux fichiers sensibles
+<FilesMatch "\.(env|env\.local|yml|yaml|xml|lock|json|md|sh|log|twig)$">
+    Require all denied
+</FilesMatch>

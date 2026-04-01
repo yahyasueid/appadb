@@ -1,0 +1,95 @@
+{# templates/components/utilisateurs/_modal_edit.html.twig #}
+
+<div class="modal-overlay" id="editUserModal-{{ user.id }}" onclick="if(event.target===this)closeModal('editUserModal-{{ user.id }}')">
+    <div class="modal-box" style="max-width:640px">
+
+        {# ── Header ── #}
+        <div class="modal-header">
+            <div>
+                <h3><i class="bi bi-pencil" style="color:var(--ac2)"></i> {{ 'utilisateurs.modal_edit_title'|trans }} — {{ user.fullName }}</h3>
+                <small style="color:var(--t3)">{{ 'utilisateurs.modal_edit_subtitle'|trans }}</small>
+            </div>
+            <button class="modal-close" onclick="closeModal('editUserModal-{{ user.id }}')"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        {# ── Form ── #}
+        {{ form_start(editForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        <div class="modal-body">
+
+            {# ── Photo ── #}
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:12px;border:1px dashed var(--brd);margin-bottom:20px">
+                <div id="editPhotoPreview-{{ user.id }}" style="width:64px;height:64px;min-width:64px;border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--brd)">
+                    {% if user.hasPhoto %}
+                        <img src="{{ asset(user.photoPath) }}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" alt="">
+                    {% else %}
+                        <div style="width:100%;height:100%;background:{{ user.posteCouleur }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;border-radius:10px">{{ user.initials }}</div>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="btn-o" style="padding:6px 14px;font-size:.78rem;cursor:pointer">
+                        <i class="bi bi-upload"></i> {{ 'utilisateurs.change_photo'|trans }}
+                        {{ form_widget(editForm.photoFile, {'attr': {'class': 'photo-input', 'data-preview': 'editPhotoPreview-' ~ user.id, 'style': 'display:none'}}) }}
+                    </label>
+                   
+                    <div style="font-size:.7rem;color:var(--t3);margin-top:4px">{{ 'utilisateurs.photo_hint'|trans }}</div>
+                </div>
+            </div>
+
+            {# ── Prénom / Nom ── #}
+            <div class="fr">
+                <div class="fg">
+                    {{ form_label(editForm.prenom) }}
+                    {{ form_widget(editForm.prenom) }}
+                    {{ form_errors(editForm.prenom) }}
+                </div>
+                <div class="fg">
+                    {{ form_label(editForm.nom) }}
+                    {{ form_widget(editForm.nom) }}
+                    {{ form_errors(editForm.nom) }}
+                </div>
+            </div>
+
+            {# ── Email ── #}
+            <div class="fg">
+                {{ form_label(editForm.email) }}
+                {{ form_widget(editForm.email) }}
+                {{ form_errors(editForm.email) }}
+            </div>
+
+            {# ── Téléphone / Poste ── #}
+            <div class="fr">
+                <div class="fg">
+                    {{ form_label(editForm.telephone) }}
+                    {{ form_widget(editForm.telephone) }}
+                </div>
+                <div class="fg">
+                    {{ form_label(editForm.poste) }}
+                    {{ form_widget(editForm.poste) }}
+                    {{ form_errors(editForm.poste) }}
+                </div>
+            </div>
+
+            {# ── Mot de passe / Confirmer ── #}
+            <div class="fr">
+                <div class="fg">
+                    {{ form_label(editForm.plainPassword.first) }}
+                    {{ form_widget(editForm.plainPassword.first) }}
+                    {{ form_errors(editForm.plainPassword.first) }}
+                </div>
+                <div class="fg">
+                    {{ form_label(editForm.plainPassword.second) }}
+                    {{ form_widget(editForm.plainPassword.second) }}
+                    {{ form_errors(editForm.plainPassword.second) }}
+                </div>
+            </div>
+        </div>
+ 
+        {# ── Footer ── #}
+        <div class="modal-footer">
+            <button type="button" class="btn-o" onclick="closeModal('editUserModal-{{ user.id }}')">{{ 'action.cancel'|trans }}</button>
+            <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i> {{ 'action.save'|trans }}</button>
+        </div>
+
+        {{ form_end(editForm) }}
+    </div>
+</div>

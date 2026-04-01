@@ -1,0 +1,998 @@
+{# templates/association/index.html.twig #}
+{# CRUD ASSOCIATIONS — ADB-MR · Multilingue FR/AR/EN · ROLE_ADMIN #}
+{% extends 'base.html.twig' %}
+
+{% block title %}ADB-MR — {{ 'assoc.page_title'|trans }}{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* ═══════════════════════════════════════════════════
+   VARIABLES (complète les variables de sigaf.css)
+═══════════════════════════════════════════════════ */
+:root{
+    --green-deep:#14532D;--green-dark:#166534;--green-mid:#2E7D32;
+    --green-light:#4CAF50;--green-pale:#A5D6A7;
+    --green-ghost:rgba(46,125,50,.07);--green-border:rgba(46,125,50,.15);
+    --blue:#0288D1;--blue-light:rgba(2,136,209,.08);
+    --gold:#D4A017;--gold-light:#F5DEB3;
+    --sand:#FBF7F0;--sand-dark:#F0E8D8;
+    --text:#1B2A1B;--text-mid:#4A6B4A;--text-light:#7A8F7A;
+    --white:#FFFFFF;--red:#D32F2F;--red-light:rgba(211,47,47,.08);
+    --orange:#E65100;--orange-light:rgba(230,81,0,.08);
+    --radius:14px;--radius-sm:10px;--radius-xs:7px;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════════════ */
+.page-header{
+    background:linear-gradient(135deg,var(--green-deep) 0%,var(--green-dark) 55%,var(--green-mid) 100%);
+    padding:28px 32px 24px;position:relative;overflow:hidden;
+    border-radius:0;
+}
+.page-header::before{
+    content:'';position:absolute;width:350px;height:350px;border-radius:50%;
+    background:radial-gradient(circle,rgba(165,214,167,.07) 0%,transparent 70%);
+    top:-130px;right:-80px;pointer-events:none;
+}
+.page-header::after{
+    content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(165,214,167,.3),transparent);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1;flex-wrap:wrap}
+.header-left{display:flex;align-items:center;gap:14px}
+.header-icon{
+    width:48px;height:48px;border-radius:13px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.3rem;color:#fff;backdrop-filter:blur(10px);flex-shrink:0;
+}
+.header-text h1{font-size:1.25rem;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:2px}
+.header-breadcrumb{display:flex;align-items:center;gap:5px;font-size:.7rem;color:rgba(255,255,255,.45);flex-wrap:wrap}
+.header-breadcrumb a{color:rgba(255,255,255,.5);text-decoration:none}
+.header-breadcrumb a:hover{color:rgba(255,255,255,.8)}
+.header-breadcrumb .sep{color:rgba(255,255,255,.2)}
+.admin-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.35);
+    border-radius:20px;padding:3px 10px;font-size:.65rem;font-weight:700;
+    color:var(--gold-light);letter-spacing:.05em;text-transform:uppercase;
+    margin-inline-start:8px;
+}
+
+/* ═══════════════════════════════════════════════════
+   STATS
+═══════════════════════════════════════════════════ */
+.stats-strip{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:1px;background:var(--sand-dark);
+    border-bottom:1px solid var(--sand-dark);
+}
+.stat-cell{
+    background:var(--white);padding:14px 20px;
+    display:flex;align-items:center;gap:10px;transition:.2s;
+}
+.stat-cell:hover{background:var(--green-ghost)}
+.stat-icon{
+    width:36px;height:36px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;
+}
+.stat-icon.g{background:rgba(46,125,50,.1);color:var(--green-mid)}
+.stat-icon.b{background:rgba(2,136,209,.1);color:var(--blue)}
+.stat-icon.o{background:rgba(212,160,23,.1);color:var(--gold)}
+.stat-icon.r{background:rgba(211,47,47,.1);color:var(--red)}
+.stat-val{font-size:1.4rem;font-weight:700;color:var(--text);line-height:1}
+.stat-lbl{font-size:.68rem;color:var(--text-light);font-weight:500;margin-top:1px}
+
+/* ═══════════════════════════════════════════════════
+   TOOLBAR
+═══════════════════════════════════════════════════ */
+.crud-toolbar{
+    padding:16px 24px;display:flex;align-items:center;
+    gap:10px;background:var(--white);
+    border-bottom:1px solid var(--sand-dark);flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:220px;max-width:320px}
+.search-wrap input{
+    width:100%;background:var(--sand);border:1.5px solid transparent;
+    border-radius:9px;padding:9px 14px 9px 36px;
+    font-size:.83rem;font-family:inherit;color:var(--text);outline:none;transition:.25s;
+}
+.search-wrap input:focus{background:var(--white);border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(46,125,50,.07)}
+.search-wrap input::placeholder{color:var(--text-light)}
+.search-wrap .si{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:.85rem;pointer-events:none}
+html[dir="rtl"] .search-wrap input{padding:9px 36px 9px 14px}
+html[dir="rtl"] .search-wrap .si{left:auto;right:11px}
+.fsel{
+    background:var(--sand);border:1.5px solid transparent;border-radius:9px;
+    padding:9px 12px;font-size:.8rem;font-family:inherit;
+    color:var(--text-mid);outline:none;cursor:pointer;transition:.25s;
+}
+.fsel:focus{border-color:var(--green-mid);background:var(--white)}
+.tsp{flex:1}
+
+/* Boutons */
+.btn{
+    display:inline-flex;align-items:center;gap:6px;padding:9px 18px;
+    border-radius:9px;font-size:.82rem;font-weight:600;font-family:inherit;
+    cursor:pointer;border:none;transition:all .2s cubic-bezier(.16,1,.3,1);white-space:nowrap;
+}
+.btn-primary{background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:#fff;box-shadow:0 3px 12px rgba(46,125,50,.22)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(46,125,50,.32)}
+.btn-secondary{background:var(--sand);color:var(--text-mid);border:1.5px solid var(--sand-dark)}
+.btn-secondary:hover{border-color:var(--green-mid);color:var(--green-mid)}
+.btn-sm{padding:6px 12px;font-size:.74rem}
+.btn-danger{background:var(--red-light);color:var(--red);border:1px solid rgba(211,47,47,.15)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-edit{background:var(--blue-light);color:var(--blue);border:1px solid rgba(2,136,209,.15)}
+.btn-edit:hover{background:var(--blue);color:#fff}
+
+/* ═══════════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════════ */
+.table-wrap{padding:0 24px 32px;overflow-x:auto}
+.crud-table{width:100%;border-collapse:separate;border-spacing:0;margin-top:16px}
+.crud-table thead th{
+    background:linear-gradient(135deg,var(--green-deep),var(--green-dark));
+    color:#fff;padding:11px 14px;font-size:.71rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;
+    border:none;
+}
+.crud-table thead th:first-child{border-radius:10px 0 0 0}
+.crud-table thead th:last-child{border-radius:0 10px 0 0}
+html[dir="rtl"] .crud-table thead th:first-child{border-radius:0 10px 0 0}
+html[dir="rtl"] .crud-table thead th:last-child{border-radius:10px 0 0 0}
+.crud-table tbody tr{background:var(--white);transition:all .15s;animation:rowIn .35s ease forwards;opacity:0}
+@keyframes rowIn{to{opacity:1}}
+.crud-table tbody tr:hover{background:var(--green-ghost)}
+.crud-table tbody td{
+    padding:12px 14px;font-size:.83rem;
+    border-bottom:1px solid var(--sand-dark);vertical-align:middle;
+}
+.crud-table tbody tr:last-child td{border-bottom:none}
+.crud-table tbody tr:last-child td:first-child{border-radius:0 0 0 10px}
+.crud-table tbody tr:last-child td:last-child{border-radius:0 0 10px 0}
+
+/* Cells */
+.cell-logo{
+    width:40px;height:40px;border-radius:9px;
+    background:var(--white);border:1.5px solid var(--sand-dark);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.cell-logo img{width:100%;height:100%;object-fit:contain}
+.cell-logo .nl{font-size:.62rem;font-weight:700;color:var(--text-light)}
+.assoc-name{font-weight:600;color:var(--text);line-height:1.3}
+.assoc-sub{font-size:.75rem;color:var(--text-light);margin-top:2px}
+.sigle-chip{
+    display:inline-block;padding:2px 7px;border-radius:20px;
+    background:var(--green-ghost);color:var(--green-mid);
+    font-size:.65rem;font-weight:700;border:1px solid var(--green-border);margin-top:3px;
+}
+.badge-s{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:600;
+}
+.badge-s.on{background:rgba(46,125,50,.1);color:var(--green-mid)}
+.badge-s.off{background:rgba(211,47,47,.08);color:var(--red)}
+.badge-s::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.badge-s.on::before{background:var(--green-light)}
+.badge-s.off::before{background:var(--red)}
+.act-btns{display:flex;gap:5px}
+.ab{
+    width:30px;height:30px;border-radius:7px;border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:.82rem;transition:.15s;
+}
+.ab.v{background:var(--green-ghost);color:var(--green-mid)}
+.ab.e{background:var(--blue-light);color:var(--blue)}
+.ab.d{background:var(--red-light);color:var(--red)}
+.ab:hover{transform:scale(1.12)}
+.ab.v:hover{background:var(--green-mid);color:#fff}
+.ab.e:hover{background:var(--blue);color:#fff}
+.ab.d:hover{background:var(--red);color:#fff}
+
+.empty-state{
+    text-align:center;padding:64px 32px;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.empty-state .ei{
+    width:64px;height:64px;border-radius:16px;
+    background:var(--green-ghost);border:1.5px solid var(--green-border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.6rem;color:var(--green-pale);
+}
+.empty-state h3{font-size:.95rem;font-weight:600;color:var(--text-mid)}
+.empty-state p{font-size:.8rem;color:var(--text-light)}
+
+/* Pagination */
+.pag-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;background:var(--white);
+    border-top:1px solid var(--sand-dark);flex-wrap:wrap;gap:10px;
+}
+.pag-info{font-size:.75rem;color:var(--text-light)}
+.pag-btns{display:flex;gap:3px}
+.pb{
+    width:32px;height:32px;border-radius:7px;border:1.5px solid var(--sand-dark);
+    background:var(--white);color:var(--text-mid);font-size:.78rem;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:.15s;font-family:inherit;
+}
+.pb:hover,.pb.act{background:var(--green-mid);color:#fff;border-color:var(--green-mid)}
+
+/* ═══════════════════════════════════════════════════
+   MODALES
+═══════════════════════════════════════════════════ */
+.mo{
+    position:fixed;inset:0;background:rgba(20,83,45,.32);
+    backdrop-filter:blur(5px);z-index:1050;
+    display:none;align-items:center;justify-content:center;padding:16px;
+}
+.mo.open{display:flex;animation:moIn .2s ease}
+@keyframes moIn{from{opacity:0}to{opacity:1}}
+.md{
+    background:var(--white);border-radius:18px;width:100%;
+    box-shadow:0 24px 80px rgba(20,83,45,.18);
+    animation:mdIn .28s cubic-bezier(.16,1,.3,1);
+    max-height:92vh;display:flex;flex-direction:column;overflow:hidden;
+}
+@keyframes mdIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.md-sm{max-width:400px}.md-md{max-width:620px}.md-lg{max-width:800px}
+
+.mh{
+    padding:20px 24px 16px;border-bottom:1px solid var(--sand-dark);
+    display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.mh-l{display:flex;align-items:center;gap:10px}
+.mi{
+    width:40px;height:40px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;
+}
+.mi.g{background:rgba(46,125,50,.1);color:var(--green-mid)}
+.mi.b{background:rgba(2,136,209,.1);color:var(--blue)}
+.mi.r{background:rgba(211,47,47,.1);color:var(--red)}
+.mt{font-size:.95rem;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.ms{font-size:.72rem;color:var(--text-light);margin-top:1px}
+.mc-btn{
+    width:34px;height:34px;border-radius:8px;border:none;
+    background:var(--sand);color:var(--text-light);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;transition:.15s;
+}
+.mc-btn:hover{background:var(--red-light);color:var(--red)}
+
+.mb{padding:22px 24px;overflow-y:auto;flex:1}
+.mf{
+    padding:14px 24px;border-top:1px solid var(--sand-dark);
+    display:flex;align-items:center;justify-content:flex-end;
+    gap:9px;flex-shrink:0;background:var(--sand);
+}
+
+/* ═══════════════════════════════════════════════════
+   FORM
+═══════════════════════════════════════════════════ */
+.fs{margin-bottom:20px}
+.fs-title{
+    font-size:.68rem;font-weight:700;color:var(--green-mid);
+    text-transform:uppercase;letter-spacing:.1em;
+    display:flex;align-items:center;gap:7px;margin-bottom:12px;
+}
+.fs-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--green-border),transparent)}
+html[dir="rtl"] .fs-title::after{background:linear-gradient(270deg,var(--green-border),transparent)}
+.fg{display:grid;gap:12px}
+.fg.c2{grid-template-columns:1fr 1fr}
+.fg.c3{grid-template-columns:1fr 1fr 1fr}
+.fgrp{display:flex;flex-direction:column;gap:5px}
+.fgrp label{font-size:.74rem;font-weight:600;color:var(--text-mid);display:flex;align-items:center;gap:4px}
+.fgrp label .req{color:var(--red);font-size:.68rem}
+.fc{
+    background:var(--sand);border:1.5px solid transparent;
+    border-radius:var(--radius-xs);padding:10px 12px;
+    font-size:.84rem;font-family:inherit;color:var(--text);
+    outline:none;transition:.22s;width:100%;
+}
+.fc:focus{background:var(--white);border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(46,125,50,.06)}
+.fc::placeholder{color:var(--text-light);font-weight:300}
+.fc.err{border-color:var(--red)}
+.fc-hint{font-size:.68rem;color:var(--text-light)}
+.fc-err{font-size:.68rem;color:var(--red);display:none}
+.fc.err ~ .fc-err{display:block}
+
+/* Toggle */
+.tog-wrap{display:flex;align-items:center;gap:8px;margin-top:6px}
+.tog{position:relative;width:40px;height:22px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-tr{
+    position:absolute;inset:0;background:var(--sand-dark);
+    border-radius:11px;cursor:pointer;transition:.22s;
+}
+.tog-tr::before{
+    content:'';position:absolute;width:16px;height:16px;
+    border-radius:50%;background:#fff;top:3px;left:3px;transition:.22s;
+    box-shadow:0 1px 3px rgba(0,0,0,.15);
+}
+.tog input:checked ~ .tog-tr{background:var(--green-mid)}
+.tog input:checked ~ .tog-tr::before{left:21px}
+.tog-lbl{font-size:.8rem;color:var(--text-mid);font-weight:500}
+
+/* Logo upload */
+.logo-up{
+    border:2px dashed var(--sand-dark);border-radius:9px;
+    padding:16px;text-align:center;cursor:pointer;transition:.22s;
+    background:var(--sand);position:relative;
+}
+.logo-up:hover,.logo-up.has{border-color:var(--green-mid);background:var(--green-ghost)}
+.logo-up input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.lu-prev{
+    width:56px;height:56px;border-radius:11px;background:var(--white);
+    border:1.5px solid var(--sand-dark);margin:0 auto 8px;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.lu-prev img{width:100%;height:100%;object-fit:contain}
+.lu-txt{font-size:.75rem;color:var(--text-light)}
+.lu-txt strong{color:var(--green-mid)}
+
+/* ═══════════════════════════════════════════════════
+   MODALE VOIR
+═══════════════════════════════════════════════════ */
+.vh{
+    display:flex;align-items:center;gap:16px;padding:16px;
+    background:var(--green-ghost);border-radius:10px;
+    border:1px solid var(--green-border);margin-bottom:18px;
+}
+.vl{
+    width:58px;height:58px;border-radius:13px;background:var(--white);
+    border:1.5px solid var(--sand-dark);display:flex;align-items:center;
+    justify-content:center;overflow:hidden;flex-shrink:0;
+}
+.vl img{width:90%;height:90%;object-fit:contain}
+.vl .nls{font-size:.75rem;font-weight:700;color:var(--text-light)}
+.vn{font-size:1rem;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.vna{font-size:.85rem;color:var(--text-mid);margin-top:2px}
+.vsg{
+    display:inline-block;padding:2px 9px;border-radius:20px;
+    background:var(--green-ghost);color:var(--green-mid);
+    font-size:.68rem;font-weight:700;border:1px solid var(--green-border);margin-top:5px;
+}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vf{padding:10px 12px;background:var(--sand);border-radius:7px}
+.vf-l{font-size:.64rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.vf-v{font-size:.82rem;color:var(--text);font-weight:500}
+.vf-v a{color:var(--blue);text-decoration:none}
+.vf-v a:hover{text-decoration:underline}
+
+/* ═══════════════════════════════════════════════════
+   MODALE SUPPRIMER
+═══════════════════════════════════════════════════ */
+.del-warn{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:4px 0}
+.del-icon{
+    width:56px;height:56px;border-radius:14px;
+    background:var(--red-light);border:1.5px solid rgba(211,47,47,.2);
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--red);
+}
+.del-warn h3{font-size:.95rem;font-weight:700;color:var(--text)}
+.del-warn p{font-size:.82rem;color:var(--text-light);line-height:1.6}
+.del-name{
+    display:inline-block;padding:5px 14px;background:var(--red-light);
+    border-radius:7px;font-weight:700;color:var(--red);
+    font-size:.82rem;border:1px solid rgba(211,47,47,.15);margin:2px 0;
+}
+.del-note{
+    font-size:.72rem;padding:7px 12px;background:var(--orange-light);
+    border-radius:7px;border:1px solid rgba(230,81,0,.15);color:var(--orange);width:100%;
+}
+
+/* ═══════════════════════════════════════════════════
+   RTL
+═══════════════════════════════════════════════════ */
+html[dir="rtl"] .act-btns{flex-direction:row-reverse}
+html[dir="rtl"] .fg.c2,html[dir="rtl"] .fg.c3{direction:rtl}
+
+@media(max-width:768px){
+    .stats-strip{grid-template-columns:1fr 1fr}
+    .fg.c2,.fg.c3{grid-template-columns:1fr}
+    .vgrid{grid-template-columns:1fr}
+    .md-md,.md-lg{max-width:100%}
+    .page-header{padding:20px 16px}
+    .crud-toolbar,.table-wrap,.pag-bar{padding-left:16px;padding-right:16px}
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+{# ── Accès ADMIN uniquement ── #}
+{% if not is_granted('ROLE_ADMIN') %}
+    <div style="padding:60px;text-align:center">
+        <i class="bi bi-lock" style="font-size:3rem;color:var(--red)"></i>
+        <h2 style="margin-top:16px">{{ 'assoc.access_denied'|trans }}</h2>
+        <a href="{{ path('app_dashboard') }}" class="btn btn-secondary" style="margin-top:12px">← {{ 'common.back'|trans }}</a>
+    </div>
+{% else %}
+
+{# ── PAGE HEADER ── #}
+<div class="page-header">
+    <div class="header-inner">
+        <div class="header-left">
+            <div class="header-icon"><i class="bi bi-building"></i></div>
+            <div class="header-text">
+                <h1>
+                    {{ 'assoc.page_title'|trans }}
+                    <span class="admin-badge"><i class="bi bi-shield-lock"></i> Admin</span>
+                </h1>
+                <div class="header-breadcrumb">
+                    <a href="{{ path('app_dashboard') }}">ADB-MR</a>
+                    <span class="sep">/</span>
+                    <span style="color:rgba(255,255,255,.7)">{{ 'sidebar.administration'|trans }}</span>
+                    <span class="sep">/</span>
+                    <span style="color:#fff">{{ 'assoc.page_title'|trans }}</span>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="openCreate()">
+            <i class="bi bi-plus-lg"></i> {{ 'assoc.btn_new'|trans }}
+        </button>
+    </div>
+</div>
+
+{# ── STATS ── #}
+<div class="stats-strip">
+    <div class="stat-cell">
+        <div class="stat-icon g"><i class="bi bi-building"></i></div>
+        <div><div class="stat-val">{{ associations|length }}</div><div class="stat-lbl">{{ 'assoc.stat_total'|trans }}</div></div>
+    </div>
+    <div class="stat-cell">
+        <div class="stat-icon b"><i class="bi bi-check-circle"></i></div>
+        <div><div class="stat-val">{{ associations|filter(a => a.isActive)|length }}</div><div class="stat-lbl">{{ 'assoc.stat_active'|trans }}</div></div>
+    </div>
+    <div class="stat-cell">
+        <div class="stat-icon o"><i class="bi bi-diagram-3"></i></div>
+        <div>
+            <div class="stat-val">{{ associations|reduce((c,a) => c + a.projets|length, 0) }}</div>
+            <div class="stat-lbl">{{ 'assoc.stat_projects'|trans }}</div>
+        </div>
+    </div>
+    <div class="stat-cell">
+        <div class="stat-icon r"><i class="bi bi-x-circle"></i></div>
+        <div><div class="stat-val">{{ associations|filter(a => not a.isActive)|length }}</div><div class="stat-lbl">{{ 'assoc.stat_inactive'|trans }}</div></div>
+    </div>
+</div>
+
+{# ── TOOLBAR ── #}
+<div class="crud-toolbar">
+    <div class="search-wrap">
+        <i class="bi bi-search si"></i>
+        <input type="text" id="sInput" placeholder="{{ 'assoc.search_placeholder'|trans }}" oninput="filterTbl()">
+    </div>
+    <select class="fsel" id="fStatus" onchange="filterTbl()">
+        <option value="">{{ 'assoc.filter_all_status'|trans }}</option>
+        <option value="active">{{ 'assoc.status_active'|trans }}</option>
+        <option value="inactive">{{ 'assoc.status_inactive'|trans }}</option>
+    </select>
+    <select class="fsel" id="fVille" onchange="filterTbl()">
+        <option value="">{{ 'assoc.filter_all_cities'|trans }}</option>
+        {% set villes = [] %}
+        {% for a in associations %}
+            {% if a.ville and a.ville not in villes %}
+                {% set villes = villes|merge([a.ville]) %}
+                <option value="{{ a.ville|lower }}">{{ a.ville }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <div class="tsp"></div>
+    <span style="font-size:.72rem;color:var(--text-light)" id="tCount">{{ associations|length }} {{ 'assoc.entries'|trans }}</span>
+    <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+        <i class="bi bi-download"></i> CSV
+    </button>
+</div>
+
+{# ── TABLE ── #}
+<div class="table-wrap">
+{% if associations is empty %}
+    <div class="empty-state">
+        <div class="ei"><i class="bi bi-building-slash"></i></div>
+        <h3>{{ 'assoc.empty_title'|trans }}</h3>
+        <p>{{ 'assoc.empty_sub'|trans }}</p>
+        <button class="btn btn-primary" style="margin-top:6px" onclick="openCreate()">
+            <i class="bi bi-plus-lg"></i> {{ 'assoc.btn_new'|trans }}
+        </button>
+    </div>
+{% else %}
+    <table class="crud-table" id="mainTbl">
+        <thead>
+            <tr>
+                <th style="width:44px">#</th>
+                <th style="width:50px"></th>
+                <th>{{ 'assoc.col_name'|trans }}</th>
+                <th>{{ 'assoc.col_responsible'|trans }}</th>
+                <th>{{ 'assoc.col_contact'|trans }}</th>
+                <th>{{ 'assoc.col_city'|trans }}</th>
+                <th>{{ 'assoc.col_agrement'|trans }}</th>
+                <th>{{ 'assoc.col_projects'|trans }}</th>
+                <th>{{ 'assoc.col_status'|trans }}</th>
+                <th style="width:110px">{{ 'assoc.col_actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for association in associations %}
+        <tr
+            data-id="{{ association.id }}"
+            data-status="{{ association.isActive ? 'active' : 'inactive' }}"
+            data-ville="{{ association.ville|lower|default('') }}"
+            data-search="{{ (association.nom ~ ' ' ~ association.nomAr ~ ' ' ~ association.sigle ~ ' ' ~ association.responsable)|lower }}"
+            style="animation-delay:{{ loop.index0 * 0.035 }}s"
+        >
+            <td style="color:var(--text-light);font-size:.72rem">{{ loop.index }}</td>
+            <td>
+                <div class="cell-logo">
+                    {% if association.hasLogo %}
+                        <img src="{{ asset(association.logoPath) }}" alt="">
+                    {% else %}
+                        <span class="nl">{{ (association.sigle ?? association.nom)[0:2]|upper }}</span>
+                    {% endif %}
+                </div>
+            </td>
+            <td>
+                <div class="assoc-name">{{ association.nom }}</div>
+                {% if association.nomAr %}<div class="assoc-sub" dir="rtl">{{ association.nomAr }}</div>{% endif %}
+                {% if association.sigle %}<span class="sigle-chip">{{ association.sigle }}</span>{% endif %}
+            </td>
+            <td style="font-size:.8rem">{{ association.responsable ?? '—' }}</td>
+            <td>
+                {% if association.email %}<div style="font-size:.76rem"><i class="bi bi-envelope" style="color:var(--text-light);margin-inline-end:4px"></i>{{ association.email }}</div>{% endif %}
+                {% if association.telephone %}<div style="font-size:.76rem;margin-top:2px"><i class="bi bi-telephone" style="color:var(--text-light);margin-inline-end:4px"></i>{{ association.telephone }}</div>{% endif %}
+                {% if not association.email and not association.telephone %}—{% endif %}
+            </td>
+            <td style="font-size:.8rem">{{ association.ville ?? '—' }}</td>
+            <td style="font-size:.76rem;color:var(--text-light)">{{ association.numeroAgrement ?? '—' }}</td>
+            <td>
+                <span style="font-weight:600;color:var(--green-mid)">{{ association.projets|length }}</span>
+                <span style="font-size:.7rem;color:var(--text-light)"> {{ 'assoc.projects_label'|trans }}</span>
+            </td>
+            <td>
+                <span class="badge-s {{ association.isActive ? 'on' : 'off' }}">
+                    {{ association.isActive ? 'assoc.status_active'|trans : 'assoc.status_inactive'|trans }}
+                </span>
+            </td>
+            <td>
+                <div class="act-btns">
+                    <button class="ab v" title="{{ 'common.view'|trans }}" onclick="openView({{ association.id }})"><i class="bi bi-eye"></i></button>
+                    <button class="ab e" title="{{ 'common.edit'|trans }}" onclick="openEdit({{ association.id }})"><i class="bi bi-pencil"></i></button>
+                    <button class="ab d" title="{{ 'common.delete'|trans }}" onclick="openDelete({{ association.id }}, '{{ association.nom|e('js') }}')"><i class="bi bi-trash"></i></button>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pag-bar">
+        <div class="pag-info" id="pagInfo">
+            {{ 'assoc.showing'|trans }} <strong>1–{{ associations|length }}</strong> {{ 'assoc.of'|trans }} <strong>{{ associations|length }}</strong>
+        </div>
+        <div class="pag-btns">
+            <button class="pb"><i class="bi bi-chevron-left"></i></button>
+            <button class="pb act">1</button>
+            <button class="pb"><i class="bi bi-chevron-right"></i></button>
+        </div>
+    </div>
+{% endif %}
+</div>
+
+
+{% endif %}{# fin is_granted('ROLE_ADMIN') #}
+
+{% endblock %}
+
+{% block modals %}
+<div class="mo" id="moForm">
+    <div class="md md-lg">
+        <div class="mh">
+            <div class="mh-l">
+                <div class="mi g"><i class="bi bi-building-add" id="fmIcon"></i></div>
+                <div>
+                    <div class="mt" id="fmTitle">{{ 'assoc.modal_create_title'|trans }}</div>
+                    <div class="ms" id="fmSub">{{ 'assoc.modal_create_sub'|trans }}</div>
+                </div>
+            </div>
+            <button class="mc-btn" onclick="closeMo('moForm')"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <div class="mb">
+        <form id="assocForm" method="post" enctype="multipart/form-data" novalidate>
+            <input type="hidden" name="_token" value="{{ csrf_token('assoc_form') }}">
+            <input type="hidden" name="_method" id="fMethod" value="POST">
+            <input type="hidden" name="id" id="fId">
+
+            {# ── Identité ── #}
+            <div class="fs">
+                <div class="fs-title"><i class="bi bi-info-circle"></i> {{ 'assoc.section_identity'|trans }}</div>
+                <div class="fg c2">
+                    <div class="fgrp" style="grid-column:1/-1">
+                        <label>{{ 'assoc.field_nom'|trans }} <span class="req">*</span></label>
+                        <input type="text" name="nom" id="fNom" class="fc" placeholder="{{ 'assoc.field_nom_ph'|trans }}" required>
+                        <span class="fc-err">{{ 'assoc.err_nom_required'|trans }}</span>
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_nom_ar'|trans }}</label>
+                        <input type="text" name="nomAr" id="fNomAr" class="fc" placeholder="الاسم بالعربية" dir="rtl">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_sigle'|trans }}</label>
+                        <input type="text" name="sigle" id="fSigle" class="fc" placeholder="ADB-MR" maxlength="30">
+                    </div>
+                </div>
+            </div>
+
+            {# ── Coordonnées ── #}
+            <div class="fs">
+                <div class="fs-title"><i class="bi bi-geo-alt"></i> {{ 'assoc.section_contact'|trans }}</div>
+                <div class="fg c2">
+                    <div class="fgrp" style="grid-column:1/-1">
+                        <label>{{ 'assoc.field_adresse'|trans }}</label>
+                        <input type="text" name="adresse" id="fAdresse" class="fc" placeholder="{{ 'assoc.field_adresse_ph'|trans }}">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_ville'|trans }}</label>
+                        <input type="text" name="ville" id="fVille" class="fc" placeholder="Nouakchott">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_pays'|trans }}</label>
+                        <input type="text" name="pays" id="fPays" class="fc" value="Mauritanie">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_tel'|trans }}</label>
+                        <input type="tel" name="telephone" id="fTel" class="fc" placeholder="+222 45 25 XX XX">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_email'|trans }}</label>
+                        <input type="email" name="email" id="fEmail" class="fc" placeholder="contact@association.mr">
+                    </div>
+                    <div class="fgrp" style="grid-column:1/-1">
+                        <label>{{ 'assoc.field_web'|trans }}</label>
+                        <input type="url" name="siteWeb" id="fWeb" class="fc" placeholder="https://www.association.mr">
+                    </div>
+                </div>
+            </div>
+
+            {# ── Légal ── #}
+            <div class="fs">
+                <div class="fs-title"><i class="bi bi-file-earmark-text"></i> {{ 'assoc.section_legal'|trans }}</div>
+                <div class="fg c3">
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_agrement'|trans }}</label>
+                        <input type="text" name="numeroAgrement" id="fAgrement" class="fc" placeholder="2024/MR/0123">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_date_creation'|trans }}</label>
+                        <input type="date" name="dateCreation" id="fDateCreation" class="fc">
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_responsable'|trans }}</label>
+                        <input type="text" name="responsable" id="fResp" class="fc" placeholder="{{ 'assoc.field_responsable_ph'|trans }}">
+                    </div>
+                </div>
+            </div>
+
+            {# ── Visuel & Statut ── #}
+            <div class="fs">
+                <div class="fs-title"><i class="bi bi-image"></i> {{ 'assoc.section_visual'|trans }}</div>
+                <div class="fg c2">
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_logo'|trans }}</label>
+                        <div class="logo-up" id="luArea">
+                            <input type="file" name="logoFile" id="fLogo" accept="image/*" onchange="previewLogo(this)">
+                            <div class="lu-prev" id="luPrev"><i class="bi bi-image" style="font-size:1.4rem;color:var(--green-pale)"></i></div>
+                            <div class="lu-txt"><strong>{{ 'assoc.upload_click'|trans }}</strong> {{ 'assoc.upload_or_drag'|trans }}<br><span style="font-size:.66rem">PNG, JPG, SVG — max 2 Mo</span></div>
+                        </div>
+                    </div>
+                    <div class="fgrp">
+                        <label>{{ 'assoc.field_status'|trans }}</label>
+                        <div class="tog-wrap">
+                            <label class="tog">
+                                <input type="checkbox" name="isActive" id="fActive" value="1" checked>
+                                <span class="tog-tr"></span>
+                            </label>
+                            <span class="tog-lbl" id="togLbl">{{ 'assoc.status_active'|trans }}</span>
+                        </div>
+                        <div class="fc-hint">{{ 'assoc.status_hint'|trans }}</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+
+        <div class="mf">
+            <button class="btn btn-secondary" onclick="closeMo('moForm')"><i class="bi bi-x"></i> {{ 'common.cancel'|trans }}</button>
+            <button class="btn btn-primary" onclick="submitForm()">
+                <i class="bi bi-check-lg" id="submitIco"></i>
+                <span id="submitLbl">{{ 'assoc.btn_create'|trans }}</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+{# ══════════════════════════════════════════════════════
+   MODALE VOIR
+══════════════════════════════════════════════════════ #}
+<div class="mo" id="moView">
+    <div class="md md-md">
+        <div class="mh">
+            <div class="mh-l">
+                <div class="mi g"><i class="bi bi-eye"></i></div>
+                <div>
+                    <div class="mt">{{ 'assoc.modal_view_title'|trans }}</div>
+                    <div class="ms" id="vSub">—</div>
+                </div>
+            </div>
+            <button class="mc-btn" onclick="closeMo('moView')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="mb" id="vBody"></div>
+        <div class="mf">
+            <button class="btn btn-secondary" onclick="closeMo('moView')"><i class="bi bi-x"></i> {{ 'common.close'|trans }}</button>
+            <button class="btn btn-edit" id="vEditBtn"><i class="bi bi-pencil"></i> {{ 'common.edit'|trans }}</button>
+        </div>
+    </div>
+</div>
+
+{# ══════════════════════════════════════════════════════
+   MODALE SUPPRIMER
+══════════════════════════════════════════════════════ #}
+<div class="mo" id="moDelete">
+    <div class="md md-sm">
+        <div class="mh">
+            <div class="mh-l">
+                <div class="mi r"><i class="bi bi-trash"></i></div>
+                <div>
+                    <div class="mt">{{ 'assoc.modal_delete_title'|trans }}</div>
+                    <div class="ms">{{ 'assoc.modal_delete_sub'|trans }}</div>
+                </div>
+            </div>
+            <button class="mc-btn" onclick="closeMo('moDelete')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="mb">
+            <div class="del-warn">
+                <div class="del-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                <h3>{{ 'assoc.delete_confirm_title'|trans }}</h3>
+                <p>{{ 'assoc.delete_confirm_text'|trans }}</p>
+                <span class="del-name" id="delName">—</span>
+                <div class="del-note"><i class="bi bi-info-circle" style="margin-inline-end:5px"></i>{{ 'assoc.delete_warn'|trans }}</div>
+            </div>
+        </div>
+        <div class="mf">
+            <button class="btn btn-secondary" onclick="closeMo('moDelete')"><i class="bi bi-x"></i> {{ 'common.cancel'|trans }}</button>
+            <form id="delForm" method="post" style="display:inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_association') }}">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> {{ 'assoc.btn_delete_confirm'|trans }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# ── Données JS ── #}
+<script>
+const ADATA = {{ associations|map(a => {
+    id: a.id,
+    nom: a.nom,
+    nomAr: a.nomAr,
+    sigle: a.sigle,
+    adresse: a.adresse,
+    ville: a.ville,
+    pays: a.pays,
+    telephone: a.telephone,
+    email: a.email,
+    siteWeb: a.siteWeb,
+    numeroAgrement: a.numeroAgrement,
+    dateCreation: a.dateCreation ? a.dateCreation|date('Y-m-d') : null,
+    responsable: a.responsable,
+    isActive: a.isActive,
+    logoPath: a.logoPath,
+    projetsCount: a.projets|length
+})|json_encode|raw }};
+
+const ROUTES = {
+    create: "{{ path('app_association_create') }}",
+    edit:   (id) => `/association/${id}/edit`,
+    delete: (id) => `/association/${id}/delete`,
+};
+
+// Traductions JS
+const T = {
+    active:   "{{ 'assoc.status_active'|trans }}",
+    inactive: "{{ 'assoc.status_inactive'|trans }}",
+    create_title: "{{ 'assoc.modal_create_title'|trans }}",
+    create_sub:   "{{ 'assoc.modal_create_sub'|trans }}",
+    edit_title:   "{{ 'assoc.modal_edit_title'|trans }}",
+    btn_create:   "{{ 'assoc.btn_create'|trans }}",
+    btn_save:     "{{ 'assoc.btn_save'|trans }}",
+    projects:     "{{ 'assoc.projects_label'|trans }}",
+    entries:      "{{ 'assoc.entries'|trans }}",
+    label_fields: {
+        responsable:  "{{ 'assoc.field_responsable'|trans }}",
+        date:         "{{ 'assoc.field_date_creation'|trans }}",
+        telephone:    "{{ 'assoc.field_tel'|trans }}",
+        email:        "{{ 'assoc.field_email'|trans }}",
+        web:          "{{ 'assoc.field_web'|trans }}",
+        adresse:      "{{ 'assoc.field_adresse'|trans }}",
+        ville:        "{{ 'assoc.field_ville'|trans }}",
+        pays:         "{{ 'assoc.field_pays'|trans }}",
+        agrement:     "{{ 'assoc.field_agrement'|trans }}",
+        projects:     "{{ 'assoc.col_projects'|trans }}",
+        status:       "{{ 'assoc.col_status'|trans }}",
+    }
+};
+</script>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+/* ═══════════════ MODALES ═══════════════ */
+function openMo(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden'}
+function closeMo(id){document.getElementById(id).classList.remove('open');document.body.style.overflow=''}
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',function(e){if(e.target===this)closeMo(this.id)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.mo.open').forEach(m=>closeMo(m.id))});
+
+/* ═══════════════ RESET FORM ═══════════════ */
+function resetForm(){
+    document.getElementById('assocForm').reset();
+    document.getElementById('fId').value='';
+    document.getElementById('fMethod').value='POST';
+    document.getElementById('assocForm').action=ROUTES.create;
+    document.getElementById('fmTitle').textContent=T.create_title;
+    document.getElementById('fmSub').textContent=T.create_sub;
+    document.getElementById('fmIcon').className='bi bi-building-add';
+    document.getElementById('submitLbl').textContent=T.btn_create;
+    document.getElementById('luPrev').innerHTML='<i class="bi bi-image" style="font-size:1.4rem;color:var(--green-pale)"></i>';
+    document.getElementById('luArea').classList.remove('has');
+    document.getElementById('togLbl').textContent=T.active;
+    document.getElementById('fActive').checked=true;
+    document.querySelectorAll('.fc.err').forEach(f=>f.classList.remove('err'));
+    document.getElementById('fPays').value='Mauritanie';
+}
+
+/* ═══════════════ CRÉER ═══════════════ */
+function openCreate(){resetForm();openMo('moForm')}
+
+/* ═══════════════ ÉDITER ═══════════════ */
+function openEdit(id){
+    const a=ADATA.find(x=>x.id===id);if(!a)return;
+    resetForm();
+    document.getElementById('fId').value=a.id;
+    document.getElementById('fMethod').value='PUT';
+    document.getElementById('assocForm').action=ROUTES.edit(id);
+    document.getElementById('fNom').value=a.nom||'';
+    document.getElementById('fNomAr').value=a.nomAr||'';
+    document.getElementById('fSigle').value=a.sigle||'';
+    document.getElementById('fAdresse').value=a.adresse||'';
+    document.getElementById('fVille').value=a.ville||'';
+    document.getElementById('fPays').value=a.pays||'Mauritanie';
+    document.getElementById('fTel').value=a.telephone||'';
+    document.getElementById('fEmail').value=a.email||'';
+    document.getElementById('fWeb').value=a.siteWeb||'';
+    document.getElementById('fAgrement').value=a.numeroAgrement||'';
+    document.getElementById('fDateCreation').value=a.dateCreation||'';
+    document.getElementById('fResp').value=a.responsable||'';
+    document.getElementById('fActive').checked=a.isActive;
+    document.getElementById('togLbl').textContent=a.isActive?T.active:T.inactive;
+    if(a.logoPath){
+        document.getElementById('luPrev').innerHTML=`<img src="/${a.logoPath}" style="width:100%;height:100%;object-fit:contain">`;
+        document.getElementById('luArea').classList.add('has');
+    }
+    document.getElementById('fmTitle').textContent=T.edit_title;
+    document.getElementById('fmSub').textContent=a.sigle?`${a.sigle} — ${a.nom}`:a.nom;
+    document.getElementById('fmIcon').className='bi bi-pencil';
+    document.getElementById('submitLbl').textContent=T.btn_save;
+    openMo('moForm');
+}
+
+/* ═══════════════ VOIR ═══════════════ */
+function openView(id){
+    const a=ADATA.find(x=>x.id===id);if(!a)return;
+    document.getElementById('vSub').textContent=(a.sigle||'')+(a.ville?' · '+a.ville:'');
+    document.getElementById('vEditBtn').onclick=()=>{closeMo('moView');openEdit(id)};
+    const logo=a.logoPath
+        ?`<img src="/${a.logoPath}" style="width:90%;height:90%;object-fit:contain">`
+        :`<span class="nls">${(a.sigle||a.nom||'?').substring(0,2).toUpperCase()}</span>`;
+    const f=(l,v,full=false)=>v
+        ?`<div class="vf"${full?' style="grid-column:1/-1"':''}>
+            <div class="vf-l">${l}</div>
+            <div class="vf-v">${v}</div>
+           </div>`:'';
+    const locale=document.documentElement.lang||'fr';
+    const fmtDate=v=>v?new Date(v).toLocaleDateString(locale==='ar'?'ar-MR':locale==='en'?'en-US':'fr-FR'):null;
+    const statusHtml=`<span class="badge-s ${a.isActive?'on':'off'}">${a.isActive?T.active:T.inactive}</span>`;
+    document.getElementById('vBody').innerHTML=`
+        <div class="vh">
+            <div class="vl">${logo}</div>
+            <div>
+                <div class="vn">${a.nom||'—'}</div>
+                ${a.nomAr?`<div class="vna" dir="rtl">${a.nomAr}</div>`:''}
+                ${a.sigle?`<span class="vsg">${a.sigle}</span>`:''}
+            </div>
+        </div>
+        <div class="vgrid">
+            ${f(T.label_fields.responsable, a.responsable)}
+            ${f(T.label_fields.date, fmtDate(a.dateCreation))}
+            ${f(T.label_fields.telephone, a.telephone)}
+            ${f(T.label_fields.email, a.email?`<a href="mailto:${a.email}">${a.email}</a>`:null)}
+            ${f(T.label_fields.web, a.siteWeb?`<a href="${a.siteWeb}" target="_blank">${a.siteWeb}</a>`:null)}
+            ${f(T.label_fields.adresse, a.adresse, true)}
+            ${f(T.label_fields.ville, a.ville)}
+            ${f(T.label_fields.pays, a.pays)}
+            ${f(T.label_fields.agrement, a.numeroAgrement)}
+            ${f(T.label_fields.projects, `<strong style="color:var(--green-mid)">${a.projetsCount}</strong> ${T.projects}`)}
+            ${f(T.label_fields.status, statusHtml)}
+        </div>`;
+    openMo('moView');
+}
+
+/* ═══════════════ SUPPRIMER ═══════════════ */
+function openDelete(id,name){
+    document.getElementById('delName').textContent=name;
+    document.getElementById('delForm').action=ROUTES.delete(id);
+    openMo('moDelete');
+}
+
+/* ═══════════════ VALIDATION & SUBMIT ═══════════════ */
+function submitForm(){
+    const form=document.getElementById('assocForm');
+    let ok=true;
+    form.querySelectorAll('[required]').forEach(f=>{
+        if(!f.value.trim()){f.classList.add('err');ok=false}
+        else f.classList.remove('err');
+    });
+    if(ok) form.submit();
+}
+
+/* ═══════════════ TOGGLE LABEL ═══════════════ */
+document.getElementById('fActive').addEventListener('change',function(){
+    document.getElementById('togLbl').textContent=this.checked?T.active:T.inactive;
+});
+
+/* ═══════════════ LOGO PREVIEW ═══════════════ */
+function previewLogo(input){
+    if(input.files&&input.files[0]){
+        const r=new FileReader();
+        r.onload=e=>{
+            document.getElementById('luPrev').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain">`;
+            document.getElementById('luArea').classList.add('has');
+        };
+        r.readAsDataURL(input.files[0]);
+    }
+}
+
+/* ═══════════════ FILTRE TABLE ═══════════════ */
+function filterTbl(){
+    const q=(document.getElementById('sInput').value||'').toLowerCase();
+    const s=document.getElementById('fStatus').value||'';
+    const v=document.getElementById('fVille').value||'';
+    let n=0;
+    document.querySelectorAll('#mainTbl tbody tr').forEach(tr=>{
+        const show=(!q||tr.dataset.search.includes(q))&&(!s||tr.dataset.status===s)&&(!v||tr.dataset.ville===v);
+        tr.style.display=show?'':'none';
+        if(show)n++;
+    });
+    const tot=document.querySelectorAll('#mainTbl tbody tr').length;
+    const el=document.getElementById('tCount');
+    if(el)el.textContent=n+' '+T.entries+(n<tot?` / ${tot}`:'');
+}
+
+/* ═══════════════ EXPORT CSV ═══════════════ */
+function exportCSV(){
+    const h=['ID','Nom','Nom AR','Sigle','Responsable','Email','Tél','Ville','Pays','Agrément','Projets','Statut'];
+    const rows=ADATA.map(a=>[
+        a.id,`"${(a.nom||'').replace(/"/g,'""')}"`,
+        `"${(a.nomAr||'').replace(/"/g,'""')}"`,
+        a.sigle||'',a.responsable||'',a.email||'',a.telephone||'',
+        a.ville||'',a.pays||'',a.numeroAgrement||'',a.projetsCount,
+        a.isActive?T.active:T.inactive
+    ]);
+    const csv=[h,...rows].map(r=>r.join(',')).join('\n');
+    const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+    const el=document.createElement('a');
+    el.href=URL.createObjectURL(blob);
+    el.download=`associations_${new Date().toISOString().slice(0,10)}.csv`;
+    el.click();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Association{% endblock %}
+
+{% block body %}
+    <h1>Association</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ association.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ association.nom }}</td>
+            </tr>
+            <tr>
+                <th>NomAr</th>
+                <td>{{ association.nomAr }}</td>
+            </tr>
+            <tr>
+                <th>Sigle</th>
+                <td>{{ association.sigle }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ association.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ association.ville }}</td>
+            </tr>
+            <tr>
+                <th>Pays</th>
+                <td>{{ association.pays }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ association.telephone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ association.email }}</td>
+            </tr>
+            <tr>
+                <th>SiteWeb</th>
+                <td>{{ association.siteWeb }}</td>
+            </tr>
+            <tr>
+                <th>NumeroAgrement</th>
+                <td>{{ association.numeroAgrement }}</td>
+            </tr>
+            <tr>
+                <th>DateCreation</th>
+                <td>{{ association.dateCreation ? association.dateCreation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Responsable</th>
+                <td>{{ association.responsable }}</td>
+            </tr>
+            <tr>
+                <th>Logo</th>
+                <td>{{ association.logo }}</td>
+            </tr>
+            <tr>
+                <th>IsActive</th>
+                <td>{{ association.isActive ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ association.createdAt ? association.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_association_index') }}">back to list</a>
+
+    <a href="{{ path('app_association_edit', {'id': association.id}) }}">edit</a>
+
+    {{ include('association/_delete_form.html.twig') }}
+{% endblock %}

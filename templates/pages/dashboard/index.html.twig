@@ -1,0 +1,139 @@
+{# templates/pages/dashboard/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SIGAF — {{ 'dashboard.title'|trans|default('Tableau de bord') }}{% endblock %}
+
+{% block body %}
+
+{# === PAGE TITLE === #}
+<div class="page-title-row">
+    <div>
+        <h2>{{ 'dashboard.title'|trans|default('Tableau de bord') }}</h2>
+        <div class="subtitle">{{ 'dashboard.subtitle'|trans|default('Vue d\'ensemble — Février 2026') }}</div>
+    </div>
+    <a href="{{ path('app_dashboard') }}" class="btn-p">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span>{{ 'action.refresh'|trans|default('Actualiser') }}</span>
+    </a>
+</div>
+
+{# === STAT CARDS === #}
+<div class="stats-grid">
+    <div class="stat-card purple">
+        <div class="stat-icon"><i class="bi bi-people"></i></div>
+        <div class="stat-value">{{ stats.beneficiaires|default(124) }}</div>
+        <div class="stat-label">{{ 'dashboard.active_beneficiaries'|trans|default('Bénéficiaires actifs') }}</div>
+        <div class="stat-change up">
+            <i class="bi bi-arrow-up-short"></i> +{{ stats.new_beneficiaires|default(8) }}
+            {{ 'dashboard.this_month'|trans|default('ce mois') }}
+        </div>
+    </div>
+
+    <div class="stat-card green">
+        <div class="stat-icon"><i class="bi bi-kanban"></i></div>
+        <div class="stat-value">{{ stats.projets|default(17) }}</div>
+        <div class="stat-label">{{ 'dashboard.ongoing_projects'|trans|default('Projets en cours') }}</div>
+        <div class="stat-change up">
+            <i class="bi bi-arrow-up-short"></i> +{{ stats.new_projets|default(3) }}
+            {{ 'dashboard.new_ones'|trans|default('nouveaux') }}
+        </div>
+    </div>
+
+    <div class="stat-card orange">
+        <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
+        <div class="stat-value">{{ stats.solde|default('3.2M') }}</div>
+        <div class="stat-label">{{ 'dashboard.cash_balance'|trans|default('Solde caisse (MRU)') }}</div>
+        <div class="stat-change down">
+            <i class="bi bi-arrow-down-short"></i> -{{ stats.depenses|default('420K') }}
+            {{ 'dashboard.expenses'|trans|default('dépenses') }}
+        </div>
+    </div>
+
+    <div class="stat-card red">
+        <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
+        <div class="stat-value">{{ stats.pending|default(6) }}</div>
+        <div class="stat-label">{{ 'dashboard.pending_validation'|trans|default('En attente validation') }}</div>
+        <div class="stat-change">{{ 'dashboard.reports_and_ops'|trans|default('Rapports & opérations') }}</div>
+    </div>
+</div>
+
+{# === CHARTS & ACTIVITY === #}
+<div class="grid-2">
+
+    {# --- Chart Panel --- #}
+    <div class="panel">
+        <div class="panel-header">
+            <h3><i class="bi bi-bar-chart-line me-2"></i>{{ 'dashboard.monthly_expenses'|trans|default('Dépenses mensuelles') }}</h3>
+            <select id="chartYearSelect" style="background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:5px 10px;color:var(--t2);font-size:.78rem">
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+            </select>
+        </div>
+        <div class="panel-body">
+            <div class="chart-area" id="chartArea"></div>
+            <div class="chart-labels" id="chartLabels"></div>
+        </div>
+    </div>
+
+    {# --- Activity Panel --- #}
+    <div class="panel">
+        <div class="panel-header">
+            <h3><i class="bi bi-activity me-2"></i>{{ 'dashboard.recent_activity'|trans|default('Activité récente') }}</h3>
+        </div>
+        <div class="panel-body" style="padding:12px 22px">
+            <ul class="audit-list" id="dashActivity">
+                {% if activities is defined %}
+                    {% for activity in activities %}
+                    <li class="audit-item">
+                        <span class="audit-dot {{ activity.type }}"></span>
+                        <div>
+                            <div>{{ activity.message|raw }}</div>
+                            <div class="audit-time">{{ activity.time }}</div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    {# Données statiques de démonstration #}
+                    <li class="audit-item">
+                        <span class="audit-dot success"></span>
+                        <div>
+                            <div>Rapport scolaire <strong>T1-2026</strong> validé</div>
+                            <div class="audit-time">Il y a 12 min — Dir. Administratif</div>
+                        </div>
+                    </li>
+                    <li class="audit-item">
+                        <span class="audit-dot info"></span>
+                        <div>
+                            <div>Nouveau bénéficiaire <strong>Aminata Diallo</strong> enregistré</div>
+                            <div class="audit-time">Il y a 45 min — Assistant</div>
+                        </div>
+                    </li>
+                    <li class="audit-item">
+                        <span class="audit-dot warning"></span>
+                        <div>
+                            <div>Dépense <strong>REF-0421</strong> en attente</div>
+                            <div class="audit-time">Il y a 2h — Caissier</div>
+                        </div>
+                    </li>
+                    <li class="audit-item">
+                        <span class="audit-dot danger"></span>
+                        <div>
+                            <div>Projet <strong>Construction École</strong> — budget dépassé 12%</div>
+                            <div class="audit-time">Il y a 3h — Alerte système</div>
+                        </div>
+                    </li>
+                    <li class="audit-item">
+                        <span class="audit-dot success"></span>
+                        <div>
+                            <div>Alimentation caisse <strong>+500K MRU</strong> validée</div>
+                            <div class="audit-time">Hier 16:30 — Dir. Administratif</div>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

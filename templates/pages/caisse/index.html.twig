@@ -1,0 +1,86 @@
+{# templates/pages/caisse/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SIGAF — {{ 'cash.title'|trans|default('Système de Caisse') }}{% endblock %}
+
+{% block body %}
+<div class="page-title-row">
+    <div>
+        <h2>{{ 'cash.title'|trans|default('Système de Caisse') }}</h2>
+        <div class="subtitle">{{ 'cash.subtitle'|trans|default('Art. 1-4 — Alimentation, dépenses & audit') }}</div>
+    </div>
+    <div style="display:flex;gap:10px">
+        <button class="btn-p" onclick="openModal('modalAli')"><i class="bi bi-plus-circle"></i><span>{{ 'cash.funding'|trans|default('Alimentation') }}</span></button>
+        <button class="btn-o" onclick="openModal('modalDep')" style="border-color:var(--warn);color:var(--warn)"><i class="bi bi-dash-circle"></i><span>{{ 'cash.expense'|trans|default('Dépense') }}</span></button>
+    </div>
+</div>
+
+{# === STATS CAISSE === #}
+<div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+    <div class="stat-card green"><div class="stat-icon"><i class="bi bi-arrow-down-circle"></i></div><div class="stat-value amount pos">{{ stats.total_alimentations|default('4,800,000')|number_format(0, ',', ' ') }}</div><div class="stat-label">{{ 'cash.total_funding'|trans|default('Total alimentations (MRU)') }}</div></div>
+    <div class="stat-card red"><div class="stat-icon"><i class="bi bi-arrow-up-circle"></i></div><div class="stat-value amount neg">{{ stats.total_depenses|default('1,600,000')|number_format(0, ',', ' ') }}</div><div class="stat-label">{{ 'cash.total_expenses'|trans|default('Total dépenses (MRU)') }}</div></div>
+    <div class="stat-card purple"><div class="stat-icon"><i class="bi bi-safe"></i></div><div class="stat-value">{{ stats.solde|default('3,200,000')|number_format(0, ',', ' ') }}</div><div class="stat-label">{{ 'cash.current_balance'|trans|default('Solde actuel (MRU)') }}</div></div>
+</div>
+
+{# === JOURNAL OPERATIONS === #}
+<div class="panel">
+    <div class="panel-header">
+        <h3>{{ 'cash.ops_journal'|trans|default('Journal des opérations') }}</h3>
+        <div class="filter-bar">
+            <select><option>{{ 'filter.all_ops'|trans|default('Toutes les opérations') }}</option><option>{{ 'cash.fundings'|trans|default('Alimentations') }}</option><option>{{ 'cash.expenses_label'|trans|default('Dépenses') }}</option></select>
+            <input type="date" name="date_debut">
+            <input type="date" name="date_fin">
+            <button class="btn-o"><i class="bi bi-file-pdf"></i><span>{{ 'action.export_pdf'|trans|default('Export PDF') }}</span></button>
+        </div>
+    </div>
+    <div class="panel-body np">
+        <div class="table-responsive">
+            <table class="dtable">
+                <thead>
+                    <tr>
+                        <th>{{ 'table.date'|trans|default('Date') }}</th>
+                        <th>{{ 'table.reference'|trans|default('Référence') }}</th>
+                        <th>{{ 'table.type'|trans|default('Type') }}</th>
+                        <th>{{ 'table.amount'|trans|default('Montant (MRU)') }}</th>
+                        <th>{{ 'table.reason'|trans|default('Motif') }}</th>
+                        <th>{{ 'table.payment_mode'|trans|default('Mode paiement') }}</th>
+                        <th>{{ 'table.status'|trans|default('Statut') }}</th>
+                        <th>{{ 'table.receipt'|trans|default('Justificatif') }}</th>
+                        <th style="text-align:right">{{ 'table.actions'|trans|default('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if operations is defined %}
+                        {% for op in operations %}
+                        <tr>
+                            <td>{{ op.date|date('d/m/Y') }}</td>
+                            <td><strong>{{ op.reference }}</strong></td>
+                            <td><span class="badge-s {{ op.type == 'alimentation' ? 'ok' : 'no' }}" style="font-size:.7rem">{{ op.type == 'alimentation' ? '↓ Alimentation' : '↑ Dépense' }}</span></td>
+                            <td class="amount {{ op.type == 'alimentation' ? 'pos' : 'neg' }}">{{ op.type == 'alimentation' ? '+' : '-' }}{{ op.montant|number_format(0, ',', ' ') }}</td>
+                            <td>{{ op.motif }}</td>
+                            <td>{{ op.modePaiement }}</td>
+                            <td><span class="badge-s {{ op.statutClass }}">{{ op.statutLabel }}</span></td>
+                            <td>
+                                {% if op.justificatif %}<i class="bi bi-paperclip" style="color:var(--ac2)"></i>
+                                {% else %}<i class="bi bi-exclamation-circle" style="color:var(--warn)"></i>{% endif %}
+                            </td>
+                            <td style="text-align:right">
+                                <button class="btn-i g" {{ op.statut != 'pending' ? 'disabled style="opacity:.3"' : '' }}><i class="bi bi-check-lg"></i></button>
+                                <button class="btn-i r" {{ op.statut != 'pending' ? 'disabled style="opacity:.3"' : '' }}><i class="bi bi-x-lg"></i></button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="9" class="empty-state"><i class="bi bi-wallet2"></i><p>Aucune opération enregistrée</p></td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<p style="font-size:.72rem;color:var(--t3);text-align:center;padding:8px"><i class="bi bi-lock me-1"></i>{{ 'cash.footer'|trans|default('Aucune suppression après validation — Audit obligatoire — Art. 4') }}</p>
+{% endblock %}
+
+{% block modals %}
+{% include 'components/_modal_caisse.html.twig' %}
+{% endblock %}

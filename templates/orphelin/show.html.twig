@@ -1,0 +1,608 @@
+{# templates/parrainage/orphelin/show.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ fiche.nomComplet }} — {{ 'orp.page_title'|trans }} — SIGAF{% endblock %}
+
+{% set par = parrainage %}
+{% set sc  = par.statut == 'مكفول' ? 'k' : (par.statut == 'معتمدة' ? 'a' : (par.statut == 'ملغي' ? 'm' : 'n')) %}
+
+{% block stylesheets %}
+<style>
+:root{
+  --go:#D4A017;--go2:rgba(212,160,23,.1);--go3:rgba(212,160,23,.07);--gok:#7B4F00;
+  --gm:#2E7D32;--gk:#14532D;--gl:#4CAF50;
+  --bl:#0288D1;--rd:#D32F2F;--pu:#7B1FA2;
+  --sand:#FBF7F0;--sand2:#F0E8D8;
+  --txt:#1B2A1B;--txt2:#4A6B4A;--txt3:#7A8F7A;
+}
+
+/* ════ HEADER ════ */
+.ph-show{background:linear-gradient(140deg,#4A2800 0%,#7B4F00 40%,var(--go) 80%,#FFD54F 100%);position:relative;overflow:hidden}
+.ph-show::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.07) 0%,transparent 70%)}
+.ph-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:32px 32px}
+.ph-main{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1;flex-wrap:wrap;padding:24px 32px 20px}
+.ph-left{display:flex;align-items:center;gap:16px;min-width:0;flex:1}
+.ph-av{width:68px;height:68px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--go),#FFD54F);border:3px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:#fff;box-shadow:0 4px 20px rgba(0,0,0,.25);overflow:hidden}
+.ph-av img{width:100%;height:100%;object-fit:cover}
+.ph-bc{font-size:.68rem;color:rgba(255,255,255,.55);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.ph-bc a{color:rgba(255,255,255,.65);text-decoration:none}.ph-bc a:hover{color:#fff}
+.ph-bc i{font-size:.5rem}.ph-bc span{color:rgba(255,255,255,.85)}
+.ph-title{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-.03em;margin:0}
+.ph-sub{font-size:.74rem;color:rgba(255,255,255,.65);margin-top:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ph-sub strong{color:rgba(255,255,255,.95)}.ph-dot{color:rgba(255,255,255,.3)}
+.ph-stt{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:20px;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;backdrop-filter:blur(4px);font-family:var(--font-ar-display,'Noto Kufi Arabic',sans-serif)}
+.ph-acts{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0}
+.btn-ph{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s;white-space:nowrap;font-family:inherit;border:1.5px solid rgba(255,255,255,.25);backdrop-filter:blur(4px)}
+.btn-ph-w{background:rgba(255,255,255,.12);color:#fff}.btn-ph-w:hover{background:rgba(255,255,255,.22)}
+.btn-ph-r{background:rgba(211,47,47,.3);color:#fff;border-color:rgba(211,47,47,.4)}.btn-ph-r:hover{background:rgba(211,47,47,.5)}
+
+/* ════ LAYOUT ════
+   Col gauche  : infos + paiements/rapports (occupe tout l'espace restant)
+   Col droite  : parrain + statut + financement (sidebar fixe)
+   ════════════════════════════════════════════════════════════ */
+.show-wrap{
+  display:grid;
+  grid-template-columns:1fr 340px;
+  gap:24px;
+  padding:24px 32px;
+  width:100%;
+  box-sizing:border-box;
+}
+@media(max-width:1100px){ .show-wrap{ grid-template-columns:1fr 300px } }
+@media(max-width:900px) { .show-wrap{ grid-template-columns:1fr; padding:16px } }
+@media(max-width:600px) { .show-wrap{ padding:12px } }
+
+/* ════ CARDS ════ */
+.card{background:#fff;border-radius:16px;border:1.5px solid var(--sand2);box-shadow:0 2px 12px rgba(74,40,0,.06);overflow:hidden;margin-bottom:20px}
+.ch{display:flex;align-items:center;gap:8px;padding:14px 20px;background:linear-gradient(90deg,var(--go3),transparent);border-bottom:1px solid var(--sand2)}
+.ch i{color:var(--go);font-size:1rem}
+.ch-t{font-size:.88rem;font-weight:700;color:var(--txt)}
+.ch-ar{font-size:.72rem;color:var(--txt3);font-family:var(--font-ar-display,'Noto Kufi Arabic',sans-serif);direction:rtl;margin-top:1px}
+.cb{padding:18px 20px}
+
+/* Info lignes */
+.ir{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid rgba(212,160,23,.08)}
+.ir:last-child{border-bottom:none}
+.il{font-size:.7rem;font-weight:600;color:var(--txt3);min-width:130px;flex-shrink:0;padding-top:1px}
+.iv{font-size:.84rem;color:var(--txt);flex:1;line-height:1.4}
+.iv.code{font-family:monospace;font-size:.8rem;background:var(--sand);padding:2px 8px;border-radius:6px;border:1px solid var(--sand2)}
+
+/* Statut badges */
+.stt{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:700;border:1px solid;white-space:nowrap;font-family:var(--font-ar-display,'Noto Kufi Arabic',sans-serif)}
+.stt-n{background:rgba(158,158,158,.1);color:#616161;border-color:rgba(158,158,158,.3)}
+.stt-a{background:rgba(2,136,209,.1);color:#0277BD;border-color:rgba(2,136,209,.25)}
+.stt-k{background:rgba(46,125,50,.1);color:#2E7D32;border-color:rgba(46,125,50,.25)}
+.stt-m{background:rgba(211,47,47,.1);color:#C62828;border-color:rgba(211,47,47,.25)}
+
+/* ════ ONGLETS ════ */
+.tabs{display:flex;border-bottom:2px solid var(--sand2);overflow-x:auto}
+.tab-btn{padding:10px 18px;border:none;background:transparent;font-size:.8rem;font-weight:600;color:var(--txt3);cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab-btn.act{color:var(--go);border-bottom-color:var(--go)}.tab-btn:hover{color:var(--txt)}
+.tab-cnt{font-size:.65rem;padding:1px 7px;border-radius:10px;background:var(--go2);color:var(--gok);font-weight:700}
+.tab-pane{display:none}.tab-pane.act{display:block}
+
+/* ════ BARRE FINANCEMENT ════ */
+.fin-bar{background:linear-gradient(135deg,var(--gok),var(--go));border-radius:12px;padding:14px 16px;color:#fff;margin-bottom:16px}
+.fr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.fl{font-size:.65rem;color:rgba(255,255,255,.7)}
+.fv{font-size:.95rem;font-weight:800;letter-spacing:-.02em}
+.fsep{height:1px;background:rgba(255,255,255,.15);margin:10px 0}
+.fpbg{height:6px;border-radius:3px;background:rgba(255,255,255,.2);margin-top:8px}
+.fpf{height:100%;border-radius:3px;background:linear-gradient(90deg,#A5D6A7,#69F0AE)}
+
+/* Parrain avatar */
+.pav{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--go),#FFD54F);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;font-weight:800;flex-shrink:0}
+
+/* Boutons actions */
+.btn-i{width:30px;height:30px;border-radius:8px;border:none;background:transparent;color:var(--txt3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;transition:.15s;text-decoration:none}
+.btn-i:hover{background:var(--go2);color:var(--go)}
+.btn-i.bl:hover{background:rgba(2,136,209,.1);color:var(--bl)}
+.btn-i.gn:hover{background:rgba(46,125,50,.1);color:var(--gm)}
+.btn-i.rd:hover{background:rgba(211,47,47,.1);color:var(--rd)}
+.btn-i.pu:hover{background:rgba(123,31,162,.1);color:var(--pu)}
+.acts{display:flex;gap:2px;align-items:center}
+
+/* Empty */
+.empty{padding:28px;text-align:center;color:var(--txt3)}
+.empty i{font-size:1.8rem;opacity:.3;display:block;margin-bottom:7px}
+.empty p{font-size:.82rem}
+
+/* ════ MODALES ════ */
+.mo{position:fixed;inset:0;background:rgba(74,40,0,.35);backdrop-filter:blur(6px);z-index:1050;display:none;align-items:center;justify-content:center;padding:16px}
+.mo.open{display:flex;animation:moIn .2s ease}
+@keyframes moIn{from{opacity:0}to{opacity:1}}
+.md{background:#fff;border-radius:20px;width:100%;box-shadow:0 24px 80px rgba(74,40,0,.22);animation:mdIn .28s cubic-bezier(.16,1,.3,1);max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+@keyframes mdIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.md-sm{max-width:420px}.md-md{max-width:640px}.md-lg{max-width:840px}
+.mh{padding:20px 24px 16px;border-bottom:1px solid var(--sand2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:linear-gradient(to bottom,#fff,#fffdf8)}
+.mh-l{display:flex;align-items:center;gap:10px}
+.mi{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.mi-o{background:var(--go2);color:var(--go)}.mi-g{background:rgba(46,125,50,.1);color:var(--gm)}
+.mi-b{background:rgba(2,136,209,.1);color:var(--bl)}.mi-r{background:rgba(211,47,47,.1);color:var(--rd)}
+.mi-p{background:rgba(123,31,162,.1);color:var(--pu)}
+.mt{font-size:.95rem;font-weight:700;color:var(--txt);letter-spacing:-.02em}
+.ms{font-size:.72rem;color:var(--txt3);margin-top:1px}
+.mcls{width:34px;height:34px;border-radius:9px;border:none;background:var(--sand);color:var(--txt3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;transition:.15s}
+.mcls:hover{background:rgba(211,47,47,.1);color:var(--rd)}
+.mb{padding:22px 24px;overflow-y:auto;flex:1}
+.mf{padding:14px 24px;border-top:1px solid var(--sand2);display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-shrink:0;background:var(--sand)}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s;text-decoration:none}
+.btn-p{background:linear-gradient(135deg,var(--gok),var(--go));color:#fff;box-shadow:0 3px 12px rgba(212,160,23,.3)}.btn-p:hover{transform:translateY(-1px)}
+.btn-g{background:linear-gradient(135deg,var(--gk),var(--gm));color:#fff;box-shadow:0 3px 12px rgba(46,125,50,.25)}.btn-g:hover{transform:translateY(-1px)}
+.btn-b{background:var(--bl);color:#fff}.btn-b:hover{background:#0277BD}
+.btn-s{background:var(--sand);color:var(--txt2);border:1.5px solid var(--sand2)}.btn-s:hover{background:var(--sand2)}
+.btn-d{background:var(--rd);color:#fff}.btn-d:hover{background:#b71c1c}
+.btn-pu{background:linear-gradient(135deg,#4A148C,var(--pu));color:#fff}
+
+/* Champs form */
+.fc{background:var(--sand);border:1.5px solid transparent;border-radius:8px;padding:10px 12px;font-size:.84rem;font-family:inherit;color:var(--txt);outline:none;transition:.22s;width:100%}
+.fc:focus{background:#fff;border-color:var(--go);box-shadow:0 0 0 3px rgba(212,160,23,.08)}
+.fc::placeholder{color:var(--txt3);font-weight:300}
+.req{color:var(--rd);font-size:.7rem}
+.frow{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.frow label{font-size:.74rem;font-weight:600;color:var(--txt2)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g2>div,.g3>div{display:flex;flex-direction:column;gap:5px}
+.g2>div label,.g3>div label{font-size:.74rem;font-weight:600;color:var(--txt2)}
+.fsec{margin-bottom:20px}
+.fsec-title{font-size:.7rem;font-weight:700;color:var(--gok);text-transform:uppercase;letter-spacing:.07em;padding:0 0 10px;border-bottom:2px solid var(--sand2);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.fsec-title i{color:var(--go);font-size:.9rem}
+
+/* Alerte */
+.abox{border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px}
+.abox i{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+.at{font-size:.85rem;font-weight:700;margin-bottom:3px}
+.as{font-size:.76rem;color:var(--txt2);line-height:1.5}
+
+@media(max-width:768px){.g2,.g3{grid-template-columns:1fr}}
+</style>
+{% endblock %}
+
+{% block body %}
+
+{# ════ PAGE HEADER ════ #}
+<div class="ph-show">
+  <div class="ph-grid"></div>
+  <div class="ph-main">
+    <div class="ph-left">
+      <div class="ph-av">
+        {% if fiche.hasPhoto %}<img src="{{ asset(fiche.photoPath) }}" alt="">
+        {% else %}{{ fiche.nomComplet|first|upper }}{% endif %}
+      </div>
+      <div class="ph-text">
+        <div class="ph-bc">
+          <a href="{{ path('app_dashboard') }}"><i class="bi bi-house"></i></a>
+          <i class="bi bi-chevron-right"></i>
+          <a href="{{ path('app_parrainage_orphelin_index') }}">{{ 'orp.breadcrumb'|trans }}</a>
+          <i class="bi bi-chevron-right"></i>
+          <span>{{ fiche.nomComplet }}</span>
+        </div>
+        <h1 class="ph-title">{{ fiche.nomComplet }}</h1>
+        <div class="ph-sub">
+          <span class="ph-stt"><i class="bi {{ par.statutIcone }}"></i>{{ par.statut }}</span>
+          <span class="ph-dot">·</span>
+          <span style="font-family:var(--font-ar-display,'Noto Kufi Arabic',sans-serif)">{{ fiche.typeOrphelinLabelAr }}</span>
+          {% if fiche.age %}<span class="ph-dot">·</span><strong>{{ fiche.age }} ans</strong>{% endif %}
+          <span class="ph-dot">·</span>
+          <span style="font-family:monospace;font-size:.72rem">{{ par.numero }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ph-acts">
+      {% if par.canApprouver and (is_granted('ROLE_DIRECTEUR_PARRAINAGES') or is_granted('ROLE_ADMIN')) %}
+      <button class="btn-ph btn-ph-w" onclick="openMo('moApprouver')">
+        <i class="bi bi-check-circle"></i>{{ 'orp.show_btn_approuver'|trans }}
+      </button>
+      {% elseif par.canActiver and (is_granted('ROLE_DIRECTEUR_PARRAINAGES') or is_granted('ROLE_ADMIN')) %}
+      <button class="btn-ph btn-ph-w" onclick="openMo('moActiver')">
+        <i class="bi bi-heart-fill"></i>{{ 'orp.btn_act_confirm'|trans }}
+      </button>
+      {% elseif par.isActif %}
+      <button class="btn-ph btn-ph-w" onclick="openMo('moVersement')">
+        <i class="bi bi-cash-coin"></i>{{ 'orp.show_btn_versement'|trans }}
+      </button>
+      {% endif %}
+      {% if is_granted('ROLE_EMPLOYE_PARRAINAGES') or is_granted('ROLE_DIRECTEUR_PARRAINAGES') or is_granted('ROLE_ADMIN') %}
+      <button class="btn-ph btn-ph-w" onclick="openMo('moEdit')">
+        <i class="bi bi-pencil"></i>{{ 'orp.btn_modifier'|trans }}
+      </button>
+      <button class="btn-ph btn-ph-r" onclick="openMo('moDel')">
+        <i class="bi bi-trash3"></i>{{ 'orp.btn_supprimer'|trans }}
+      </button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{# ════ BODY — 2 COLONNES PLEINE LARGEUR ════ #}
+<div class="show-wrap">
+
+  {# ── Colonne principale (gauche) ── #}
+  <div>
+
+    {# Card : Données de l'orphelin #}
+    <div class="card">
+      <div class="ch">
+        <i class="bi bi-person-heart"></i>
+        <div><div class="ch-t">{{ 'orp.show_sec_donnees'|trans }}</div><div class="ch-ar">{{ 'orp.show_sec_donnees_ar'|trans }}</div></div>
+      </div>
+      <div class="cb">
+        <div class="ir"><span class="il">{{ 'orp.lbl_nom_complet'|trans }}</span><span class="iv"><strong>{{ fiche.nomComplet }}</strong></span></div>
+        {% if fiche.cin %}<div class="ir"><span class="il">{{ 'orp.lbl_cin_court'|trans }}</span><span class="iv code">{{ fiche.cin }}</span></div>{% endif %}
+        <div class="ir">
+          <span class="il">{{ 'orp.lbl_date_naissance'|trans }}</span>
+          <span class="iv">
+            {% if fiche.dateNaissance %}{{ fiche.dateNaissance|date('d/m/Y') }}{% if fiche.age %}<span style="color:var(--txt3);font-size:.78rem"> ({{ fiche.age }} ans)</span>{% endif %}
+            {% else %}<span style="color:var(--txt3)">{{ 'orp.show_non_renseigne'|trans }}</span>{% endif %}
+          </span>
+        </div>
+        {% if fiche.lieuNaissance %}<div class="ir"><span class="il">{{ 'orp.lbl_lieu_naissance'|trans }}</span><span class="iv">{{ fiche.lieuNaissance }}</span></div>{% endif %}
+        <div class="ir"><span class="il">{{ 'orp.lbl_genre_court'|trans }}</span><span class="iv">{{ fiche.genre == 'masculin' ? 'orp.show_masculin'|trans : 'orp.show_feminin'|trans }}</span></div>
+        <div class="ir">
+          <span class="il">{{ 'orp.lbl_type_court'|trans }}</span>
+          <span class="iv">{{ fiche.typeOrphelinLabel }} <span style="color:var(--txt3);font-size:.78rem;font-family:var(--font-ar-display,'Noto Kufi Arabic',sans-serif)"> · {{ fiche.typeOrphelinLabelAr }}</span></span>
+        </div>
+        {% if fiche.adresse %}<div class="ir"><span class="il">{{ 'orp.lbl_adresse_court'|trans }}</span><span class="iv">{{ fiche.adresse }}</span></div>{% endif %}
+        {% if fiche.telephone %}<div class="ir"><span class="il">{{ 'orp.lbl_telephone_court'|trans }}</span><span class="iv"><i class="bi bi-telephone" style="font-size:.7rem;color:var(--go)"></i> {{ fiche.telephone }}</span></div>{% endif %}
+        {% if fiche.etatSante %}<div class="ir"><span class="il">{{ 'orp.lbl_etat_sante'|trans }}</span><span class="iv">{{ fiche.etatSante }}</span></div>{% endif %}
+      </div>
+    </div>
+
+    {# Card : Famille #}
+    <div class="card">
+      <div class="ch"><i class="bi bi-people"></i>
+        <div><div class="ch-t">{{ 'orp.show_sec_famille'|trans }}</div><div class="ch-ar">{{ 'orp.show_sec_famille_ar'|trans }}</div></div>
+      </div>
+      <div class="cb">
+        {% if fiche.nomMere %}
+        <div class="ir"><span class="il">{{ 'orp.lbl_nom_mere_court'|trans }}</span>
+          <span class="iv">{{ fiche.nomMere }}
+            {% if fiche.mereMariee %}<span style="font-size:.65rem;background:var(--go2);color:var(--gok);padding:1px 7px;border-radius:8px;border:1px solid rgba(212,160,23,.2);margin-right:6px">{{ 'orp.show_am_mariee'|trans }}</span>{% endif %}
+          </span>
+        </div>{% endif %}
+        {% if fiche.dateDecesPere %}<div class="ir"><span class="il">{{ 'orp.show_lbl_deces_pere'|trans }}</span><span class="iv">{{ fiche.dateDecesPere|date('d/m/Y') }}</span></div>{% endif %}
+        {% if fiche.dateDecesMere %}<div class="ir"><span class="il">{{ 'orp.show_lbl_deces_mere'|trans }}</span><span class="iv">{{ fiche.dateDecesMere|date('d/m/Y') }}</span></div>{% endif %}
+        {% if fiche.nomTuteur %}
+        <div class="ir"><span class="il">{{ 'orp.show_lbl_tuteur'|trans }}</span>
+          <span class="iv">{{ fiche.nomTuteur }}{% if fiche.relationTuteur %}<span style="color:var(--txt3);font-size:.78rem"> ({{ fiche.relationTuteurLabel }})</span>{% endif %}</span>
+        </div>{% endif %}
+        <div class="ir"><span class="il">{{ 'orp.lbl_fratrie'|trans }}</span>
+          <span class="iv">
+            <span style="background:var(--sand);padding:2px 8px;border-radius:6px;border:1px solid var(--sand2);font-size:.8rem;margin-left:6px">♂ {{ fiche.nbFreres }} frère{{ fiche.nbFreres != 1 ? 's' }}</span>
+            <span style="background:var(--sand);padding:2px 8px;border-radius:6px;border:1px solid var(--sand2);font-size:.8rem">♀ {{ fiche.nbSoeurs }} sœur{{ fiche.nbSoeurs != 1 ? 's' }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {# Card : Scolarité #}
+    <div class="card">
+      <div class="ch"><i class="bi bi-mortarboard"></i>
+        <div><div class="ch-t">{{ 'orp.sec_scolarite_court'|trans }}</div><div class="ch-ar">{{ 'orp.show_sec_scolarite_ar'|trans }}</div></div>
+      </div>
+      <div class="cb">
+        {% if fiche.ecole %}<div class="ir"><span class="il">{{ 'orp.lbl_ecole_court'|trans }}</span><span class="iv">{{ fiche.ecole }}</span></div>{% endif %}
+        {% if fiche.niveauScolaire %}<div class="ir"><span class="il">{{ 'orp.lbl_niveau_court'|trans }}</span><span class="iv">{{ fiche.niveauScolaire }}</span></div>{% endif %}
+        {% if fiche.raisonNonScolarisation %}<div class="ir"><span class="il">{{ 'orp.lbl_raison_court'|trans }}</span><span class="iv" style="color:var(--rd)">{{ fiche.raisonNonScolarisation }}</span></div>{% endif %}
+        {% if not fiche.ecole and not fiche.niveauScolaire %}<p style="color:var(--txt3);font-size:.82rem;padding:8px 0">{{ 'orp.non_scolarise'|trans }}</p>{% endif %}
+      </div>
+    </div>
+
+    {# Card : Paiements + Rapports (onglets) #}
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn act" onclick="switchTab(this,'tPay')">
+          <i class="bi bi-cash-coin"></i>{{ 'orp.tab_versements'|trans }}
+          <span class="tab-cnt">{{ par.paiements|length }}</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab(this,'tRpt')">
+          <i class="bi bi-file-text"></i>{{ 'orp.tab_rapports'|trans }}
+          <span class="tab-cnt">{{ rapports|length }}</span>
+        </button>
+      </div>
+
+      {# ── Onglet versements ── #}
+      <div class="tab-pane act" id="tPay">
+        {% if par.isActif and (is_granted('ROLE_EMPLOYE_PARRAINAGES') or is_granted('ROLE_DIRECTEUR_PARRAINAGES') or is_granted('ROLE_ADMIN')) %}
+        <div style="display:flex;justify-content:flex-end;padding:12px 20px 0">
+          <button class="btn btn-g" style="font-size:.78rem;padding:7px 14px" onclick="openMo('moVersement')">
+            <i class="bi bi-plus-lg"></i>{{ 'orp.btn_add_versement'|trans }}
+          </button>
+        </div>
+        {% endif %}
+        {% if par.paiements is empty %}
+          <div class="empty"><i class="bi bi-cash-coin"></i><p>Aucun versement enregistré</p></div>
+        {% else %}
+        <table class="dtable" data-page-length="10" data-order-column="1"
+               data-order-dir="desc" data-no-sort="0,4" style="width:100%">
+          <thead>
+            <tr><th>#</th><th>{{ 'orp.col_date'|trans }}</th><th>{{ 'orp.col_montant'|trans }}</th><th>{{ 'orp.col_mode'|trans }}</th><th>{{ 'orp.col_periode'|trans }}</th><th>{{ 'orp.col_actions'|trans }}</th></tr>
+          </thead>
+          <tbody>
+            {% for p in par.paiements %}
+            <tr>
+              <td style="text-align:center;color:var(--txt3);font-size:.72rem">{{ loop.index }}</td>
+              <td><strong style="font-size:.82rem">{{ p.datePaiement|date('d/m/Y') }}</strong></td>
+              <td><span style="font-weight:800;color:var(--gm);font-size:.9rem">{{ p.montant|number_format(0,'.',' ') }}</span><span style="font-size:.65rem;color:var(--txt3)"> MRU</span></td>
+              <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:.75rem"><i class="bi {{ p.modeIcone }}" style="color:{{ p.modeCouleur }}"></i>{{ p.modeLabelFr }}</span></td>
+              <td>{% if p.periodeConcernee %}<span style="font-size:.75rem;background:var(--sand);padding:2px 8px;border-radius:6px;border:1px solid var(--sand2)">{{ p.periodeConcernee }}</span>{% else %}—{% endif %}</td>
+              <td>
+                <div class="acts">
+                  {% if p.hasJustificatif %}<a class="btn-i bl" href="{{ asset(p.justificatifPath) }}" target="_blank" title="{{ 'orp.justif_voir'|trans }}"><i class="bi bi-paperclip"></i></a>{% endif %}
+                  {% if is_granted('ROLE_EMPLOYE_PARRAINAGES') or is_granted('ROLE_ADMIN') %}
+                  <button class="btn-i rd" onclick="openMoDelPay({{ p.id }}, '{{ p.montant|number_format(0,'.',' ') }}')"><i class="bi bi-trash3"></i></button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+
+      {# ── Onglet rapports ── #}
+      <div class="tab-pane" id="tRpt">
+        {% if par.isActif and (is_granted('ROLE_EMPLOYE_PARRAINAGES') or is_granted('ROLE_DIRECTEUR_PARRAINAGES') or is_granted('ROLE_ADMIN')) %}
+        <div style="display:flex;justify-content:flex-end;padding:12px 20px 0">
+          <button class="btn btn-pu" style="font-size:.78rem;padding:7px 14px" onclick="openMo('moRapport')">
+            <i class="bi bi-plus-lg"></i>{{ 'orp.btn_creer_rapport'|trans }}
+          </button>
+        </div>
+        {% endif %}
+        {% if rapports is empty %}
+          <div class="empty"><i class="bi bi-file-text"></i><p>Aucun rapport rédigé</p></div>
+        {% else %}
+        <table class="dtable" data-page-length="10" data-order-column="0"
+               data-order-dir="desc" data-no-sort="3" style="width:100%">
+          <thead>
+            <tr><th>{{ 'orp.col_annee'|trans }}</th><th>{{ 'orp.col_semestre'|trans }}</th><th>{{ 'orp.col_statut'|trans }}</th><th>{{ 'orp.col_actions'|trans }}</th></tr>
+          </thead>
+          <tbody>
+            {% for r in rapports %}
+            {% if r.statut == 'envoye' %}{% set rc='#2E7D32,rgba(46,125,50,.1),rgba(46,125,50,.25)' %}
+            {% elseif r.statut == 'pret' %}{% set rc='#D4A017,rgba(212,160,23,.1),rgba(212,160,23,.25)' %}
+            {% else %}{% set rc='#9E9E9E,rgba(158,158,158,.1),rgba(158,158,158,.3)' %}{% endif %}
+            {% set rcv = rc|split(',') %}
+            <tr>
+              <td><strong>{{ r.annee }}</strong></td>
+              <td><span style="background:rgba(123,31,162,.1);color:var(--pu);padding:2px 10px;border-radius:8px;font-size:.75rem;font-weight:700">S{{ r.semestre }}</span></td>
+              <td><span style="font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;color:{{ rcv[0] }};background:{{ rcv[1] }};border:1px solid {{ rcv[2] }}">{{ r.statutLabel }}</span></td>
+              <td>
+                <div class="acts">
+                  {% if r.hasDocument %}<a class="btn-i pu" href="{{ asset(r.documentPath) }}" target="_blank"><i class="bi bi-file-earmark-pdf"></i></a>{% endif %}
+                  {% if is_granted('ROLE_EMPLOYE_PARRAINAGES') or is_granted('ROLE_ADMIN') %}
+                  <button class="btn-i rd" onclick="openMoDelRpt({{ r.id }}, {{ r.annee }}, {{ r.semestre }})"><i class="bi bi-trash3"></i></button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>{# /col gauche #}
+
+
+  {# ── Sidebar droite ── #}
+  <div>
+
+    {# Barre financement #}
+    {% set total_paye = par.montantTotalPaye %}
+    {% set taux = par.tauxPaiement %}
+    <div class="fin-bar">
+      <div class="fr"><span class="fl">{{ 'orp.fin_montant'|trans }}</span><span class="fv">{{ par.montantPeriodique|number_format(0,'.',' ') }} MRU</span></div>
+      <div class="fr"><span class="fl">{{ par.periodiciteLabel }}</span></div>
+      <div class="fsep"></div>
+      <div class="fr"><span class="fl">{{ 'orp.fin_total'|trans }}</span><span class="fv">{{ total_paye|number_format(0,'.',' ') }} MRU</span></div>
+      <div class="fpbg"><div class="fpf" style="width:{{ taux > 100 ? 100 : taux }}%"></div></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:5px"><span style="font-size:.65rem;color:rgba(255,255,255,.7)">{{ taux|round(0) }}% versé</span></div>
+    </div>
+
+    {# Card parrain #}
+    <div class="card">
+      <div class="ch"><i class="bi bi-person-hearts"></i><div><div class="ch-t">{{ 'orp.parrain_titre'|trans }}</div></div></div>
+      <div class="cb" style="padding:14px 16px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div class="pav">{{ par.parrain.nom|first|upper }}</div>
+          <div>
+            <div style="font-size:.92rem;font-weight:700;color:var(--txt)">{{ par.parrain.nom }}</div>
+            <div style="font-size:.7rem;color:var(--txt3)">Réf: <strong style="color:var(--go)">{{ par.parrain.numero }}</strong></div>
+          </div>
+        </div>
+        {% if par.parrain.pays %}<div class="ir"><span class="il">{{ 'orp.lbl_pays'|trans }}</span><span class="iv">{{ par.parrain.pays }}</span></div>{% endif %}
+        {% if par.parrain.telephone %}<div class="ir"><span class="il">Téléphone</span><span class="iv">{{ par.parrain.telephone }}</span></div>{% endif %}
+        {% if par.parrain.email %}<div class="ir"><span class="il">{{ 'orp.lbl_email'|trans }}</span><span class="iv" style="font-size:.78rem;word-break:break-all">{{ par.parrain.email }}</span></div>{% endif %}
+        {% if par.parrain.bp %}<div class="ir"><span class="il">{{ 'orp.lbl_bp'|trans }}</span><span class="iv">{{ par.parrain.bp }}</span></div>{% endif %}
+      </div>
+    </div>
+
+    {# Card statut #}
+    <div class="card">
+      <div class="ch"><i class="bi bi-info-circle"></i><div><div class="ch-t">{{ 'orp.dossier_titre'|trans }}</div></div></div>
+      <div class="cb">
+        <div class="ir"><span class="il">{{ 'orp.lbl_statut'|trans }}</span><span class="iv"><span class="stt stt-{{ sc }}"><i class="bi {{ par.statutIcone }}"></i>{{ par.statut }}</span></span></div>
+        <div class="ir"><span class="il">{{ 'orp.lbl_ref'|trans }}</span><span class="iv code">{{ par.numero }}</span></div>
+        <div class="ir"><span class="il">{{ 'orp.lbl_annee_d'|trans }}</span><span class="iv">{{ par.annee }}</span></div>
+        {% if par.dateDebut %}<div class="ir"><span class="il">{{ 'orp.lbl_date_debut_d'|trans }}</span><span class="iv">{{ par.dateDebut|date('d/m/Y') }}</span></div>{% endif %}
+        {% if par.dateFin %}<div class="ir"><span class="il">{{ 'orp.lbl_date_fin'|trans }}</span><span class="iv">{{ par.dateFin|date('d/m/Y') }}</span></div>{% endif %}
+        <div class="ir"><span class="il">{{ 'orp.lbl_cree_le'|trans }}</span><span class="iv" style="font-size:.78rem;color:var(--txt3)">{{ par.createdAt|date('d/m/Y H:i') }}</span></div>
+        {% if par.creePar %}<div class="ir"><span class="il">{{ 'orp.lbl_cree_par'|trans }}</span><span class="iv" style="font-size:.78rem">{{ par.creePar.fullName }}</span></div>{% endif %}
+        {% if par.validePar %}<div class="ir"><span class="il">{{ 'orp.lbl_valide_par'|trans }}</span><span class="iv" style="font-size:.78rem;color:var(--bl)">{{ par.validePar.fullName }}</span></div>{% endif %}
+
+        {% if is_granted('ROLE_DIRECTEUR_PARRAINAGES') or is_granted('ROLE_ADMIN') %}
+        {% if par.canApprouver or par.canActiver or par.canAnnuler %}
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--sand2);display:flex;flex-direction:column;gap:7px">
+          {% if par.canApprouver %}
+          <button class="btn btn-b" style="width:100%;justify-content:center" onclick="openMo('moApprouver')"><i class="bi bi-check-circle"></i>{{ 'orp.sidebar_btn_approuver'|trans }}</button>
+          {% endif %}
+          {% if par.canActiver %}
+          <button class="btn btn-g" style="width:100%;justify-content:center" onclick="openMo('moActiver')"><i class="bi bi-heart-fill"></i>{{ 'orp.sidebar_btn_activer'|trans }}</button>
+          {% endif %}
+          {% if par.canAnnuler %}
+          <button class="btn" style="width:100%;justify-content:center;background:rgba(211,47,47,.1);color:#C62828;border:1px solid rgba(211,47,47,.2)" onclick="openMo('moAnnuler')"><i class="bi bi-x-circle"></i>{{ 'orp.sidebar_btn_annuler'|trans }}</button>
+          {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    {# Photo si disponible #}
+    {% if fiche.hasPhoto %}
+    <div class="card">
+      <div class="ch"><i class="bi bi-image"></i><div><div class="ch-t">{{ 'orp.photo_titre'|trans }}</div></div></div>
+      <img src="{{ asset(fiche.photoPath) }}" alt="{{ fiche.nomComplet }}" style="width:100%;height:220px;object-fit:cover">
+    </div>
+    {% endif %}
+
+  </div>{# /sidebar #}
+
+</div>{# /show-wrap #}
+{% endblock %}
+
+
+{% block modals %}
+
+<div class="mo" id="moEdit">
+  <div class="md md-lg">
+    <div class="mh"><div class="mh-l"><div class="mi mi-o"><i class="bi bi-pencil"></i></div><div><div class="mt">Modifier le dossier</div><div class="ms">{{ fiche.nomComplet }}</div></div></div><button class="mcls" onclick="closeMo('moEdit')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb">
+      <form id="fEdit" action="{{ path('app_parrainage_orphelin_edit', {id: fiche.id}) }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token('orphelin_edit') }}">
+        <div class="fsec"><div class="fsec-title"><i class="bi bi-person-heart"></i>{{ 'orp.show_sec_donnees'|trans }}</div>
+          <div class="g2"><div><label>{{ 'orp.lbl_nom_complet'|trans }} <span class="req">*</span></label><input type="text" name="nom_complet" class="fc" required value="{{ fiche.nomComplet }}"></div><div><label>{{ 'orp.lbl_cin_court'|trans }}</label><input type="text" name="cin" class="fc" value="{{ fiche.cin }}"></div></div>
+          <div class="g3"><div><label>{{ 'orp.lbl_date_naissance'|trans }}</label><input type="date" name="date_naissance" class="fc" value="{{ fiche.dateNaissance ? fiche.dateNaissance|date('Y-m-d') : '' }}"></div><div><label>{{ 'orp.lbl_lieu_naissance'|trans }}</label><input type="text" name="lieu_naissance" class="fc" value="{{ fiche.lieuNaissance }}"></div><div><label>{{ 'orp.lbl_genre_court'|trans }}</label><select name="genre" class="fc"><option value="masculin" {{ fiche.genre=='masculin'?'selected' }}>Masculin — ذكر</option><option value="feminin" {{ fiche.genre=='feminin'?'selected' }}>Féminin — أنثى</option></select></div></div>
+          <div class="g2"><div><label>{{ 'orp.lbl_type_court'|trans }}</label><select name="type_orphelin" class="fc"><option value="pere_decede" {{ fiche.typeOrphelin=='pere_decede'?'selected' }}>Père décédé — فقد الأب</option><option value="mere_decedee" {{ fiche.typeOrphelin=='mere_decedee'?'selected' }}>Mère décédée — فقد الأم</option><option value="deux_parents" {{ fiche.typeOrphelin=='deux_parents'?'selected' }}>Les deux parents — فقد الوالدين</option></select></div><div><label>{{ 'orp.lbl_adresse_court'|trans }}</label><input type="text" name="adresse" class="fc" value="{{ fiche.adresse }}"></div></div>
+          <div class="g2"><div><label>{{ 'orp.lbl_telephone_court'|trans }}</label><input type="text" name="telephone" class="fc" value="{{ fiche.telephone }}"></div><div><label>{{ 'orp.lbl_etat_sante'|trans }}</label><input type="text" name="etat_sante" class="fc" value="{{ fiche.etatSante }}"></div></div>
+        </div>
+        <div class="fsec"><div class="fsec-title"><i class="bi bi-people"></i>{{ 'orp.sec_famille_court'|trans }}</div>
+          <div class="g3"><div><label>{{ 'orp.lbl_nom_mere_court'|trans }}</label><input type="text" name="nom_mere" class="fc" value="{{ fiche.nomMere }}"></div><div><label>{{ 'orp.lbl_nom_tuteur_court'|trans }}</label><input type="text" name="nom_tuteur" class="fc" value="{{ fiche.nomTuteur }}"></div><div><label>{{ 'orp.lbl_relation_court'|trans }}</label><select name="relation_tuteur" class="fc"><option value="">—</option><option value="mere" {{ fiche.relationTuteur=='mere'?'selected' }}>Mère</option><option value="frere" {{ fiche.relationTuteur=='frere'?'selected' }}>Frère</option><option value="oncle" {{ fiche.relationTuteur=='oncle'?'selected' }}>Oncle</option><option value="grand_pere" {{ fiche.relationTuteur=='grand_pere'?'selected' }}>Grand-père</option><option value="autre" {{ fiche.relationTuteur=='autre'?'selected' }}>Autre</option></select></div></div>
+          <div class="g3"><div><label>{{ 'orp.lbl_nb_freres'|trans }}</label><input type="number" name="nb_freres" class="fc" value="{{ fiche.nbFreres }}" min="0"></div><div><label>{{ 'orp.lbl_nb_soeurs'|trans }}</label><input type="number" name="nb_soeurs" class="fc" value="{{ fiche.nbSoeurs }}" min="0"></div><div><label>{{ 'orp.lbl_mere_remariee_court'|trans }}</label><select name="mere_mariee" class="fc"><option value="0" {{ not fiche.mereMariee?'selected' }}>{{ 'orp.opt_non'|trans }}</option><option value="1" {{ fiche.mereMariee?'selected' }}>{{ 'orp.opt_oui_mere'|trans }}</option></select></div></div>
+        </div>
+        <div class="fsec"><div class="fsec-title"><i class="bi bi-mortarboard"></i>{{ 'orp.sec_scolarite_court'|trans }}</div>
+          <div class="g3"><div><label>{{ 'orp.lbl_ecole_court'|trans }}</label><input type="text" name="ecole" class="fc" value="{{ fiche.ecole }}"></div><div><label>{{ 'orp.lbl_niveau_court'|trans }}</label><input type="text" name="niveau_scolaire" class="fc" value="{{ fiche.niveauScolaire }}"></div><div><label>{{ 'orp.lbl_raison_court'|trans }}</label><input type="text" name="raison_non_scolarisation" class="fc" value="{{ fiche.raisonNonScolarisation }}"></div></div>
+        </div>
+        <div class="fsec"><div class="fsec-title"><i class="bi bi-image"></i>{{ 'orp.sec_photo_modif'|trans }} <span style="font-weight:400;color:var(--txt3)">{{ 'orp.photo_vide_hint'|trans }}</span></div><input type="file" name="photo" class="fc" accept="image/*"></div>
+      </form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moEdit')"><i class="bi bi-x"></i>{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-p" onclick="document.getElementById('fEdit').submit()"><i class="bi bi-check2"></i>{{ 'orp.btn_enreg_modif'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moApprouver">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi mi-b"><i class="bi bi-check-circle"></i></div><div><div class="mt">{{ 'orp.mo_app_title'|trans }}</div><div class="ms">{{ fiche.nomComplet }}</div></div></div><button class="mcls" onclick="closeMo('moApprouver')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="abox" style="background:rgba(2,136,209,.08);border:1px solid rgba(2,136,209,.2)"><i class="bi bi-arrow-right-circle-fill" style="color:var(--bl)"></i><div><div class="at" style="color:#01579B">{{ 'orp.app_transition'|trans }}</div><div class="as">{{ 'orp.app_desc'|trans }}</div></div></div>
+      <form id="fApp" action="{{ path('app_parrainage_orphelin_approuver', {id: fiche.id}) }}" method="post"><input type="hidden" name="_token" value="{{ csrf_token('orphelin_approuver') }}"></form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moApprouver')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-b" onclick="document.getElementById('fApp').submit()"><i class="bi bi-check-circle"></i>{{ 'orp.btn_app_confirm'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moActiver">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi mi-g"><i class="bi bi-heart-fill"></i></div><div><div class="mt">{{ 'orp.mo_act_title'|trans }}</div><div class="ms">{{ fiche.nomComplet }}</div></div></div><button class="mcls" onclick="closeMo('moActiver')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="abox" style="background:rgba(46,125,50,.08);border:1px solid rgba(46,125,50,.2)"><i class="bi bi-heart-fill" style="color:var(--gm)"></i><div><div class="at" style="color:var(--gk)">{{ 'orp.act_transition'|trans }}</div><div class="as">{{ 'orp.act_desc'|trans }}</div></div></div>
+      <form id="fAct" action="{{ path('app_parrainage_orphelin_activer', {id: fiche.id}) }}" method="post"><input type="hidden" name="_token" value="{{ csrf_token('orphelin_activer') }}"></form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moActiver')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-g" onclick="document.getElementById('fAct').submit()"><i class="bi bi-heart-fill"></i>{{ 'orp.btn_act_confirm'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moAnnuler">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi mi-r"><i class="bi bi-x-circle"></i></div><div><div class="mt">{{ 'orp.mo_ann_title'|trans }}</div><div class="ms">{{ fiche.nomComplet }}</div></div></div><button class="mcls" onclick="closeMo('moAnnuler')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="abox" style="background:rgba(211,47,47,.08);border:1px solid rgba(211,47,47,.2)"><i class="bi bi-x-circle-fill" style="color:var(--rd)"></i><div><div class="at" style="color:#C62828">{{ 'orp.ann_transition'|trans }}</div><div class="as">{{ 'orp.ann_desc'|trans }}</div></div></div>
+      <form id="fAnn" action="{{ path('app_parrainage_orphelin_annuler', {id: fiche.id}) }}" method="post"><input type="hidden" name="_token" value="{{ csrf_token('orphelin_annuler') }}"><div class="frow" style="margin-top:10px"><label>{{ 'orp.lbl_raison_ann'|trans }}</label><textarea name="raison" class="fc" rows="2" placeholder="Déménagement, fin de période..."></textarea></div></form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moAnnuler')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-d" onclick="document.getElementById('fAnn').submit()"><i class="bi bi-x-circle"></i>{{ 'orp.btn_ann_confirm'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moVersement">
+  <div class="md md-md">
+    <div class="mh"><div class="mh-l"><div class="mi mi-g"><i class="bi bi-cash-coin"></i></div><div><div class="mt">{{ 'orp.mo_versement_title'|trans }}</div><div class="ms">{{ fiche.nomComplet }} · {{ par.parrain.nom }}</div></div></div><button class="mcls" onclick="closeMo('moVersement')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb">
+      <form id="fVers" action="{{ path('app_parrainage_orphelin_paiement', {id: fiche.id}) }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token('orphelin_paiement') }}">
+        <div class="g2"><div class="frow"><label>{{ 'orp.lbl_montant_req'|trans }} <span class="req">*</span></label><input type="number" name="montant" class="fc" step="100" min="1" required placeholder="{{ par.montantPeriodique }}"></div><div class="frow"><label>{{ 'orp.lbl_date_req'|trans }} <span class="req">*</span></label><input type="date" name="date_paiement" class="fc" id="vDate"></div></div>
+        <div class="g2"><div class="frow"><label>{{ 'orp.lbl_mode_pai'|trans }}</label><select name="mode" class="fc"><option value="virement">{{ 'orp.opt_virement'|trans }}</option><option value="cheque">{{ 'orp.opt_cheque'|trans }}</option><option value="especes" selected>{{ 'orp.opt_especes'|trans }}</option><option value="mobile">{{ 'orp.opt_mobile'|trans }}</option><option value="autre">{{ 'orp.opt_autre_pai'|trans }}</option></select></div><div class="frow"><label>{{ 'orp.lbl_periode_vers'|trans }}</label><input type="text" name="periode_concernee" class="fc" placeholder="S1 2025, Janvier 2025..."></div></div>
+        <div class="frow"><label>{{ 'orp.lbl_reference'|trans }}</label><input type="text" name="reference" class="fc" placeholder="REF-0001..."></div>
+        <div class="frow"><label>{{ 'orp.lbl_justif'|trans }}</label><input type="file" name="justificatif" class="fc" accept=".pdf,image/*"></div>
+        <div class="frow"><label>{{ 'orp.lbl_notes'|trans }}</label><textarea name="notes" class="fc" rows="2" placeholder="Remarques…"></textarea></div>
+      </form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moVersement')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-g" onclick="document.getElementById('fVers').submit()"><i class="bi bi-check2"></i>{{ 'orp.btn_enreg_vers'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moDelPay">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi mi-r"><i class="bi bi-trash3"></i></div><div><div class="mt">{{ 'orp.mo_del_pay_title'|trans }}</div><div class="ms" id="delPaySub">—</div></div></div><button class="mcls" onclick="closeMo('moDelPay')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="abox" style="background:rgba(211,47,47,.08);border:1px solid rgba(211,47,47,.2)"><i class="bi bi-exclamation-triangle-fill" style="color:var(--rd)"></i><div><div class="at" style="color:#C62828">{{ 'orp.del_pay_titre'|trans }}</div><div class="as">{{ 'orp.del_pay_desc'|trans }}</div></div></div>
+      <form id="fDelPay" method="post"><input type="hidden" name="_token" value="{{ csrf_token('paiement_delete') }}"></form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moDelPay')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-d" onclick="document.getElementById('fDelPay').submit()"><i class="bi bi-trash3"></i>{{ 'orp.btn_del_vers_confirm'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moRapport">
+  <div class="md md-md">
+    <div class="mh"><div class="mh-l"><div class="mi mi-p"><i class="bi bi-file-earmark-text"></i></div><div><div class="mt">{{ 'orp.mo_rapport_title'|trans }}</div><div class="ms">{{ fiche.nomComplet }}</div></div></div><button class="mcls" onclick="closeMo('moRapport')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb">
+      <form id="fRpt" action="{{ path('app_parrainage_orphelin_rapport', {id: fiche.id}) }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{{ csrf_token('orphelin_rapport') }}">
+        <div class="g2"><div class="frow"><label>{{ 'orp.lbl_annee_req'|trans }} <span class="req">*</span></label><input type="number" name="annee" class="fc" value="{{ 'now'|date('Y') }}" required min="2020" max="2099"></div><div class="frow"><label>{{ 'orp.lbl_semestre_req'|trans }} <span class="req">*</span></label><select name="semestre" class="fc" required><option value="1">{{ 'orp.opt_s1'|trans }}</option><option value="2">{{ 'orp.opt_s2'|trans }}</option></select></div></div>
+        <div class="frow"><label>{{ 'orp.lbl_situation'|trans }}</label><textarea name="situation_generale" class="fc" rows="3" placeholder="Mise à jour de la situation du bénéficiaire…"></textarea></div>
+        <div class="frow"><label>{{ 'orp.lbl_scolarite_rpt'|trans }}</label><textarea name="resultats_scolarite" class="fc" rows="2" placeholder="Passage en classe, résultats…"></textarea></div>
+        <div class="frow"><label>{{ 'orp.lbl_sante_rpt'|trans }}</label><textarea name="situation_sante" class="fc" rows="2" placeholder="État de santé…"></textarea></div>
+        <div class="frow"><label>{{ 'orp.lbl_msg_parrain'|trans }}</label><textarea name="message_parrain" class="fc" rows="2" placeholder="Remerciements, nouvelles…"></textarea></div>
+        <div class="frow"><label>{{ 'orp.lbl_doc'|trans }}</label><input type="file" name="document" class="fc" accept=".pdf,image/*"></div>
+      </form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moRapport')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-pu" onclick="document.getElementById('fRpt').submit()"><i class="bi bi-check2"></i>{{ 'orp.btn_creer_rpt'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moDelRpt">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi mi-r"><i class="bi bi-trash3"></i></div><div><div class="mt">{{ 'orp.mo_del_rpt_title'|trans }}</div><div class="ms" id="delRptSub">—</div></div></div><button class="mcls" onclick="closeMo('moDelRpt')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="abox" style="background:rgba(211,47,47,.08);border:1px solid rgba(211,47,47,.2)"><i class="bi bi-exclamation-triangle-fill" style="color:var(--rd)"></i><div><div class="at" style="color:#C62828">{{ 'orp.del_irrev'|trans }}</div><div class="as">{{ 'orp.del_rpt_desc'|trans }}</div></div></div>
+      <form id="fDelRpt" method="post"><input type="hidden" name="_token" value="{{ csrf_token('rapport_delete') }}"></form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moDelRpt')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-d" onclick="document.getElementById('fDelRpt').submit()"><i class="bi bi-trash3"></i>{{ 'orp.btn_del_rpt_confirm'|trans }}</button></div>
+  </div>
+</div>
+
+<div class="mo" id="moDel">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi mi-r"><i class="bi bi-trash3"></i></div><div><div class="mt">Supprimer le dossier</div><div class="ms">{{ fiche.nomComplet }}</div></div></div><button class="mcls" onclick="closeMo('moDel')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="abox" style="background:rgba(211,47,47,.08);border:1px solid rgba(211,47,47,.2)"><i class="bi bi-exclamation-triangle-fill" style="color:var(--rd);font-size:1.4rem"></i><div><div class="at" style="color:#C62828">{{ 'orp.del_irrev'|trans }}</div><div class="as">{{ 'orp.del_warn_show'|trans }}</div></div></div>
+      <form id="fDel" action="{{ path('app_parrainage_orphelin_delete', {id: fiche.id}) }}" method="post"><input type="hidden" name="_token" value="{{ csrf_token('orphelin_delete') }}"></form>
+    </div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moDel')">{{ 'orp.btn_annuler'|trans }}</button><button class="btn btn-d" onclick="document.getElementById('fDel').submit()"><i class="bi bi-trash3"></i>{{ 'orp.btn_del_confirm'|trans }}</button></div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+function openMo(id)  { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden' }
+function closeMo(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow='' }
+document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if(e.target===m) closeMo(m.id) }))
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.mo.open').forEach(m => closeMo(m.id)) })
+const vd = document.getElementById('vDate'); if(vd) vd.valueAsDate = new Date()
+function openMoDelPay(payId, montant) { document.getElementById('delPaySub').textContent=montant+' MRU'; document.getElementById('fDelPay').action='/parrainage/paiement/'+payId+'/delete'; openMo('moDelPay') }
+function openMoDelRpt(rptId, annee, semestre) { document.getElementById('delRptSub').textContent='Rapport S'+semestre+' '+annee; document.getElementById('fDelRpt').action='/rapport/parrainage/'+rptId+'/delete'; openMo('moDelRpt') }
+function switchTab(btn, paneId) { document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('act')); document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('act')); btn.classList.add('act'); document.getElementById(paneId).classList.add('act') }
+</script>
+{% endblock %}

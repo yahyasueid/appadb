@@ -1,0 +1,38 @@
+{# templates/pages/audit/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SIGAF — {{ 'audit.title'|trans|default('Journal d\'Audit') }}{% endblock %}
+
+{% block body %}
+<div class="page-title-row">
+    <div>
+        <h2>{{ 'audit.title'|trans|default('Journal d\'Audit') }}</h2>
+        <div class="subtitle">{{ 'audit.subtitle'|trans|default('Traçabilité complète — Aucune suppression') }}</div>
+    </div>
+    <button class="btn-o"><i class="bi bi-download"></i><span>{{ 'action.export'|trans|default('Exporter') }}</span></button>
+</div>
+
+<div class="panel">
+    <div class="panel-body" style="padding:14px 22px">
+        <ul class="audit-list">
+            {% if logs is defined %}
+                {% for log in logs %}
+                <li class="audit-item">
+                    <span class="audit-dot {{ log.type }}"></span>
+                    <div>
+                        <div>{{ log.message|raw }}</div>
+                        <div class="audit-time">{{ log.date|date('d/m/Y H:i') }}</div>
+                    </div>
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="audit-item"><span class="audit-dot success"></span><div><div>Rapport scolaire T1-2026 <strong>validé</strong></div><div class="audit-time">21/02/2026 09:14</div></div></li>
+                <li class="audit-item"><span class="audit-dot info"></span><div><div>Bénéficiaire <strong>Aminata Diallo</strong> enregistré</div><div class="audit-time">21/02/2026 08:30</div></div></li>
+                <li class="audit-item"><span class="audit-dot warning"></span><div><div>Dépense <strong>DEP-0128</strong> soumise</div><div class="audit-time">20/02/2026 16:45</div></div></li>
+                <li class="audit-item"><span class="audit-dot success"></span><div><div>Alimentation <strong>ALI-0044</strong> validée — +300K</div><div class="audit-time">19/02/2026 14:20</div></div></li>
+                <li class="audit-item"><span class="audit-dot danger"></span><div><div>Projet <strong>Construction École</strong> — Alerte budget</div><div class="audit-time">19/02/2026 10:00</div></div></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{# templates/components/_modal_beneficiaire.html.twig #}
+
+<div class="modal-overlay" id="modalBenef">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="bi bi-person-plus me-2"></i>{{ 'modal.new_beneficiary'|trans|default('Nouveau bénéficiaire') }}</h3>
+            <button class="modal-close" onclick="closeModal('modalBenef')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form method="POST" action="{{ path('app_parrainage_new') }}">
+            <div class="modal-body">
+                <div class="fr">
+                    <div class="fg">
+                        <label>{{ 'field.first_name'|trans|default('Prénom') }}</label>
+                        <input type="text" name="prenom" required>
+                    </div>
+                    <div class="fg">
+                        <label>{{ 'field.last_name'|trans|default('Nom') }}</label>
+                        <input type="text" name="nom" required>
+                    </div>
+                </div>
+                <div class="fr">
+                    <div class="fg">
+                        <label>{{ 'field.birth_date'|trans|default('Date de naissance') }}</label>
+                        <input type="date" name="dateNaissance">
+                    </div>
+                    <div class="fg">
+                        <label>{{ 'field.gender'|trans|default('Sexe') }}</label>
+                        <select name="sexe">
+                            <option value="M">{{ 'gender.male'|trans|default('Masculin') }}</option>
+                            <option value="F">{{ 'gender.female'|trans|default('Féminin') }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.monthly_amount'|trans|default('Montant mensuel (MRU)') }}</label>
+                    <input type="number" name="montantMensuel" placeholder="15000">
+                </div>
+                <div class="fg">
+                    <label>{{ 'field.observations'|trans|default('Observations') }}</label>
+                    <textarea name="observations" placeholder="{{ 'field.observations_placeholder'|trans|default('Notes…') }}"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-o" onclick="closeModal('modalBenef')">{{ 'action.cancel'|trans|default('Annuler') }}</button>
+                <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i><span>{{ 'action.register'|trans|default('Enregistrer') }}</span></button>
+            </div>
+        </form>
+    </div>
+</div>

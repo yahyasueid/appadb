@@ -1,0 +1,36 @@
+/* public/css/pages/utilisateurs.css */
+/* ═══ Page Gestion Utilisateurs ═══ */
+
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-header h1{font-size:1.5rem;font-weight:700;display:flex;align-items:center;gap:10px;color:var(--green-deep,#14532D)}
+
+/* Stats */
+.stats-row{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.stat-chip{background:#fff;border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:.85rem;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.stat-chip strong{margin-left:auto;font-size:1.1rem}
+
+/* Table */
+.table-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.table thead th{background:var(--green-deep,#14532D);color:#fff;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;border:0}
+.row-inactive{opacity:.5}
+.user-cell{display:flex;align-items:center;gap:12px}
+.avatar-sm{width:38px;height:38px;border-radius:10px;object-fit:cover}
+.avatar-initials{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.82rem;border-radius:10px}
+.badge-poste{padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.status-dot.active{background:#4CAF50}
+.status-dot.inactive{background:#ccc}
+
+/* Action buttons */
+.actions-group{display:flex;gap:4px;justify-content:flex-end}
+.btn-icon{background:none;border:1px solid #e8e8e8;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;color:#6c757d}
+.btn-icon:hover{background:#e8f5e9;border-color:#4CAF50;color:#2E7D32}
+
+/* Modal tweaks */
+.border-dashed{border-style:dashed !important}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+
+/* Form errors */
+.modal-body .form-control.is-invalid,
+.modal-body .form-select.is-invalid{border-color:#dc3545}
+.modal-body ul.form-errors{list-style:none;padding:0;margin:4px 0 0;font-size:.78rem;color:#dc3545}

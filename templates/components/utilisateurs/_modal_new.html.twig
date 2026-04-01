@@ -1,0 +1,90 @@
+{# templates/components/utilisateurs/_modal_new.html.twig #}
+
+<div class="modal-overlay" id="newUserModal" onclick="if(event.target===this)closeModal('newUserModal')">
+    <div class="modal-box" style="max-width:640px">
+
+        {# ── Header ── #}
+        <div class="modal-header">
+            <div>
+                <h3><i class="bi bi-plus-circle" style="color:var(--ac)"></i> {{ 'utilisateurs.modal_new_title'|trans }}</h3>
+                <small style="color:var(--t3)">{{ 'utilisateurs.modal_new_subtitle'|trans }}</small>
+            </div>
+            <button class="modal-close" onclick="closeModal('newUserModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        {# ── Form ── #}
+        {{ form_start(newForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+        <div class="modal-body">
+
+            {# ── Photo upload ── #}
+            <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:12px;border:1px dashed var(--brd);margin-bottom:20px">
+                <div id="newPhotoPreview" style="width:64px;height:64px;min-width:64px;border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--brd)">
+                    <i class="bi bi-camera" style="font-size:1.5rem;color:var(--t3)"></i>
+                </div>
+                <div>
+                    <label class="btn-o" style="padding:6px 14px;font-size:.78rem;cursor:pointer">
+                        <i class="bi bi-upload"></i> {{ 'utilisateurs.choose_photo'|trans }}
+                        {{ form_widget(newForm.photoFile, {'attr': {'class': 'photo-input', 'data-preview': 'newPhotoPreview', 'style': 'display:none'}}) }}
+                    </label>
+                    <div style="font-size:.7rem;color:var(--t3);margin-top:4px">{{ 'utilisateurs.photo_hint'|trans }}</div>
+                </div>
+            </div>
+
+            {# ── Prénom / Nom ── #}
+            <div class="fr">
+                <div class="fg">
+                    {{ form_label(newForm.prenom) }}
+                    {{ form_widget(newForm.prenom) }}
+                    {{ form_errors(newForm.prenom) }}
+                </div>
+                <div class="fg">
+                    {{ form_label(newForm.nom) }}
+                    {{ form_widget(newForm.nom) }}
+                    {{ form_errors(newForm.nom) }}
+                </div>
+            </div>
+
+            {# ── Email ── #}
+            <div class="fg">
+                {{ form_label(newForm.email) }}
+                {{ form_widget(newForm.email) }}
+                {{ form_errors(newForm.email) }}
+            </div>
+
+            {# ── Téléphone / Poste ── #}
+            <div class="fr">
+                <div class="fg">
+                    {{ form_label(newForm.telephone) }}
+                    {{ form_widget(newForm.telephone) }}
+                </div>
+                <div class="fg">
+                    {{ form_label(newForm.poste) }}
+                    {{ form_widget(newForm.poste) }}
+                    {{ form_errors(newForm.poste) }}
+                </div>
+            </div>
+
+            {# ── Mot de passe / Confirmer ── #}
+            <div class="fr">
+                <div class="fg">
+                    {{ form_label(newForm.plainPassword.first) }}
+                    {{ form_widget(newForm.plainPassword.first) }}
+                    {{ form_errors(newForm.plainPassword.first) }}
+                </div>
+                <div class="fg">
+                    {{ form_label(newForm.plainPassword.second) }}
+                    {{ form_widget(newForm.plainPassword.second) }}
+                    {{ form_errors(newForm.plainPassword.second) }}
+                </div>
+            </div>
+        </div>
+
+        {# ── Footer ── #}
+        <div class="modal-footer">
+            <button type="button" class="btn-o" onclick="closeModal('newUserModal')">{{ 'action.cancel'|trans }}</button>
+            <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i> {{ 'utilisateurs.btn_create'|trans }}</button>
+        </div>
+
+        {{ form_end(newForm) }}
+    </div>
+</div>

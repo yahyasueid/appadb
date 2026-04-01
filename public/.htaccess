@@ -1,0 +1,26 @@
+# ================================================
+#  .htaccess — /htdocs/apps.adb-mr.org/public/
+# ================================================
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Fichiers statiques existants → servir directement
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Tout → Symfony
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css               "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png              "access plus 3 months"
+    ExpiresByType image/jpeg             "access plus 3 months"
+    ExpiresByType image/webp             "access plus 3 months"
+    ExpiresByType font/woff2             "access plus 6 months"
+</IfModule>

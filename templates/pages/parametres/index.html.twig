@@ -1,0 +1,53 @@
+{# templates/pages/parametres/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}SIGAF — {{ 'settings.title'|trans|default('Paramètres') }}{% endblock %}
+
+{% block body %}
+<div class="page-title-row">
+    <div>
+        <h2>{{ 'settings.title'|trans|default('Paramètres') }}</h2>
+        <div class="subtitle">{{ 'settings.subtitle'|trans|default('Configuration du système') }}</div>
+    </div>
+</div>
+
+<div class="grid-2">
+    {# === GENERAL === #}
+    <div class="panel">
+        <div class="panel-header"><h3>{{ 'settings.general'|trans|default('Général') }}</h3></div>
+        <div class="panel-body">
+            <form method="POST" action="{{ path('app_parametres_save') }}">
+                <div class="fg">
+                    <label>{{ 'settings.institution'|trans|default('Nom de l\'institution') }}</label>
+                    <input type="text" name="institution" value="Association Développement et Bien Faisance">
+                </div>
+                <div class="fg">
+                    <label>{{ 'settings.currency'|trans|default('Devise') }}</label>
+                    <select name="devise"><option>MRU — Ouguiya</option></select>
+                </div>
+                <div class="fg">
+                    <label>{{ 'settings.language'|trans|default('Langue') }}</label>
+                    <select name="langue" id="settingsLang">
+                        <option value="fr" {{ app.request.locale == 'fr' ? 'selected' : '' }}>Français</option>
+                        <option value="ar" {{ app.request.locale == 'ar' ? 'selected' : '' }}>العربية</option>
+                        <option value="en" {{ app.request.locale == 'en' ? 'selected' : '' }}>English</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-p"><i class="bi bi-check-lg"></i><span>{{ 'action.save'|trans|default('Sauvegarder') }}</span></button>
+            </form>
+        </div>
+    </div>
+
+    {# === RULES === #}
+    <div class="panel">
+        <div class="panel-header"><h3>{{ 'settings.rules'|trans|default('Règles de gestion') }}</h3></div>
+        <div class="panel-body" style="font-size:.82rem;color:var(--t2);line-height:1.7">
+            <p><i class="bi bi-lock me-1" style="color:var(--warn)"></i><strong>{{ 'rule.no_delete'|trans|default('Aucune suppression des données financières (Art. 4)') }}</strong></p>
+            <p><i class="bi bi-shield-check me-1" style="color:var(--ac2)"></i><strong>{{ 'rule.validation'|trans|default('Validation obligatoire par le Directeur (Art. 3)') }}</strong></p>
+            <p><i class="bi bi-journal-text me-1" style="color:var(--ac)"></i><strong>{{ 'rule.audit'|trans|default('Journal d\'audit obligatoire') }}</strong></p>
+            <p><i class="bi bi-person-x me-1" style="color:var(--ora)"></i>{{ 'rule.no_validation'|trans|default('Assistants sans droit de validation (Art. 2)') }}</p>
+            <p><i class="bi bi-file-pdf me-1" style="color:var(--warn)"></i>{{ 'rule.export'|trans|default('Rapports exportables PDF/Word (Art. 4)') }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

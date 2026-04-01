@@ -1,0 +1,1772 @@
+{# templates/projet/index.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'proj.page_title'|trans }} — ADB-MR{% endblock %}
+
+{% block stylesheets %}
+<style>
+/* ═══════════════════════════════════════════════════
+   VARIABLES PROJET
+═══════════════════════════════════════════════════ */
+:root{
+  --gd:#14532D;--gk:#166534;--gm:#2E7D32;--gl:#4CAF50;--gp:#A5D6A7;
+  --bl:#0288D1;--bl2:rgba(2,136,209,.1);
+  --go:#D4A017;--go2:rgba(212,160,23,.1);
+  --rd:#D32F2F;--rd2:rgba(211,47,47,.1);
+  --pu:#7B1FA2;--pu2:rgba(123,31,162,.1);
+  --sand:#FBF7F0;--sand2:#F0E8D8;
+  --txt:#1B2A1B;--txt2:#4A6B4A;--txt3:#7A8F7A;
+  --bg:#F2F6F2;
+  --r:14px;--rs:10px;--rx:7px;
+  --sh:0 2px 12px rgba(20,83,45,.07);
+  --shm:0 8px 32px rgba(20,83,45,.14);
+  --green-deep:#14532D;--green-dark:#166534;--green-mid:#2E7D32;
+  --green-light:#4CAF50;--green-pale:#A5D6A7;
+  --green-ghost:rgba(46,125,50,.07);--green-border:rgba(46,125,50,.15);
+  --blue:#0288D1;--blue-light:rgba(2,136,209,.08);
+  --gold:#D4A017;--gold-light:#F5DEB3;
+  --sand-dark:#F0E8D8;
+  --text:#1B2A1B;--text-mid:#4A6B4A;--text-light:#7A8F7A;
+  --white:#FFFFFF;--red:#D32F2F;--red-light:rgba(211,47,47,.08);
+  --orange:#E65100;--orange-light:rgba(230,81,0,.08);
+  --radius:14px;--radius-sm:10px;--radius-xs:7px;
+}
+* { box-sizing:border-box; margin:0; padding:0 }
+
+.page-header {
+  background:linear-gradient(140deg, #0f3d18 0%, #1B5E20 40%, #2E7D32 75%, #388E3C 100%);
+  padding:0;position:relative;overflow:hidden;
+}
+.page-header::before {
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.page-header::after {
+  content:'';position:absolute;bottom:-60px;left:25%;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+.page-header .ph-grid-deco {
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.ph-main {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;position:relative;z-index:1;flex-wrap:wrap;
+  padding:24px 32px 20px;
+}
+.ph-left { display:flex;align-items:center;gap:16px;min-width:0;flex:1 }
+.ph-logo {
+  width:88px;height:88px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(4px);overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+}
+.ph-logo img  {background: white; width:100%;height:100%;object-fit:contain;padding:4px }
+.ph-logo i    { font-size:1.5rem;color:rgba(255,255,255,.9) }
+.ph-text { min-width:0;flex:1 }
+.ph-breadcrumb {
+  font-size:.68rem;color:rgba(255,255,255,.5);margin-bottom:6px;
+  display:flex;align-items:center;gap:5px;
+}
+.ph-breadcrumb a { color:rgba(255,255,255,.55);text-decoration:none;transition:.15s }
+.ph-breadcrumb a:hover { color:#fff }
+.ph-breadcrumb i { font-size:.5rem }
+.ph-breadcrumb span { color:rgba(255,255,255,.8) }
+.ph-title {
+  font-size:1.4rem;font-weight:800;color:#fff;
+  letter-spacing:-.03em;line-height:1.15;margin:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.ph-title-ar {
+  font-size:.9rem;font-weight:600;color:rgba(255,255,255,.65);
+  font-family:'Noto Sans Arabic','GE SS Two',sans-serif;
+  direction:rtl;text-align:left;margin-top:2px;line-height:1.2;
+}
+.ph-sub {
+  font-size:1.04rem;color:#fcfefc ;margin-top:4px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.ph-sub strong { color:rgba(255,255,255,.9) }
+.ph-sub-dot { color:rgba(255,255,255,.3) }
+.btn-hero {
+  display:inline-flex;align-items:center;gap:8px;
+  border:none;border-radius:12px;
+  padding:11px 22px;font-size:.84rem;font-weight:700;
+  cursor:pointer;transition:.22s;white-space:nowrap;
+  font-family:inherit;flex-shrink:0;
+}
+.btn-hero.primary {
+  background:rgba(255,255,255,.15);color:#fff;
+  border:1.5px solid rgba(255,255,255,.3);
+  backdrop-filter:blur(6px);
+  box-shadow:0 2px 12px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-hero.primary:hover {
+  background:rgba(255,255,255,.25);
+  border-color:rgba(255,255,255,.45);
+  transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-hero.primary i { font-size:1rem }
+.stats-strip {
+  display:flex;gap:8px;flex-wrap:wrap;
+  padding:14px 32px 18px;
+  border-top:1px solid rgba(255,255,255,.1);
+  position:relative;z-index:1;
+}
+.stat-chip {
+  display:flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;padding:9px 14px;
+  backdrop-filter:blur(4px);transition:.18s;
+}
+.stat-chip:hover { background:rgba(255,255,255,.14) }
+.stat-chip .sc-ico {
+  font-size:1.05rem;width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.1);border-radius:7px;
+}
+.stat-chip .sc-v { font-size:1rem;font-weight:800;color:#fff;line-height:1;letter-spacing:-.02em }
+.stat-chip .sc-l { font-size:.6rem;color:rgba(255,255,255,.5);margin-top:2px;white-space:nowrap }
+
+/* ═══ TOOLBAR ═══ */
+.crud-toolbar {
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:14px 32px;
+  background:linear-gradient(to bottom,#fff,#fafdf9);
+  border-bottom:1px solid var(--sand-dark);
+  box-shadow:0 1px 0 var(--sand-dark), 0 2px 8px rgba(20,83,45,.04);
+  position:sticky;top:0;z-index:40;
+}
+.search-box {
+  position:relative;flex:1;min-width:200px;max-width:320px;
+}
+.search-box i {
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  color:var(--text-light);font-size:.85rem;pointer-events:none;
+}
+.search-box input {
+  width:100%;padding:8px 12px 8px 32px;
+  border:1.5px solid var(--sand-dark);border-radius:var(--radius-xs);
+  font-size:.83rem;font-family:inherit;background:var(--sand);
+  color:var(--text);outline:none;transition:.2s;
+}
+.search-box input:focus { border-color:var(--green-mid);background:#fff;box-shadow:0 0 0 3px rgba(46,125,50,.06) }
+.fsel {
+  padding:8px 12px;border:1.5px solid var(--sand-dark);border-radius:var(--radius-xs);
+  font-size:.8rem;font-family:inherit;background:var(--sand);color:var(--text);
+  outline:none;cursor:pointer;transition:.2s;
+}
+.fsel:focus { border-color:var(--green-mid);background:#fff }
+.tb-cnt { font-size:.75rem;color:var(--text-light);white-space:nowrap;margin-left:auto }
+.vtg { display:flex;border:1.5px solid var(--sand-dark);border-radius:var(--radius-xs);overflow:hidden }
+.vb {
+  width:36px;height:36px;border:none;background:transparent;
+  color:var(--text-light);cursor:pointer;transition:.15s;font-size:.9rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.vb:hover,.vb.active { background:var(--green-ghost);color:var(--green-mid) }
+
+/* ═══ CONTENT ═══ */
+.proj-content { padding:24px 32px }
+.empty-grid {
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 20px;gap:12px;color:var(--text-light);
+}
+.empty-grid.vis { display:flex }
+.empty-grid i { font-size:2.5rem;opacity:.3 }
+.empty-grid p { font-size:.85rem }
+.assoc-group {
+  margin-bottom:28px;border-radius:var(--radius);
+  border:1.5px solid var(--sand-dark);background:var(--white);
+  overflow:hidden;box-shadow:var(--sh);
+}
+.assoc-header {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  background:linear-gradient(90deg,rgba(46,125,50,.06),rgba(46,125,50,.02));
+  border-bottom:1px solid var(--sand-dark);flex-wrap:wrap;gap:8px;
+}
+.assoc-left { display:flex;align-items:center;gap:12px }
+.assoc-logo {
+  width:38px;height:38px;border-radius:10px;overflow:hidden;
+  background:var(--sand);border:1.5px solid var(--sand-dark);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+}
+.assoc-logo img { width:100%;height:100%;object-fit:contain }
+.assoc-name { font-size:.92rem;font-weight:700;color:var(--text) }
+.assoc-meta { font-size:.7rem;color:var(--text-light);margin-top:2px;display:flex;align-items:center;gap:6px }
+.assoc-right { display:flex;gap:7px;flex-wrap:wrap }
+.a-badge {
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;font-size:.7rem;font-weight:600;
+}
+.proj-grid {
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;padding:16px 20px;
+}
+.proj-list { display:none;flex-direction:column;gap:0 }
+.no-proj {
+  padding:24px;text-align:center;font-size:.8rem;
+  color:var(--text-light);display:flex;align-items:center;justify-content:center;gap:6px;
+}
+
+/* ═══ CARTE PROJET ═══ */
+.proj-card {
+  border-radius:16px;background:var(--white);overflow:hidden;
+  transition:box-shadow .22s,transform .22s;
+  display:flex;flex-direction:column;cursor:default;
+  box-shadow:0 2px 8px rgba(0,0,0,.07), 0 0 0 1.5px var(--sand-dark);
+}
+.proj-card:hover {
+  box-shadow:0 8px 28px rgba(46,125,50,.16), 0 0 0 1.5px rgba(46,125,50,.3);
+  transform:translateY(-3px);
+}
+.pc-cover { height:160px;position:relative;overflow:hidden;flex-shrink:0 }
+.pc-cover img { width:100%;height:100%;object-fit:cover;transition:transform .4s cubic-bezier(.25,.46,.45,.94) }
+.proj-card:hover .pc-cover img { transform:scale(1.04) }
+.pc-cover-ov {
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.08) 0%,transparent 35%,rgba(0,0,0,.55) 100%);
+}
+.pc-cover-top {
+  position:absolute;top:10px;left:10px;right:10px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:6px;
+}
+.pc-type-badge {
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.16);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.25);border-radius:20px;
+  padding:4px 10px 4px 6px;
+}
+.pc-type-ico {
+  width:22px;height:22px;border-radius:6px;
+  background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:.7rem;flex-shrink:0;
+}
+.pc-type-lbl { font-size:.62rem;font-weight:700;color:#fff;letter-spacing:.02em }
+.pc-statut {
+  font-size:.6rem;font-weight:700;padding:4px 9px;border-radius:20px;
+  border:1px solid;backdrop-filter:blur(6px);
+  display:flex;align-items:center;gap:4px;color:#fff;white-space:nowrap;flex-shrink:0;
+}
+.pc-cover-bottom {
+  position:absolute;bottom:0;left:0;right:0;
+  padding:10px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px;
+}
+.pc-num {
+  font-size:1rem;font-family:'Courier New',monospace;font-weight:700;letter-spacing:.05em;
+  color:rgba(255,255,255,.9);background:rgba(0,0,0,.28);
+  padding:2px 8px;border-radius:6px;backdrop-filter:blur(3px);
+  border:1px solid rgba(255,255,255,.12);flex-shrink:0;
+}
+.pc-report-btn {
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:8px;font-size:.67rem;font-weight:700;
+  color:#fff;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.25);text-decoration:none;
+  transition:background .18s,transform .18s;flex-shrink:0;
+  opacity:0;transform:translateY(4px);
+}
+.proj-card:hover .pc-report-btn { opacity:1;transform:translateY(0) }
+.pc-report-btn:hover { background:rgba(255,255,255,.3);color:#fff }
+.pc-body { padding:14px 16px 10px;flex:1;display:flex;flex-direction:column }
+.pc-nom {
+  font-size:.92rem;font-weight:800;color:var(--text);line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  letter-spacing:-.02em;margin-bottom:8px;
+}
+.pc-infos { display:flex;flex-direction:column;gap:4px;margin-bottom:12px }
+.pc-info { display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--text-light) }
+.pc-info i { font-size:.65rem;width:12px;text-align:center;flex-shrink:0 }
+.pc-info span { overflow:hidden;text-overflow:ellipsis;white-space:nowrap }
+.pc-fin {
+  background:linear-gradient(135deg,rgba(46,125,50,.04),rgba(46,125,50,.02));
+  border:1px solid rgba(46,125,50,.1);border-radius:10px;padding:10px 12px;
+}
+.pc-fin-top { display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px;gap:6px }
+.pc-budget-lbl { font-size:.6rem;color:var(--text-light);font-weight:500 }
+.pc-budget-val {
+  font-size:.94rem;font-weight:900;color:var(--green-dark);
+  letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline;gap:3px;
+}
+.pc-budget-mru { font-size:.6rem;font-weight:600;color:var(--text-light) }
+.pc-taux-badge { font-size:.65rem;font-weight:800;padding:3px 8px;border-radius:10px;flex-shrink:0 }
+.pc-bar-bg { height:5px;border-radius:10px;background:rgba(46,125,50,.12);overflow:hidden }
+.pc-bar-f  { height:100%;border-radius:10px;background:linear-gradient(90deg,var(--green-dark),var(--gl));transition:width .9s cubic-bezier(.16,1,.3,1) }
+.pc-paid-row { display:flex;justify-content:space-between;align-items:center;margin-top:5px }
+.pc-paid-lbl { font-size:.6rem;color:var(--text-light) }
+.pc-paid-val { font-size:.7rem;font-weight:700;color:var(--green-mid) }
+.pc-footer { border-top:1px solid rgba(46,125,50,.08);display:flex;flex-direction:column }
+.pc-media-row { display:flex;align-items:center;justify-content:space-between;padding:8px 14px 7px }
+.pc-media-chips { display:flex;gap:5px }
+.pc-chip {
+  display:flex;align-items:center;gap:3px;font-size:.65rem;font-weight:600;
+  padding:3px 7px;border-radius:8px;background:var(--sand);color:var(--text-light);
+  transition:.15s;border:1px solid transparent;
+}
+.pc-chip:hover { background:var(--sand-dark) }
+.pc-chip i { font-size:.6rem }
+.pc-chip.has { color:var(--text-mid);font-weight:700 }
+.pc-prog-lbl { font-size:.62rem;font-weight:700;color:var(--green-mid);letter-spacing:-.01em }
+.pc-actions {
+  display:grid;grid-template-columns:repeat(5,1fr);
+  border-top:1px solid rgba(46,125,50,.08);
+  border-radius:0 0 14px 14px;overflow:hidden;
+}
+.pca {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;padding:9px 2px 8px;
+  border:none;background:transparent;color:var(--text-light);cursor:pointer;
+  font-size:.55rem;font-weight:600;font-family:inherit;
+  transition:background .15s,color .15s;text-decoration:none;line-height:1;
+  border-right:1px solid rgba(46,125,50,.08);position:relative;overflow:hidden;
+}
+.pca:last-child { border-right:none }
+.pca i { font-size:.95rem;display:block;margin-bottom:2px;transition:transform .2s cubic-bezier(.34,1.56,.64,1) }
+.pca:hover i     { transform:translateY(-2px) scale(1.15) }
+.pca:active i    { transform:scale(.88) }
+.pca:hover               { background:rgba(46,125,50,.06);color:var(--gm) }
+.pca.pca-view:hover      { background:rgba(2,136,209,.07);color:var(--bl) }
+.pca.pca-add:hover       { background:rgba(46,125,50,.07);color:var(--gm) }
+.pca.pca-edit:hover      { background:rgba(212,160,23,.07);color:var(--go) }
+.pca.pca-del             { color:var(--txt3) }
+.pca.pca-del:hover       { background:rgba(211,47,47,.07);color:var(--rd) }
+.pca.pca-sep-before::before {
+  content:'';position:absolute;left:0;top:22%;bottom:22%;
+  width:1px;background:rgba(46,125,50,.12);
+}
+.pca[title]:hover::after {
+  content:attr(title);
+  position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);
+  background:rgba(20,40,20,.88);color:#fff;
+  font-size:.6rem;padding:3px 8px;border-radius:6px;
+  white-space:nowrap;pointer-events:none;z-index:10;
+  animation:tipIn .12s ease;
+}
+@keyframes tipIn { from{opacity:0;transform:translateX(-50%) translateY(3px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
+/* ═══ VUE LISTE ═══ */
+.pac {
+  width:30px;height:30px;border-radius:8px;border:none;background:transparent;
+  color:var(--text-light);cursor:pointer;display:inline-flex;
+  align-items:center;justify-content:center;font-size:.8rem;transition:.15s;text-decoration:none;
+}
+.pac:hover    { background:var(--green-ghost);color:var(--gm) }
+.pac.rd:hover { background:var(--rd2);color:var(--rd) }
+.pac.bl:hover { background:var(--bl2);color:var(--bl) }
+.pac.go:hover { background:var(--go2);color:var(--go) }
+.proj-row {
+  display:flex;align-items:center;gap:12px;
+  padding:11px 20px;border-bottom:1px solid rgba(46,125,50,.07);transition:.15s;
+}
+.proj-row:last-child { border-bottom:none }
+.proj-row:hover { background:rgba(46,125,50,.03) }
+.pr-type-ico { width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.9rem }
+.pr-main { flex:1;min-width:0 }
+.pr-nom  { font-size:.86rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+.pr-sub  { display:flex;gap:8px;font-size:.68rem;color:var(--text-light);margin-top:3px;flex-wrap:wrap }
+.pr-sub span { display:flex;align-items:center;gap:3px }
+.pr-fin  { min-width:120px }
+.pr-fin-top { display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:4px }
+.pr-fin-top span:last-child { color:var(--green-mid);font-weight:700 }
+.pr-fin-bg { height:4px;border-radius:2px;background:var(--sand-dark) }
+.pr-fin-f  { height:100%;border-radius:2px;background:var(--gm);transition:width .8s ease }
+.pr-actions { display:flex;gap:3px }
+
+/* ═══ MODALES ═══ */
+.mo {
+  position:fixed;inset:0;background:rgba(20,83,45,.32);
+  backdrop-filter:blur(5px);z-index:1050;
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.mo.open { display:flex;animation:moIn .2s ease }
+@keyframes moIn { from{opacity:0}to{opacity:1} }
+.md {
+  background:var(--white);border-radius:18px;width:100%;
+  box-shadow:0 24px 80px rgba(20,83,45,.18);
+  animation:mdIn .28s cubic-bezier(.16,1,.3,1);
+  max-height:92vh;display:flex;flex-direction:column;overflow:hidden;
+}
+@keyframes mdIn { from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none} }
+.md-sm  { max-width:420px }
+.md-md  { max-width:640px }
+.md-lg  { max-width:820px }
+.md-xl  { max-width:960px }
+.mh {
+  padding:20px 24px 16px;
+  background:linear-gradient(to bottom,#fff,#fafdf9);
+  border-bottom:1px solid var(--sand-dark);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.mh-l  { display:flex;align-items:center;gap:10px }
+.mi    { width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0 }
+.mi.g  { background:rgba(46,125,50,.1);color:var(--green-mid) }
+.mi.b  { background:rgba(2,136,209,.1);color:var(--blue) }
+.mi.r  { background:rgba(211,47,47,.1);color:var(--red) }
+.mi.o  { background:rgba(212,160,23,.1);color:var(--go) }
+.mi.p  { background:rgba(123,31,162,.1);color:var(--pu) }
+.mt    { font-size:.95rem;font-weight:700;color:var(--text);letter-spacing:-.02em }
+.ms    { font-size:.72rem;color:var(--text-light);margin-top:1px }
+.mcls  {
+  width:34px;height:34px;border-radius:8px;border:none;
+  background:var(--sand);color:var(--text-light);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;transition:.15s;
+}
+.mcls:hover { background:var(--red-light);color:var(--red) }
+.mb  { padding:22px 24px;overflow-y:auto;flex:1 }
+.mf  {
+  padding:14px 24px;border-top:1px solid var(--sand-dark);
+  display:flex;align-items:center;justify-content:flex-end;
+  gap:9px;flex-shrink:0;background:var(--sand);
+}
+.btn { display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-xs);border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s;text-decoration:none }
+.btn-p { background:linear-gradient(135deg,var(--green-dark),var(--green-mid));color:#fff;box-shadow:0 3px 12px rgba(46,125,50,.22) }
+.btn-p:hover { transform:translateY(-1px);box-shadow:0 6px 20px rgba(46,125,50,.32) }
+.btn-s { background:var(--sand);color:var(--text-mid);border:1.5px solid var(--sand-dark) }
+.btn-s:hover { background:var(--sand-dark) }
+.btn-d { background:var(--red);color:#fff }
+.btn-d:hover { background:#b71c1c }
+.btn-sm { padding:6px 13px;font-size:.76rem }
+.fc {
+  background:var(--sand);border:1.5px solid transparent;
+  border-radius:var(--radius-xs);padding:10px 12px;
+  font-size:.84rem;font-family:inherit;color:var(--text);
+  outline:none;transition:.22s;width:100%;
+}
+.fc:focus { background:var(--white);border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(46,125,50,.06) }
+.fc::placeholder { color:var(--text-light);font-weight:300 }
+.req { color:var(--red);font-size:.7rem }
+.frow { display:flex;flex-direction:column;gap:5px;margin-bottom:14px }
+.frow label { font-size:.74rem;font-weight:600;color:var(--text-mid) }
+.frow.c2 { display:grid;grid-template-columns:1fr 1fr;gap:12px }
+.frow.c2 > div { display:flex;flex-direction:column;gap:5px }
+.frow.c2 > div label { font-size:.74rem;font-weight:600;color:var(--text-mid) }
+.frow.c3 { display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;align-items:start }
+.frow.c3 > div { display:flex;flex-direction:column;gap:5px }
+.frow.c3 > div label { font-size:.74rem;font-weight:600;color:var(--text-mid) }
+.fg { display:flex;flex-direction:column;gap:5px;margin-bottom:14px }
+.fg label { font-size:.74rem;font-weight:600;color:var(--text-mid) }
+.uzn {
+  border:2px dashed var(--sand-dark);border-radius:var(--radius-xs);
+  padding:20px;text-align:center;cursor:pointer;transition:.22s;
+  background:var(--sand);position:relative;
+}
+.uzn:hover,.uzn.drag { border-color:var(--green-mid);background:var(--green-ghost) }
+.uzn i      { font-size:1.6rem;color:var(--text-light);display:block;margin-bottom:6px }
+.uz-t       { font-size:.78rem;font-weight:600;color:var(--text-mid) }
+.uz-s       { font-size:.65rem;color:var(--text-light);margin-top:3px }
+.file-ready {
+  display:none;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(46,125,50,.06),rgba(46,125,50,.03));
+  border:1.5px solid rgba(46,125,50,.25);border-radius:var(--radius-xs);padding:14px 16px;
+}
+.file-ready.vis { display:flex }
+.fr-ico { width:42px;height:42px;border-radius:10px;flex-shrink:0;background:rgba(46,125,50,.12);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--gm) }
+.fr-info { flex:1;min-width:0 }
+.fr-name { font-size:.82rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+.fr-sub  { font-size:.68rem;color:var(--text-light);margin-top:2px;display:flex;align-items:center;gap:6px }
+.fr-ok   { font-size:.65rem;font-weight:700;color:var(--gm);background:rgba(46,125,50,.1);padding:1px 7px;border-radius:8px;display:flex;align-items:center;gap:3px }
+.fr-chg  { flex-shrink:0;border:none;background:var(--sand-dark);color:var(--text-mid);border-radius:7px;padding:5px 10px;font-size:.7rem;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;display:flex;align-items:center;gap:4px }
+.fr-chg:hover { background:var(--sand2);color:var(--text) }
+
+/* ═══ VISU BILAN ═══ */
+.visu-bilan {
+  background:linear-gradient(135deg,#0f3d1f 0%,var(--green-deep) 50%,var(--green-mid) 100%);
+  border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:16px;
+  box-shadow:0 4px 20px rgba(20,83,45,.2);
+}
+.vb-row { display:flex;justify-content:space-between;align-items:center;margin-bottom:8px }
+.vb-lbl { font-size:.72rem;color:rgba(255,255,255,.65) }
+.vb-val { font-size:.88rem;font-weight:700;color:#fff }
+.vb-sep { height:1px;background:rgba(255,255,255,.15);margin:10px 0 }
+.vb-pg  { margin-top:10px }
+.vb-pg-lbl { display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,.6);margin-bottom:5px }
+.vb-pg-bg  { height:6px;border-radius:3px;background:rgba(255,255,255,.2) }
+.vb-pg-f   { height:100%;border-radius:3px;background:linear-gradient(90deg,#A5D6A7,#69F0AE);transition:width .8s ease }
+.visu-tabs {
+  display:flex;gap:4px;overflow-x:auto;margin-bottom:14px;
+  border-bottom:1.5px solid var(--sand-dark);padding-bottom:0;
+}
+.vtab {
+  display:flex;align-items:center;gap:6px;padding:9px 14px;
+  border:none;background:transparent;font-size:.76rem;font-weight:600;
+  color:var(--text-light);cursor:pointer;transition:.15s;
+  border-radius:var(--radius-xs) var(--radius-xs) 0 0;white-space:nowrap;
+  font-family:inherit;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;
+}
+.vtab:hover  { color:var(--green-mid);background:var(--green-ghost) }
+.vtab.active { color:var(--green-mid);border-bottom-color:var(--green-mid);background:var(--green-ghost) }
+.vtab-cnt { background:var(--green-mid);color:#fff;font-size:.58rem;padding:1px 6px;border-radius:10px;font-weight:700 }
+.vpanel        { display:none }
+.vpanel.active { display:block }
+.irow  { display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--sand-dark) }
+.irow:last-child { border-bottom:none }
+.ilbl  { font-size:.7rem;font-weight:600;color:var(--text-light);min-width:120px;flex-shrink:0;padding-top:1px }
+.ival  { font-size:.8rem;color:var(--text) }
+.pair  { display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--sand-dark) }
+.pair:last-child { border-bottom:none }
+.pai-ico { width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0 }
+.pai-info { flex:1;min-width:0 }
+.pai-mt  { font-size:.85rem;font-weight:700;color:var(--text) }
+.pai-sub { font-size:.68rem;color:var(--text-light);margin-top:2px }
+.pmode   { padding:1px 7px;border-radius:8px;font-size:.6rem;font-weight:600 }
+.pgal      { display:grid;grid-template-columns:repeat(3,1fr);gap:8px }
+.pgal-item { position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;background:var(--sand) }
+.pgal-item img { width:100%;height:100%;object-fit:cover;transition:.2s }
+.pgal-item:hover img { transform:scale(1.05) }
+.frow2   { display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--sand-dark) }
+.frow2:last-child { border-bottom:none }
+.f-ico   { width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0 }
+.f-name  { font-size:.8rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis }
+.f-sub   { font-size:.65rem;color:var(--text-light);margin-top:2px }
+.vid-item  { display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--sand-dark);align-items:center }
+.vid-item:last-child { border-bottom:none }
+.vid-thumb { position:relative;width:90px;flex-shrink:0;border-radius:8px;overflow:hidden;aspect-ratio:16/9;background:var(--sand) }
+.vid-thumb img { width:100%;height:100%;object-fit:cover }
+.vid-play  { position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3) }
+.vid-playbtn { color:#fff;font-size:1.4rem;text-decoration:none;transition:.15s }
+.vid-playbtn:hover { transform:scale(1.15) }
+.vid-info  { flex:1;min-width:0;display:flex;justify-content:space-between;align-items:center }
+.vid-title { font-size:.8rem;font-weight:600;color:var(--text);line-height:1.3 }
+.del-prev { text-align:center;padding:24px 0 }
+.del-prev .di { font-size:2.5rem;margin-bottom:12px }
+.del-prev p { font-size:.88rem;color:var(--text);line-height:1.6 }
+.spill { display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600 }
+.lb {
+  position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:2000;
+  display:none;align-items:center;justify-content:center;cursor:zoom-out;
+}
+.lb.open { display:flex }
+.lb img  { max-width:90vw;max-height:90vh;border-radius:8px;object-fit:contain }
+.lb-cls  {
+  position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);
+  border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;
+  font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.lb-cls:hover { background:rgba(255,255,255,.3) }
+.flashes { padding:8px 32px 0 }
+.fmsg    {
+  display:flex;align-items:center;gap:10px;padding:11px 16px;
+  border-radius:var(--radius-xs);font-size:.82rem;font-weight:500;margin-bottom:8px;
+}
+.fmsg.success { background:rgba(46,125,50,.1);color:var(--green-mid);border:1px solid rgba(46,125,50,.2) }
+.fmsg.error   { background:var(--red-light);color:var(--red);border:1px solid rgba(211,47,47,.2) }
+.statut-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sp-lbl{position:relative;cursor:pointer}
+.sp-pill{
+  display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:9px;
+  font-size:.71rem;font-weight:700;border:1.5px solid var(--brd);
+  background:var(--sa,#FBF7F0);color:var(--txt3);transition:.18s;
+  white-space:nowrap;overflow:hidden;user-select:none;
+}
+.sp-pill:hover{border-color:rgba(46,125,50,.3);color:var(--txt2,#4A6B4A);background:rgba(46,125,50,.05)}
+.sp-pill.active{font-weight:800}
+.sp-pill i{font-size:.8rem;flex-shrink:0}
+.sp-text{overflow:hidden;text-overflow:ellipsis}
+
+@media(max-width:992px){
+  .ph-main{padding:20px 24px 16px}.stats-strip{padding:12px 24px 16px}
+  .crud-toolbar{padding:10px 20px}.proj-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));padding:14px 20px}
+  .assoc-header{padding:12px 16px}
+}
+@media(max-width:768px){
+  .ph-main{padding:16px 16px 12px;flex-direction:column;align-items:flex-start;gap:12px}.ph-left{width:100%}
+  .ph-title{font-size:1.15rem}.btn-hero{width:100%;justify-content:center}
+  .stats-strip{padding:10px 16px 14px;gap:6px}.stat-chip{padding:7px 10px;flex:1;min-width:calc(50% - 6px)}
+  .sc-v{font-size:.9rem}.crud-toolbar{padding:10px 14px;gap:8px}.fsel{flex:1;min-width:0}
+  .proj-grid{grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px}
+  .assoc-header{padding:10px 14px;flex-direction:column;align-items:flex-start}
+  .md-lg,.md-xl{max-width:100%;margin:0;border-radius:16px 16px 0 0}.mo{align-items:flex-end;padding:0}
+  .frow.c2,.frow.c3{grid-template-columns:1fr}.pgal{grid-template-columns:repeat(2,1fr)}.ilbl{min-width:90px}
+}
+@media(max-width:480px){
+  .ph-main{padding:14px 12px 10px}.stats-strip{padding:8px 12px 12px}
+  .stat-chip{min-width:calc(50% - 4px);padding:6px 8px}.crud-toolbar{padding:8px 12px}
+  .proj-grid{grid-template-columns:1fr;padding:10px 12px;gap:8px}.pc-cover{height:140px}
+  .pgal{grid-template-columns:1fr}.mb{padding:16px}.mh{padding:14px 16px 12px}.mf{padding:10px 16px}.assoc-header{padding:8px 12px}
+}
+
+/* ═══ VISU 3 COLONNES ═══ */
+.visu-grid {
+  display:grid;
+  grid-template-columns:220px 1fr 220px;
+  gap:14px;
+  min-height:0;
+}
+.visu-col { display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0 }
+.visu-col-mid { display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0 }
+
+/* Section titre colonne */
+.vc-sec {
+  font-size:.6rem;font-weight:800;color:var(--text-light);
+  text-transform:uppercase;letter-spacing:.1em;
+  padding-bottom:6px;border-bottom:1.5px solid var(--sand-dark);
+  margin-bottom:4px;display:flex;align-items:center;gap:6px;
+}
+.vc-sec i { font-size:.75rem;color:var(--green-mid) }
+
+/* Card colonne */
+.vc-card {
+  background:var(--sand);border:1px solid var(--sand-dark);
+  border-radius:var(--radius-sm);padding:12px 14px;
+}
+
+/* Média tabs dans colonne du milieu */
+.vmtabs {
+  display:flex;gap:3px;background:var(--sand);
+  border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);
+  padding:3px;flex-shrink:0;
+}
+.vmtab {
+  flex:1;padding:7px 6px;border:none;background:none;
+  font-size:.68rem;font-weight:700;color:var(--text-light);
+  cursor:pointer;border-radius:var(--rxs);transition:.15s;
+  font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.vmtab:hover { background:var(--green-ghost);color:var(--green-mid) }
+.vmtab.active { background:var(--green-mid);color:#fff;box-shadow:0 2px 8px rgba(46,125,50,.25) }
+.vmtab .cnt { font-size:.55rem;font-weight:800;padding:1px 5px;border-radius:8px;
+  background:rgba(255,255,255,.25);min-width:16px;text-align:center }
+.vmtab:not(.active) .cnt { background:var(--sand-dark);color:var(--text-light) }
+.vmpanel { display:none }
+.vmpanel.active { display:block }
+
+/* Photo galerie 3 colonnes dans milieu */
+.pgal3 { display:grid;grid-template-columns:repeat(3,1fr);gap:6px }
+.pgal3-item {
+  aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;
+  background:var(--sand);position:relative;
+}
+.pgal3-item img { width:100%;height:100%;object-fit:cover;transition:.2s }
+.pgal3-item:hover img { transform:scale(1.05) }
+
+/* Plaque drapeaux en bas */
+.visu-plaque {
+  margin-top:14px;
+  background:linear-gradient(135deg,#f8f5f0,#fff);
+  border:1.5px solid var(--sand-dark);border-radius:var(--radius-sm);
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  flex-wrap:wrap;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+}
+.vp-flags { display:flex;align-items:center;gap:10px }
+.vp-flag {
+  width:44px;height:30px;border-radius:5px;overflow:hidden;
+  border:1px solid rgba(0,0,0,.1);
+  box-shadow:0 1px 4px rgba(0,0,0,.12);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+}
+.vp-logos { display:flex;align-items:center;gap:8px }
+.vp-logo {
+  height:32px;width:auto;border-radius:4px;
+  border:1px solid var(--sand-dark);padding:2px;
+  background:#fff;object-fit:contain;
+}
+.vp-info {
+  display:flex;flex-direction:column;gap:3px;text-align:center;flex:1;
+}
+.vp-num {
+  font-size:.75rem;font-weight:800;color:var(--green-dark);
+  font-family:'Courier New',monospace;letter-spacing:.05em;
+}
+.vp-titre {
+  font-size:.82rem;font-weight:900;color:var(--text);
+  letter-spacing:-.01em;
+}
+.vp-lieu {
+  font-size:.65rem;color:var(--text-light);
+}
+.vp-assoc {
+  font-size:.62rem;color:var(--text-mid);font-weight:600;
+  border-top:1px solid var(--sand-dark);padding-top:4px;margin-top:2px;
+}
+
+@media(max-width:900px) {
+  .visu-grid { grid-template-columns:1fr 1fr }
+}
+@media(max-width:600px) {
+  .visu-grid { grid-template-columns:1fr }
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+{% for label, messages in app.flashes %}
+  {% for msg in messages %}
+  <div class="flashes">
+    <div class="fmsg {{ label }}">
+      <i class="bi bi-{{ label == 'success' ? 'check-circle' : 'exclamation-circle' }}"></i>{{ msg }}
+    </div>
+  </div>
+  {% endfor %}
+{% endfor %}
+
+{# ═══ Calcul dernière année ═══ #}
+{% set annees = [] %}
+{% for assoc in associations %}
+  {% if assocActive is null or assocActive.id == assoc.id %}
+    {% for p in projetsParAssociation[assoc.id] ?? [] %}
+      {% if p.annee and p.annee not in annees %}
+        {% set annees = annees|merge([p.annee]) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% set lastAnnee = annees|sort|last %}
+
+{# ═══ PAGE HEADER ═══ #}
+<div class="page-header">
+  <div class="ph-grid-deco"></div>
+  <div class="ph-main">
+    <div class="ph-left">
+      <div class="ph-logo">
+        {% if assocActive and assocActive.hasLogo %}
+          <img src="{{ asset(assocActive.logoPath) }}" alt="{{ assocActive.nom }}">
+        {% else %}
+          <i class="bi bi-folder2-open"></i>
+        {% endif %}
+      </div>
+      <div class="ph-text">
+        <div class="ph-breadcrumb">
+          <a href="{{ path('app_dashboard') }}">ADB-MR</a>
+          <i class="bi bi-chevron-right"></i>
+          {% if assocActive %}
+            <a href="{{ path('app_projets') }}">{{ 'proj.breadcrumb'|trans }}</a>
+            <i class="bi bi-chevron-right"></i>
+            <span>{{ assocActive.sigle ?? assocActive.nom }}</span>
+          {% else %}
+            <span>{{ 'proj.breadcrumb'|trans }}</span>
+          {% endif %}
+        </div>
+        <h1 class="ph-title">
+          {% if assocActive %}
+            {% if app.request.locale == 'ar' and assocActive.nomAr %}{{ assocActive.nomAr }}
+            {% else %}{{ assocActive.nom }}{% endif %}
+          {% else %}{{ 'proj.page_title'|trans }}{% endif %}
+        </h1>
+        {% if assocActive and assocActive.nomAr and app.request.locale != 'ar' %}
+          <div class="ph-title-ar">{{ assocActive.nomAr }}</div>
+        {% endif %}
+        <div class="ph-sub">
+          {% if assocActive %}
+            {% if assocActive.sigle %}<strong>{{ assocActive.sigle }}</strong><span class="ph-sub-dot">·</span>{% endif %}
+            {% if assocActive.ville %}<span>{{ assocActive.ville }}</span><span class="ph-sub-dot">·</span>{% endif %}
+            <span>{{ (projetsParAssociation[assocActive.id] ?? [])|length }} {{ 'proj.stat_total'|trans }}</span>
+          {% else %}
+            <span>{{ associations|length }} {{ 'proj.stat_assoc'|trans }}</span>
+            <span class="ph-sub-dot">·</span>
+            <span>{{ totalProjets }} {{ 'proj.stat_total'|trans }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <button class="btn-hero primary" onclick="openMo('moCreate')">
+      <i class="bi bi-plus-lg"></i>{{ 'proj.btn_new'|trans }}
+    </button>
+  </div>
+
+  <div class="stats-strip">
+    {% if assocActive %}
+      {% set projs_a = projetsParAssociation[assocActive.id] ?? [] %}
+      {% set budg_a = 0 %}{% for p in projs_a %}{% set budg_a = budg_a + p.coutTotal %}{% endfor %}
+      {% set paye_a = 0 %}{% for p in projs_a %}{% set paye_a = paye_a + p.montantTotalPaye %}{% endfor %}
+      <div class="stat-chip"><div class="sc-ico">📋</div><div><div class="sc-v">{{ projs_a|length }}</div><div class="sc-l">{{ 'proj.stat_total'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">⚙️</div><div><div class="sc-v">{{ enCours }}</div><div class="sc-l">{{ 'proj.stat_in_progress'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">✅</div><div><div class="sc-v">{{ termines }}</div><div class="sc-l">{{ 'proj.stat_done'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">💰</div><div><div class="sc-v">{{ (budg_a/1000000)|number_format(1) }}M</div><div class="sc-l">{{ 'proj.stat_budget'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">💳</div><div><div class="sc-v">{{ (paye_a/1000000)|number_format(1) }}M</div><div class="sc-l">{{ 'proj.bilan_paid'|trans }}</div></div></div>
+      {% if budg_a > 0 %}
+        {% set taux_global = (paye_a / budg_a * 100)|round(0) %}
+        <div class="stat-chip"><div class="sc-ico">📊</div><div>
+          <div class="sc-v" style="color:{{ taux_global >= 100 ? '#81C784' : (taux_global >= 50 ? '#FFD54F' : '#EF9A9A') }}">{{ taux_global }}%</div>
+          <div class="sc-l">{{ 'proj.bilan_rate'|trans }}</div>
+        </div></div>
+      {% endif %}
+    {% else %}
+      <div class="stat-chip"><div class="sc-ico">🏢</div><div><div class="sc-v">{{ associations|length }}</div><div class="sc-l">{{ 'proj.stat_assoc'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">📋</div><div><div class="sc-v">{{ totalProjets }}</div><div class="sc-l">{{ 'proj.stat_total'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">⚙️</div><div><div class="sc-v">{{ enCours }}</div><div class="sc-l">{{ 'proj.stat_in_progress'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">✅</div><div><div class="sc-v">{{ termines }}</div><div class="sc-l">{{ 'proj.stat_done'|trans }}</div></div></div>
+      <div class="stat-chip"><div class="sc-ico">💰</div><div><div class="sc-v">{{ (totalBudget/1000000)|number_format(1) }}M</div><div class="sc-l">{{ 'proj.stat_budget'|trans }}</div></div></div>
+    {% endif %}
+  </div>
+</div>
+
+{# ═══ TOOLBAR ═══ #}
+<div class="crud-toolbar">
+  <div class="search-box">
+    <i class="bi bi-search"></i>
+    <input id="q" type="text" placeholder="{{ 'proj.search_ph'|trans }}" oninput="filter()">
+  </div>
+
+  <select class="fsel" id="fStatut" onchange="filter()">
+    <option value="">{{ 'proj.filter_statut'|trans }}</option>
+    {% for k,v in constant('App\\Entity\\Projet::STATUTS') %}
+    <option value="{{ k }}">{% if app.request.locale == 'ar' %}{{ v.label_ar }}{% else %}{{ v.label_fr }}{% endif %}</option>
+    {% endfor %}
+  </select>
+
+  {% set types_used = [] %}
+  {% for assoc in associations %}
+    {% if assocActive is null or assocActive.id == assoc.id %}
+      {% for p in projetsParAssociation[assoc.id] ?? [] %}
+        {% if p.type and p.type not in types_used %}
+          {% set types_used = types_used|merge([p.type]) %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+  {% set all_types = constant('App\\Entity\\Projet::TYPES') %}
+  <select class="fsel" id="fType" onchange="filter()">
+    <option value="">{{ 'proj.filter_type'|trans }}</option>
+    {% for k in types_used|sort %}
+    <option value="{{ k }}">{{ all_types[k].label_ar ?? all_types[k].label_fr ?? k }}</option>
+    {% endfor %}
+  </select>
+
+  <select class="fsel" id="fAssoc" onchange="filterOrNav(this.value)">
+    <option value="">{{ 'proj.filter_assoc'|trans }}</option>
+    {% for a in associations %}
+      <option value="{{ a.id }}" {{ assocActive is not null and assocActive.id == a.id ? 'selected' }}>{{ a.nom }}</option>
+    {% endfor %}
+  </select>
+
+  {# ── Année — pré-sélectionner la dernière ── #}
+  <select class="fsel" id="fAnnee" onchange="filter()">
+    <option value="">{{ 'proj.filter_annee'|trans }}</option>
+    {% for y in annees|sort|reverse %}
+    <option value="{{ y }}" {{ y == lastAnnee ? 'selected' }}>{{ y }}</option>
+    {% endfor %}
+  </select>
+
+  <span class="tb-cnt" id="cnt">— {{ 'proj.filter_results'|trans }}</span>
+  <div class="vtg">
+    <button class="vb active" id="bGrid" onclick="setView('grid')" title="Grille"><i class="bi bi-grid-3x3-gap"></i></button>
+    <button class="vb"        id="bList" onclick="setView('list')"  title="Liste"><i class="bi bi-list-ul"></i></button>
+  </div>
+</div>
+
+{# ═══ CONTENU ═══ #}
+<div class="proj-content">
+  <div class="empty-grid" id="eg"><i class="bi bi-search"></i><p>{{ 'proj.no_results'|trans }}</p></div>
+
+  {% for assoc in associations %}
+  {% if assocActive is null or assocActive.id == assoc.id %}
+  {% set projs = projetsParAssociation[assoc.id] ?? [] %}
+  <div class="assoc-group ag" id="ag{{ assoc.id }}" data-aid="{{ assoc.id }}" data-anom="{{ assoc.nom|lower }}">
+    <div class="assoc-header">
+      <div class="assoc-left">
+        <div class="assoc-logo">
+          {% if assoc.hasLogo %}<img src="{{ asset(assoc.logoPath) }}" alt="">{% else %}🏢{% endif %}
+        </div>
+        <div>
+          <div class="assoc-name">{{ assoc.nom }}</div>
+          <div class="assoc-meta">
+            {% if assoc.sigle %}<strong style="color:var(--gm)">{{ assoc.sigle }}</strong> ·{% endif %}
+            {% if assoc.ville %}<i class="bi bi-geo-alt" style="font-size:.6rem"></i>{{ assoc.ville }}{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="assoc-right">
+        <span class="a-badge" style="background:rgba(46,125,50,.1);color:var(--gm)">
+          <i class="bi bi-folder2"></i>{{ projs|length }} {{ 'proj.stat_total'|trans }}
+        </span>
+        {% set ba = 0 %}{% for p in projs %}{% set ba = ba + p.coutTotal %}{% endfor %}
+        {% if ba > 0 %}
+        <span class="a-badge" style="background:var(--go2);color:var(--go)">
+          <i class="bi bi-cash-stack"></i>{{ (ba/1000)|number_format(0) }}K MRU
+        </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="proj-grid" id="pgrid{{ assoc.id }}">
+      {% if projs is empty %}
+      <div class="no-proj" style="grid-column:1/-1"><i class="bi bi-folder2-open"></i>{{ 'proj.no_projects'|trans }}</div>
+      {% else %}
+      {% for p in projs %}
+      {% set taux = p.coutTotal > 0 ? (p.montantTotalPaye / p.coutTotal * 100)|round(1) : 0 %}
+      {% set tauxColor = taux >= 100 ? 'var(--gm)' : (taux >= 50 ? 'var(--go)' : 'var(--rd)') %}
+      {% set tauxBg = taux >= 100 ? 'rgba(46,125,50,.12)' : (taux >= 50 ? 'rgba(212,160,23,.12)' : 'rgba(211,47,47,.1)') %}
+      <div class="proj-card" id="c{{ p.id }}"
+           data-nom="{{ p.nom|lower }}" data-num="{{ p.numero|lower }}"
+           data-statut="{{ p.statut }}" data-type="{{ p.type }}"
+           data-aid="{{ assoc.id }}" data-lieu="{{ p.lieu|lower }}" data-don="{{ p.donateur|lower }}"
+           data-annee="{{ p.annee }}">
+        <div class="pc-cover" style="background:linear-gradient(135deg,{{ p.typeCouleur }}dd 0%,{{ p.typeCouleur }}88 100%)">
+          {% if p.coverPhoto %}<img src="{{ asset(p.coverPhoto.path) }}" alt="" loading="lazy">{% endif %}
+          <div class="pc-cover-ov"></div>
+          <div class="pc-cover-top">
+            <div class="pc-type-badge">
+              <div class="pc-type-ico"><i class="bi {{ p.typeIcone }}"></i></div>
+              <span class="pc-type-lbl">{% if app.request.locale == 'ar' %}{{ p.typeLabelAr ?? p.typeLabel }}{% else %}{{ p.typeLabel }}{% endif %}</span>
+            </div>
+            <span class="pc-statut" style="background:{{ p.statutCouleur }}35;border-color:{{ p.statutCouleur }}55">
+              <i class="bi {{ p.statutIcone }}"></i>{% if app.request.locale == 'ar' %}{{ p.statutLabelAr }}{% else %}{{ p.statutLabel }}{% endif %}
+            </span>
+          </div>
+          <div class="pc-cover-bottom">
+            <span class="pc-num">{{ p.numero }}</span>
+            <a href="{{ path('app_projet_show', {id: p.id}) }}" class="pc-report-btn" onclick="event.stopPropagation()">
+              <i class="bi bi-box-arrow-up-right"></i>{{ 'proj.action_report'|trans }}
+            </a>
+          </div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-nom">{{ p.nom }}</div>
+          <div class="pc-infos">
+            <div class="pc-info"><i class="bi bi-geo-alt" style="color:var(--gm)"></i><span>{{ p.lieu }}{% if p.pays and p.pays != 'Mauritanie' %}, {{ p.pays }}{% endif %}</span></div>
+            <div class="pc-info"><i class="bi bi-person" style="color:var(--bl)"></i><span>{{ p.donateur }}</span></div>
+            <div class="pc-info"><i class="bi bi-calendar3" style="color:var(--go)"></i><span>{{ p.annee }}{% if p.duree %} · {{ p.duree }}{% endif %}</span></div>
+          </div>
+          <div class="pc-fin">
+            <div class="pc-fin-top">
+              <div>
+                <div class="pc-budget-lbl">{{ 'proj.bilan_budget'|trans }}</div>
+                <div class="pc-budget-val">
+                  <span>{{ p.coutTotal|number_format(0, '.', ' ')|replace({' ': '&nbsp;'})|raw }}</span>
+                  <span class="pc-budget-mru">MRU</span>
+                </div>
+              </div>
+              <span class="pc-taux-badge" style="background:{{ tauxBg }};color:{{ tauxColor }}">{{ taux }}%</span>
+            </div>
+            <div class="pc-bar-bg"><div class="pc-bar-f" style="width:0;--pw:{{ taux }}%"></div></div>
+            <div class="pc-paid-row">
+              <span class="pc-paid-lbl">{{ 'proj.bilan_paid'|trans }}</span>
+              <span class="pc-paid-val">{{ p.montantTotalPaye|number_format(0, '.', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;MRU</span>
+            </div>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div class="pc-media-row">
+            <div class="pc-media-chips">
+              <span class="pc-chip {% if p.paiements|length > 0 %}has{% endif %}" style="{% if p.paiements|length > 0 %}background:rgba(212,160,23,.1);color:var(--go);border-color:rgba(212,160,23,.2){% endif %}"><i class="bi bi-cash"></i>{{ p.paiements|length }}</span>
+              <span class="pc-chip {% if p.photos|length > 0 %}has{% endif %}" style="{% if p.photos|length > 0 %}background:rgba(123,31,162,.08);color:#7B1FA2;border-color:rgba(123,31,162,.15){% endif %}"><i class="bi bi-images"></i>{{ p.photos|length }}</span>
+              <span class="pc-chip {% if p.fichiers|length > 0 %}has{% endif %}" style="{% if p.fichiers|length > 0 %}background:rgba(211,47,47,.07);color:var(--rd);border-color:rgba(211,47,47,.15){% endif %}"><i class="bi bi-file-earmark-pdf"></i>{{ p.fichiers|length }}</span>
+              <span class="pc-chip {% if p.videos|length > 0 %}has{% endif %}" style="{% if p.videos|length > 0 %}background:rgba(2,136,209,.07);color:var(--bl);border-color:rgba(2,136,209,.15){% endif %}"><i class="bi bi-play-circle"></i>{{ p.videos|length }}</span>
+            </div>
+            <span class="pc-prog-lbl">{{ p.progression }}%</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pca pca-view" onclick="ouvrirVisu({{ p.id }})" title="{{ 'proj.action_view'|trans }}"><i class="bi bi-eye"></i><span>{{ 'proj.action_view'|trans }}</span></button>
+            <button class="pca pca-add" onclick="ouvrirAddDirect({{ p.id }},'photo')" title="{{ 'proj.pho_add_title'|trans }}"><i class="bi bi-camera"></i><span>Photo</span></button>
+            <button class="pca pca-add pca-sep-before" onclick="ouvrirAddDirect({{ p.id }},'fichier')" title="{{ 'proj.fi_add_title'|trans }}"><i class="bi bi-file-earmark-arrow-up"></i><span>PDF</span></button>
+            <button class="pca pca-edit pca-sep-before" onclick="ouvrirEdit({{ p.id }})" title="{{ 'proj.action_edit'|trans }}"><i class="bi bi-pencil"></i><span>{{ 'proj.action_edit'|trans }}</span></button>
+            <button class="pca pca-del" onclick="ouvrirDelete({{ p.id }},'{{ p.nom|e('js') }}')" title="{{ 'proj.action_delete'|trans }}"><i class="bi bi-trash3"></i><span>{{ 'proj.action_delete'|trans }}</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-row" id="r{{ p.id }}" style="display:none"
+           data-nom="{{ p.nom|lower }}" data-num="{{ p.numero|lower }}"
+           data-statut="{{ p.statut }}" data-type="{{ p.type }}"
+           data-aid="{{ assoc.id }}" data-lieu="{{ p.lieu|lower }}" data-don="{{ p.donateur|lower }}"
+           data-annee="{{ p.annee }}">
+        <div class="pr-type-ico" style="background:{{ p.typeCouleur }}18"><i class="bi {{ p.typeIcone }}" style="color:{{ p.typeCouleur }}"></i></div>
+        <div class="pr-main">
+          <div class="pr-nom">{{ p.nom }}</div>
+          <div class="pr-sub">
+            <span><i class="bi bi-hash" style="font-size:.6rem"></i>{{ p.numero }}</span>
+            <span><i class="bi bi-geo-alt" style="font-size:.6rem"></i>{{ p.lieu }}</span>
+            <span><i class="bi bi-person" style="font-size:.6rem"></i>{{ p.donateur }}</span>
+            <span>{{ p.annee }}</span>
+          </div>
+        </div>
+        <div class="pr-fin">
+          <div class="pr-fin-top"><span>{{ p.coutTotal|number_format(0, ',', ' ') }} MRU</span><span>{{ taux }}%</span></div>
+          <div class="pr-fin-bg"><div class="pr-fin-f" style="width:0;--pw:{{ taux }}%"></div></div>
+        </div>
+        <span class="spill" style="background:{{ p.statutCouleur }}18;color:{{ p.statutCouleur }}">
+          <i class="bi {{ p.statutIcone }}"></i>{% if app.request.locale == 'ar' %}{{ p.statutLabelAr }}{% else %}{{ p.statutLabel }}{% endif %}
+        </span>
+        <div class="pr-actions">
+          <button class="pac" onclick="ouvrirVisu({{ p.id }})"><i class="bi bi-eye"></i></button>
+          <button class="pac" onclick="ouvrirAddDirect({{ p.id }},'photo')"><i class="bi bi-camera"></i></button>
+          <button class="pac" onclick="ouvrirAddDirect({{ p.id }},'fichier')"><i class="bi bi-file-earmark-arrow-up"></i></button>
+          <button class="pac" onclick="ouvrirAddDirect({{ p.id }},'video')"><i class="bi bi-youtube"></i></button>
+          <a href="{{ path('app_projet_show', {id: p.id}) }}" class="pac"><i class="bi bi-file-earmark-text"></i></a>
+          <button class="pac" onclick="ouvrirEdit({{ p.id }})"><i class="bi bi-pencil"></i></button>
+          <button class="pac rd" onclick="ouvrirDelete({{ p.id }},'{{ p.nom|e('js') }}')"><i class="bi bi-trash3"></i></button>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <div class="proj-list" id="plist{{ assoc.id }}"></div>
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
+{# ═══ DONNÉES JS ═══ #}
+<script>
+const PROJETS = {
+{% for assoc in associations %}
+{% if assocActive is null or assocActive.id == assoc.id %}
+  {% for p in projetsParAssociation[assoc.id] ?? [] %}
+  {{ p.id }}: {
+    id: {{ p.id }},
+    nom: {{ p.nom|json_encode|raw }},
+    numero: {{ p.numero|json_encode|raw }},
+    type: {{ p.type|json_encode|raw }},
+    typeLabel: {{ p.typeLabel|json_encode|raw }},
+    typeIcone: {{ p.typeIcone|json_encode|raw }},
+    typeCouleur: {{ p.typeCouleur|json_encode|raw }},
+    statut: {{ p.statut|json_encode|raw }},
+    statutLabel: {{ (app.request.locale == 'ar' ? p.statutLabelAr : p.statutLabel)|json_encode|raw }},
+    statutIcone: {{ p.statutIcone|json_encode|raw }},
+    statutCouleur: {{ p.statutCouleur|json_encode|raw }},
+    lieu: {{ p.lieu|json_encode|raw }},
+    pays: {{ p.pays|json_encode|raw }},
+    donateur: {{ p.donateur|json_encode|raw }},
+    coutTotal: {{ p.coutTotal }},
+    montantPaye: {{ p.montantTotalPaye }},
+    montantRestant: {{ p.montantRestant }},
+    tauxPaiement: {{ p.tauxPaiement }},
+    progression: {{ p.progression }},
+    annee: {{ p.annee }},
+    duree: {{ p.duree|json_encode|raw }},
+    description: {{ (p.description ?? '')|json_encode|raw }},
+    assocNom: {{ assoc.nom|json_encode|raw }},
+    assocId: {{ assoc.id }},
+    dateContrat: {{ p.dateContrat ? p.dateContrat|date('d/m/Y')|json_encode|raw : 'null' }},
+    dateFin: {{ p.dateFin ? p.dateFin|date('d/m/Y')|json_encode|raw : 'null' }},
+    paiements: [{% for pai in p.paiements %}{id:{{ pai.id }},montant:{{ pai.montant }},modeLabel:{{ pai.getModeLabel(app.request.locale)|json_encode|raw }},modeIcone:{{ pai.modeIcone|json_encode|raw }},modeCouleur:{{ pai.modeCouleur|json_encode|raw }},date:{{ pai.datePaiement|date('d/m/Y')|json_encode|raw }},reference:{{ (pai.reference ?? '')|json_encode|raw }},justif:{{ pai.hasJustificatif ? asset(pai.justificatifPath)|json_encode|raw : 'null' }},csrfDel:{{ csrf_token('delete_paiement_'~pai.id)|json_encode|raw }}}{% if not loop.last %},{% endif %}{% endfor %}],
+    photos: [{% for ph in p.photos %}{id:{{ ph.id }},path:{{ asset(ph.path)|json_encode|raw }},legende:{{ (ph.legende ?? ph.originalName)|json_encode|raw }},csrfDel:{{ csrf_token('delete_photo_'~ph.id)|json_encode|raw }}}{% if not loop.last %},{% endif %}{% endfor %}],
+    fichiers: [{% for fi in p.fichiers %}{id:{{ fi.id }},nom:{{ fi.originalName|json_encode|raw }},cat:{{ (app.request.locale == 'ar' ? fi.categorieLabelAr : fi.categorieLabel)|json_encode|raw }},catCouleur:{{ fi.categorieCouleur|json_encode|raw }},catIcone:{{ fi.categorieIcone|json_encode|raw }},path:{{ asset(fi.path)|json_encode|raw }},taille:{{ (fi.tailleFormatee ?? '')|json_encode|raw }},csrfDel:{{ csrf_token('delete_fichier_'~fi.id)|json_encode|raw }}}{% if not loop.last %},{% endif %}{% endfor %}],
+    videos: [{% for vi in p.videos %}{id:{{ vi.id }},titre:{{ (vi.titre ?? '')|json_encode|raw }},url:{{ vi.url|json_encode|raw }},thumb:{{ (vi.thumbnailUrl ?? '')|json_encode|raw }},csrfDel:{{ csrf_token('delete_video_'~vi.id)|json_encode|raw }}}{% if not loop.last %},{% endif %}{% endfor %}],
+    csrfEdit:{{ csrf_token('projet_edit_'~p.id)|json_encode|raw }},
+    csrfDel:{{ csrf_token('delete_projet_'~p.id)|json_encode|raw }},
+    csrfPaiement:{{ csrf_token('paiement_form_'~p.id)|json_encode|raw }},
+    csrfPhoto:{{ csrf_token('photo_form_'~p.id)|json_encode|raw }},
+    csrfFichier:{{ csrf_token('fichier_form_'~p.id)|json_encode|raw }},
+    csrfVideo:{{ csrf_token('video_form_'~p.id)|json_encode|raw }},
+    urlEdit:{{ path('app_projet_edit',{id:p.id})|json_encode|raw }},
+    urlDel:{{ path('app_projet_delete',{id:p.id})|json_encode|raw }},
+    urlPaiementCreate:{{ path('app_projet_paiement_create',{id:p.id})|json_encode|raw }},
+    urlPhotoCreate:{{ path('app_projet_photo_create',{id:p.id})|json_encode|raw }},
+    urlFichierCreate:{{ path('app_projet_fichier_create',{id:p.id})|json_encode|raw }},
+    urlVideoCreate:{{ path('app_projet_video_create',{id:p.id})|json_encode|raw }}
+  },
+  {% endfor %}
+{% endif %}
+{% endfor %}
+};
+const ROUTES_PAIEMENT_DEL = '{{ path('app_projet_paiement_delete',{id:0})|replace({'0':'__ID__'}) }}';
+const ROUTES_PHOTO_DEL    = '{{ path('app_projet_photo_delete',{id:0})|replace({'0':'__ID__'}) }}';
+const ROUTES_FICHIER_DEL  = '{{ path('app_projet_fichier_delete',{id:0})|replace({'0':'__ID__'}) }}';
+const ROUTES_VIDEO_DEL    = '{{ path('app_projet_video_delete',{id:0})|replace({'0':'__ID__'}) }}';
+const T = {
+  info_number:{{ 'proj.info_number'|trans|json_encode|raw }},info_assoc:{{ 'proj.info_assoc'|trans|json_encode|raw }},
+  info_type:{{ 'proj.info_type'|trans|json_encode|raw }},info_statut:{{ 'proj.info_statut'|trans|json_encode|raw }},
+  info_location:{{ 'proj.info_location'|trans|json_encode|raw }},info_donor:{{ 'proj.info_donor'|trans|json_encode|raw }},
+  info_duration:{{ 'proj.info_duration'|trans|json_encode|raw }},info_contract:{{ 'proj.info_contract'|trans|json_encode|raw }},
+  info_end_date:{{ 'proj.info_end_date'|trans|json_encode|raw }},info_progression:{{ 'proj.info_progression'|trans|json_encode|raw }},
+  info_description:{{ 'proj.info_description'|trans|json_encode|raw }},pai_none:{{ 'proj.pai_none'|trans|json_encode|raw }},
+  pai_del:{{ 'proj.pai_delete_confirm'|trans|json_encode|raw }},pho_none:{{ 'proj.pho_none'|trans|json_encode|raw }},
+  pho_del:{{ 'proj.pho_delete_confirm'|trans|json_encode|raw }},pho_cover:{{ 'proj.pho_cover'|trans|json_encode|raw }},
+  fi_none:{{ 'proj.fi_none'|trans|json_encode|raw }},fi_del:{{ 'proj.fi_delete_confirm'|trans|json_encode|raw }},
+  vi_none:{{ 'proj.vi_none'|trans|json_encode|raw }},vi_del:{{ 'proj.vi_delete_confirm'|trans|json_encode|raw }},
+  bilan_rate:{{ 'proj.bilan_rate'|trans|json_encode|raw }},delete_msg:{{ 'proj.delete_msg'|trans|json_encode|raw }},
+};
+const ASSOC_ACTIVE_ID = {{ assocActive ? assocActive.id : 'null' }};
+const DEFAULT_ANNEE   = {{ lastAnnee ? lastAnnee : 'null' }};
+</script>
+{% endblock %}
+
+{% block modals %}
+{# ═══ MODALE CRÉER ═══ #}
+<div class="mo" id="moCreate">
+  <div class="md md-lg">
+    <div class="mh">
+      <div class="mh-l"><div class="mi g"><i class="bi bi-folder-plus"></i></div><div><div class="mt">{{ 'proj.btn_new'|trans }}</div><div class="ms">{{ 'proj.create_sub'|trans }}</div></div></div>
+      <button class="mcls" onclick="closeMo('moCreate')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" action="{{ path('app_projet_create') }}">
+      <input type="hidden" name="_token" value="{{ csrf_token('projet_create') }}">
+      <div class="mb">
+        <div class="frow c3">
+          <div>
+            <label>{{ 'proj.field_assoc'|trans }} <span class="req">*</span></label>
+            <select name="association_id" id="createAssoc" class="fc" required>
+              <option value="">{{ 'proj.field_assoc_ph'|trans }}</option>
+              {% for a in associations %}<option value="{{ a.id }}">{{ a.nom }}</option>{% endfor %}
+            </select>
+            <div id="createAssocHint" style="display:none;align-items:center;gap:5px;margin-top:5px;font-size:.68rem;color:var(--gm);font-weight:600;background:rgba(46,125,50,.07);border-radius:7px;padding:4px 8px;border:1px solid rgba(46,125,50,.15)">
+              <i class="bi bi-check-circle-fill" style="font-size:.72rem;flex-shrink:0"></i>
+              <span id="createAssocHintNom">{% if assocActive %}{{ assocActive.nom }}{% endif %}</span>
+            </div>
+          </div>
+          <div>
+            <label>{{ 'proj.field_type'|trans }} <span class="req">*</span></label>
+            <input type="text" name="type" class="fc" required placeholder="{{ 'proj.field_type_ph'|trans }}" list="typesSugg" autocomplete="off">
+            <datalist id="typesSugg">
+              {% for k,v in constant('App\\Entity\\Projet::TYPES') %}<option value="{{ k }}">{% endfor %}
+            </datalist>
+          </div>
+          <div>
+            <label>{{ 'proj.field_annee'|trans }} <span class="req">*</span></label>
+            <input type="number" name="annee" class="fc" required min="2000" max="2099" value="{{ 'now'|date('Y') }}">
+          </div>
+        </div>
+        <div class="frow c2">
+          <div><label>{{ 'proj.field_numero'|trans }} <span class="req">*</span></label><input type="text" name="numero" class="fc" required placeholder="{{ 'proj.field_numero_ph'|trans }}" pattern="[A-Za-z0-9\-]+" title="{{ 'proj.field_numero_hint'|trans }}"></div>
+          <div><label>{{ 'proj.field_nom'|trans }} <span class="req">*</span></label><input type="text" name="nom" class="fc" required placeholder="{{ 'proj.field_nom_ph'|trans }}"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>{{ 'proj.field_donor'|trans }} <span class="req">*</span></label><input type="text" name="donateur" class="fc" required></div>
+          <div><label>{{ 'proj.field_budget'|trans }}</label><input type="number" name="coutTotal" class="fc" min="0" step="0.01" value="0"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>{{ 'proj.field_location'|trans }} <span class="req">*</span></label><input type="text" name="lieu" class="fc" required></div>
+          <div><label>{{ 'proj.field_duration'|trans }}</label><input type="text" name="duree" class="fc" placeholder="{{ 'proj.field_duration_ph'|trans }}"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>{{ 'proj.field_contract_date'|trans }}</label><input type="date" name="dateContrat" class="fc" value="{{ 'now'|date('Y-m-d') }}"></div>
+          <div><label>{{ 'proj.field_end_date'|trans }}</label><input type="date" name="dateFin" class="fc"></div>
+        </div>
+        <div class="fg"><label>{{ 'proj.field_description'|trans }}</label><textarea name="description" class="fc" rows="2"></textarea></div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moCreate')">{{ 'proj.btn_cancel'|trans }}</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-check-lg"></i>{{ 'proj.btn_create'|trans }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══ MODALE VISUALISER ═══ #}
+{# ═══ MODALE VISUALISER — 3 COLONNES ═══ #}
+<div class="mo" id="moVisu">
+  <div class="md md-xl">
+
+    {# ── Header ── #}
+    <div class="mh">
+      <div class="mh-l">
+        <div class="mi b"><i class="bi bi-eye"></i></div>
+        <div>
+          <div class="mt" id="visuTitre">—</div>
+          <div class="ms" id="visuSub">—</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <a id="visuRapportLink" href="#" class="btn btn-s btn-sm" target="_blank">
+          <i class="bi bi-file-earmark-text"></i>{{ 'proj.btn_rapport'|trans }}
+        </a>
+        <button class="mcls" onclick="closeMo('moVisu')"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+
+    {# ── Corps ── #}
+    <div class="mb">
+
+      {# ── Bilan financier (pleine largeur) ── #}
+      <div class="visu-bilan" style="margin-bottom:14px">
+        <div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.45);margin-bottom:8px">{{ 'proj.bilan_title'|trans }}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:center">
+          <div>
+            <div class="vb-lbl">{{ 'proj.bilan_budget'|trans }}</div>
+            <div class="vb-val" id="vBudget">—</div>
+          </div>
+          <div>
+            <div class="vb-lbl">{{ 'proj.bilan_paid'|trans }}</div>
+            <div class="vb-val" style="color:#A5D6A7" id="vPaye">—</div>
+          </div>
+          <div>
+            <div class="vb-lbl" style="color:rgba(255,255,255,.85)">{{ 'proj.bilan_remaining'|trans }}</div>
+            <div class="vb-val" style="color:#FFCDD2" id="vRestant">—</div>
+          </div>
+          <div style="min-width:120px">
+            <div class="vb-pg-lbl" style="margin-bottom:5px">
+              <span>{{ 'proj.bilan_rate'|trans }}</span>
+              <span id="vTaux" style="color:#fff;font-weight:800">0%</span>
+            </div>
+            <div class="vb-pg-bg"><div class="vb-pg-f" id="vProgBar" style="width:0"></div></div>
+          </div>
+        </div>
+      </div>
+
+      {# ── Grille 3 colonnes ── #}
+      <div class="visu-grid">
+
+        {# ── COL GAUCHE : Informations ── #}
+        <div class="visu-col">
+          <div class="vc-sec"><i class="bi bi-info-circle"></i>{{ 'proj.tab_infos'|trans }}</div>
+          <div id="visuInfos" style="font-size:.78rem"></div>
+        </div>
+
+        {# ── COL MILIEU : Médias (photos, fichiers, vidéos) ── #}
+        <div class="visu-col-mid">
+          {# Tabs médias #}
+          <div class="vmtabs">
+            <button class="vmtab active" onclick="vmTab('photos',this)">
+              <i class="bi bi-images"></i>{{ 'proj.tab_photos'|trans }}
+              <span class="cnt" id="vtcPho">0</span>
+            </button>
+            <button class="vmtab" onclick="vmTab('fichiers',this)">
+              <i class="bi bi-file-earmark-pdf"></i>{{ 'proj.tab_fichiers'|trans }}
+              <span class="cnt" id="vtcFi">0</span>
+            </button>
+            <button class="vmtab" onclick="vmTab('videos',this)">
+              <i class="bi bi-play-circle"></i>{{ 'proj.tab_videos'|trans }}
+              <span class="cnt" id="vtcVi">0</span>
+            </button>
+          </div>
+          {# Bouton ajouter contextuel #}
+          <button class="btn btn-p btn-sm" id="vmAddBtn" style="width:100%" onclick="vmAdd()">
+            <i class="bi bi-plus-lg"></i><span id="vmAddLbl">{{ 'proj.pho_add_title'|trans }}</span>
+          </button>
+          {# Panneaux médias #}
+          <div class="vmpanel active" id="vm-photos">
+            <div class="pgal3" id="visuPhotos"></div>
+          </div>
+          <div class="vmpanel" id="vm-fichiers">
+            <div id="visuFichiers"></div>
+          </div>
+          <div class="vmpanel" id="vm-videos">
+            <div id="visuVideos"></div>
+          </div>
+        </div>
+
+        {# ── COL DROITE : Paiements ── #}
+        <div class="visu-col">
+          <div class="vc-sec"><i class="bi bi-cash-stack"></i>{{ 'proj.tab_paiements'|trans }} <span id="vtcPai" style="background:var(--green-mid);color:#fff;font-size:.55rem;padding:1px 6px;border-radius:8px;font-weight:700;margin-left:2px">0</span></div>
+          <button class="btn btn-p btn-sm" style="width:100%;margin-bottom:8px" onclick="ouvrirAddPaiement()">
+            <i class="bi bi-plus-lg"></i>{{ 'proj.pai_add_title'|trans }}
+          </button>
+          <div id="visuPaiements" style="font-size:.78rem"></div>
+        </div>
+
+      </div>{# /visu-grid #}
+
+      {# ── PLAQUE DRAPEAUX (inspirée de la photo) ── #}
+      <div class="visu-plaque">
+        <div class="vp-flags">
+          <div class="vp-flag">🇦🇪</div>
+          <div class="vp-flag">🇲🇷</div>
+        </div>
+        <div class="vp-info">
+          <div class="vp-num" id="vpNum">—</div>
+          <div class="vp-titre" id="vpNom">—</div>
+          <div class="vp-lieu" id="vpLieu">—</div>
+          <div class="vp-assoc" id="vpAssoc">—</div>
+        </div>
+        <div class="vp-logos" id="vpLogos">
+          {# Logo association injecté en JS #}
+        </div>
+      </div>
+
+    </div>{# /mb #}
+  </div>{# /md #}
+</div>{# /mo #}
+
+{# ═══ MODALE MODIFIER ═══ #}
+<div class="mo" id="moEdit">
+  <div class="md md-lg">
+    <div class="mh">
+      <div class="mh-l"><div class="mi g"><i class="bi bi-pencil"></i></div><div><div class="mt">{{ 'proj.edit_title'|trans }}</div><div class="ms" id="editSub">—</div></div></div>
+      <button class="mcls" onclick="closeMo('moEdit')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <form method="POST" id="editForm">
+      <input type="hidden" name="_token" id="editToken">
+      <input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="frow c3">
+          <div><label>{{ 'proj.field_assoc'|trans }}</label><select name="association_id" id="editAssoc" class="fc"><option value="">{{ 'proj.field_assoc_ph'|trans }}</option>{% for a in associations %}<option value="{{ a.id }}">{{ a.nom }}</option>{% endfor %}</select></div>
+          <div><label>{{ 'proj.field_type'|trans }}</label><input type="text" name="type" id="editType" class="fc" placeholder="{{ 'proj.field_type_ph'|trans }}" list="typesSugg" autocomplete="off"></div>
+          <div><label>{{ 'proj.field_annee'|trans }}</label><input type="number" name="annee" id="editAnnee" class="fc" min="2000" max="2099"></div>
+        </div>
+        <div class="frow c2">
+          <div><label>{{ 'proj.field_numero'|trans }} <span class="req">*</span></label><input type="text" name="numero" id="editNumero" class="fc" required pattern="[A-Za-z0-9\-]+" title="{{ 'proj.field_numero_hint'|trans }}"></div>
+          <div><label>{{ 'proj.field_nom'|trans }} <span class="req">*</span></label><input type="text" name="nom" id="editNom" class="fc" required></div>
+        </div>
+        <div class="frow c3">
+          <div><label>{{ 'proj.field_donor'|trans }}</label><input type="text" name="donateur" id="editDonateur" class="fc"></div>
+          <div><label>{{ 'proj.field_budget'|trans }}</label><input type="number" name="coutTotal" id="editBudget" class="fc" min="0" step="0.01"></div>
+          <div><label>{{ 'proj.field_duration'|trans }}</label><input type="text" name="duree" id="editDuree" class="fc"></div>
+        </div>
+        <div class="frow c3">
+          <div><label>{{ 'proj.field_location'|trans }}</label><input type="text" name="lieu" id="editLieu" class="fc"></div>
+          <div><label>{{ 'proj.field_contract_date'|trans }}</label><input type="date" name="dateContrat" id="editDateContrat" class="fc"></div>
+          <div><label>{{ 'proj.field_end_date'|trans }}</label><input type="date" name="dateFin" id="editDateFin" class="fc"></div>
+          
+        </div>
+        
+        <div class="fg">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+            <label style="margin:0">{{ 'proj.progression_label'|trans }}</label>
+            <span id="editProgLabel" style="font-size:1rem;font-weight:900;color:var(--gm);letter-spacing:-.03em">0%</span>
+          </div>
+          <div style="position:relative;height:5px;background:var(--sd);border-radius:10px;margin-bottom:8px;overflow:hidden">
+            <div id="editProgBar" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gm),var(--gl));border-radius:10px;transition:width .15s;width:0%"></div>
+          </div>
+          <input type="range" name="progression" id="editProg" min="0" max="100" style="width:100%;accent-color:var(--gm);height:4px" oninput="editSlide(this.value)">
+          <div style="display:flex;justify-content:space-between;font-size:.58rem;color:var(--txt3);margin-top:3px"><span>0%</span><span>50%</span><span>100%</span></div>
+        </div>
+        <div class="fg"><label>{{ 'proj.field_description'|trans }}</label><textarea name="description" id="editDesc" class="fc" rows="2"></textarea></div>
+      </div>
+      <div class="mf">
+        <button type="button" class="btn btn-s" onclick="closeMo('moEdit')">{{ 'proj.btn_cancel'|trans }}</button>
+        <button type="submit" class="btn btn-p"><i class="bi bi-check-lg"></i>{{ 'proj.btn_save'|trans }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{# ═══ MODALE PAIEMENT ═══ #}
+<div class="mo" id="moAddPai">
+  <div class="md md-md">
+    <div class="mh"><div class="mh-l"><div class="mi b"><i class="bi bi-cash-stack"></i></div><div><div class="mt">{{ 'proj.pai_add_title'|trans }}</div><div class="ms" id="paiSub">—</div></div></div><button class="mcls" onclick="closeMo('moAddPai')"><i class="bi bi-x-lg"></i></button></div>
+    <form method="POST" id="paiForm" enctype="multipart/form-data">
+      <input type="hidden" name="_token" id="paiToken"><input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="frow c2">
+          <div><label>{{ 'proj.pai_field_amount'|trans }} <span class="req">*</span></label><input type="number" name="montant" class="fc" step="0.01" min="0.01" required placeholder="0.00"></div>
+          <div><label>{{ 'proj.pai_field_date'|trans }} <span class="req">*</span></label><input type="date" name="datePaiement" class="fc" value="{{ 'now'|date('Y-m-d') }}" required></div>
+        </div>
+        <div class="frow c2">
+          <div><label>{{ 'proj.pai_field_mode'|trans }}</label><select name="mode" class="fc">{% for k,v in constant('App\\Entity\\ProjetPaiement::MODES') %}<option value="{{ k }}">{{ v.label_fr }}</option>{% endfor %}</select></div>
+          <div><label>{{ 'proj.pai_field_ref'|trans }}</label><input type="text" name="reference" class="fc" placeholder="{{ 'proj.pai_field_ref_ph'|trans }}"></div>
+        </div>
+        <div class="fg"><label>{{ 'proj.pai_field_notes'|trans }}</label><textarea name="notes" class="fc" rows="2"></textarea></div>
+        <div class="fg"><label>{{ 'proj.pai_field_justif'|trans }}</label>
+          <input type="file" id="justifF" name="justificatifFile" accept=".pdf,application/pdf" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none" onchange="fileReadySmart('justifF','uzJustif','frJustif')">
+          <div class="uzn" id="uzJustif" onclick="document.getElementById('justifF').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDropSmart(event,'justifF','uzJustif','frJustif')">
+            <i class="bi bi-file-earmark-arrow-up"></i><div class="uz-t">{{ 'proj.fi_drop_label'|trans }}</div><div class="uz-s">{{ 'proj.fi_drop_types'|trans }}</div>
+          </div>
+          <div class="file-ready" id="frJustif"><div class="fr-ico"><i class="bi bi-file-earmark-pdf"></i></div><div class="fr-info"><div class="fr-name" id="frJustifName">—</div><div class="fr-sub"><span class="fr-ok"><i class="bi bi-check-circle-fill"></i>Prêt</span><span id="frJustifSize"></span></div></div><button type="button" class="fr-chg" onclick="resetFileSmart('justifF','uzJustif','frJustif')"><i class="bi bi-arrow-repeat"></i>Changer</button></div>
+        </div>
+      </div>
+      <div class="mf"><button type="button" class="btn btn-s" onclick="closeMo('moAddPai')">{{ 'proj.btn_cancel'|trans }}</button><button type="submit" class="btn btn-p"><i class="bi bi-check-lg"></i>{{ 'proj.btn_save'|trans }}</button></div>
+    </form>
+  </div>
+</div>
+
+{# ═══ MODALE PHOTOS ═══ #}
+<div class="mo" id="moAddPho">
+  <div class="md md-md">
+    <div class="mh"><div class="mh-l"><div class="mi p"><i class="bi bi-images"></i></div><div><div class="mt">{{ 'proj.pho_add_title'|trans }}</div><div class="ms" id="phoSub">—</div></div></div><button class="mcls" onclick="closeMo('moAddPho')"><i class="bi bi-x-lg"></i></button></div>
+    <form method="POST" id="phoForm" enctype="multipart/form-data">
+      <input type="hidden" name="_token" id="phoToken"><input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="fg"><label>{{ 'proj.pho_add_sub'|trans }}</label>
+          <input type="file" id="photoF" name="photoFiles[]" accept="image/jpeg,image/png,image/webp" multiple style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none" onchange="phoPreview(this.files)">
+          <div class="uzn" id="phoUzn" onclick="document.getElementById('photoF').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="phoHandleDrop(event)">
+            <i class="bi bi-image" style="font-size:1.8rem;color:var(--gl)"></i><div class="uz-t">{{ 'proj.pho_drop_label'|trans }}</div><div class="uz-s">JPG · PNG · WebP — max 5 Mo — 20 photos max</div>
+          </div>
+          <div id="phoReady" style="display:none">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:8px"><span style="width:34px;height:34px;border-radius:8px;background:rgba(123,31,162,.1);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><i class="bi bi-images" style="color:var(--pu);font-size:.9rem"></i></span><div><span id="phoCount" style="font-size:.82rem;font-weight:700;color:var(--text)"></span><div style="font-size:.66rem;color:var(--text-light);margin-top:1px;display:flex;align-items:center;gap:4px"><i class="bi bi-check-circle-fill" style="color:var(--gm)"></i>Prêtes à envoyer</div></div></div>
+              <button type="button" onclick="phoClear()" style="font-size:.72rem;color:var(--rd);background:var(--rd2);border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;transition:.15s;font-family:inherit;font-weight:600"><i class="bi bi-x-circle"></i>Annuler</button>
+            </div>
+            <div id="phoThumbs" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px"></div>
+          </div>
+        </div>
+        <div class="fg"><label>{{ 'proj.pho_field_legend'|trans }}</label><input type="text" name="legende" class="fc" placeholder="{{ 'proj.pho_field_legend_ph'|trans }}"></div>
+      </div>
+      <div class="mf"><button type="button" class="btn btn-s" onclick="closeMo('moAddPho')">{{ 'proj.btn_cancel'|trans }}</button><button type="submit" class="btn btn-p" id="phoBtnSend" disabled><i class="bi bi-upload"></i>{{ 'proj.btn_send'|trans }} <span id="phoSendCount" style="opacity:.7">(0)</span></button></div>
+    </form>
+  </div>
+</div>
+
+{# ═══ MODALE FICHIER ═══ #}
+<div class="mo" id="moAddFi">
+  <div class="md md-md">
+    <div class="mh"><div class="mh-l"><div class="mi o"><i class="bi bi-file-earmark-arrow-up"></i></div><div><div class="mt">{{ 'proj.fi_add_title'|trans }}</div><div class="ms" id="fiSub">—</div></div></div><button class="mcls" onclick="closeMo('moAddFi')"><i class="bi bi-x-lg"></i></button></div>
+    <form method="POST" id="fiForm" enctype="multipart/form-data">
+      <input type="hidden" name="_token" id="fiToken"><input type="hidden" name="_from" value="index">
+      <div class="mb">
+   <div class="fg">
+  <label>{{ 'proj.fi_field_cat'|trans }}</label>
+  <select name="categorie" class="fc">
+    {% for k, v in constant('App\\Entity\\ProjetFichier::CATEGORIES') %}
+      <option value="{{ k }}">
+        {% if app.request.locale == 'ar' %}{{ v.label_ar }}{% else %}{{ v.label_fr }}{% endif %}
+      </option>
+    {% endfor %} 
+  </select>
+</div>
+        <div class="fg"><label>{{ 'proj.fi_drop_label'|trans }} <span class="req">*</span></label>
+          <input type="file" id="fichierF" name="fichierFile" accept=".pdf,application/pdf" required style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none" onchange="fileReadySmart('fichierF','uzFichier','frFichier')">
+          <div class="uzn" id="uzFichier" onclick="document.getElementById('fichierF').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDropSmart(event,'fichierF','uzFichier','frFichier')"><i class="bi bi-file-earmark-pdf"></i><div class="uz-t">{{ 'proj.fi_drop_label'|trans }}</div><div class="uz-s">{{ 'proj.fi_drop_types'|trans }}</div></div>
+          <div class="file-ready" id="frFichier"><div class="fr-ico"><i class="bi bi-file-earmark-pdf"></i></div><div class="fr-info"><div class="fr-name" id="frFichierName">—</div><div class="fr-sub"><span class="fr-ok"><i class="bi bi-check-circle-fill"></i>Prêt à envoyer</span><span id="frFichierSize"></span></div></div><button type="button" class="fr-chg" onclick="resetFileSmart('fichierF','uzFichier','frFichier')"><i class="bi bi-arrow-repeat"></i>Changer</button></div>
+        </div>
+      </div>
+      <div class="mf"><button type="button" class="btn btn-s" onclick="closeMo('moAddFi')">{{ 'proj.btn_cancel'|trans }}</button><button type="submit" class="btn btn-p"><i class="bi bi-upload"></i>{{ 'proj.btn_send'|trans }}</button></div>
+    </form>
+  </div>
+</div>
+
+{# ═══ MODALE VIDÉO ═══ #}
+<div class="mo" id="moAddVi">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi r"><i class="bi bi-youtube"></i></div><div><div class="mt">{{ 'proj.vi_add_title'|trans }}</div><div class="ms" id="viSub">—</div></div></div><button class="mcls" onclick="closeMo('moAddVi')"><i class="bi bi-x-lg"></i></button></div>
+    <form method="POST" id="viForm"><input type="hidden" name="_token" id="viToken"><input type="hidden" name="_from" value="index">
+      <div class="mb">
+        <div class="fg"><label>{{ 'proj.vi_field_url'|trans }} <span class="req">*</span></label><input type="url" name="url" class="fc" required placeholder="{{ 'proj.vi_field_url_ph'|trans }}" oninput="previewYT(this.value)"></div>
+        <div id="ytPrev" style="display:none;margin-bottom:10px"><img id="ytThumb" src="" alt="" style="width:100%;border-radius:var(--rx);aspect-ratio:16/9;object-fit:cover"></div>
+        <div class="fg"><label>{{ 'proj.vi_field_title'|trans }}</label><input type="text" name="titre" class="fc" placeholder="{{ 'proj.vi_field_title_ph'|trans }}"></div>
+      </div>
+      <div class="mf"><button type="button" class="btn btn-s" onclick="closeMo('moAddVi')">{{ 'proj.btn_cancel'|trans }}</button><button type="submit" class="btn btn-p"><i class="bi bi-plus-lg"></i>{{ 'proj.btn_add'|trans }}</button></div>
+    </form>
+  </div>
+</div>
+
+{# ═══ MODALE SUPPRESSION ═══ #}
+<div class="mo" id="moDel">
+  <div class="md md-sm">
+    <div class="mh"><div class="mh-l"><div class="mi r"><i class="bi bi-trash3"></i></div><div><div class="mt" style="color:var(--red)">{{ 'proj.delete_title'|trans }}</div><div class="ms">{{ 'proj.delete_subtitle'|trans }}</div></div></div><button class="mcls" onclick="closeMo('moDel')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="mb"><div class="del-prev"><div class="di" id="delIcon">🗑️</div><p id="delMsg">{{ 'proj.delete_title'|trans }} ?</p></div></div>
+    <div class="mf"><button class="btn btn-s" onclick="closeMo('moDel')">{{ 'proj.btn_cancel'|trans }}</button><form id="delForm" method="POST" style="display:inline"><input type="hidden" name="_token" id="delToken"><button type="submit" class="btn btn-d"><i class="bi bi-trash3"></i>{{ 'proj.btn_delete'|trans }}</button></form></div>
+  </div>
+</div>
+
+<div class="lb" id="lb" onclick="closeLB()">
+  <button class="lb-cls" onclick="closeLB()"><i class="bi bi-x-lg"></i></button>
+  <img id="lbImg" src="" alt="">
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+let curView = 'grid', curProjetId = null;
+
+if (typeof openMo === 'undefined') {
+  window.openMo  = id => { document.getElementById(id)?.classList.add('open');    document.body.style.overflow='hidden' };
+  window.closeMo = id => { document.getElementById(id)?.classList.remove('open'); document.body.style.overflow='' };
+  document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if(e.target===m) closeMo(m.id) }));
+}
+
+(function() {
+  const _orig = window.openMo;
+  window.openMo = function(moId) {
+    if (moId === 'moCreate') {
+      const sel = document.getElementById('createAssoc');
+      if (sel) {
+        const fAssocSel = document.getElementById('fAssoc');
+        const targetId  = ASSOC_ACTIVE_ID ? String(ASSOC_ACTIVE_ID) : (fAssocSel && fAssocSel.value ? fAssocSel.value : '');
+        sel.value = targetId;
+        const hint = document.getElementById('createAssocHint'), hintNom = document.getElementById('createAssocHintNom');
+        if (sel.value && sel.value === targetId) {
+          sel.style.cssText = 'border-color:var(--gm)!important;background:rgba(46,125,50,.04)!important';
+          if (hint && hintNom) { const opt = sel.querySelector(`option[value="${targetId}"]`); if (opt) hintNom.textContent = opt.textContent.trim(); hint.style.display = 'flex'; }
+          sel.addEventListener('change', function onChg() { sel.style.cssText=''; if(hint) hint.style.display='none'; sel.removeEventListener('change',onChg); });
+        } else { sel.style.cssText=''; if(hint) hint.style.display='none'; }
+      }
+    }
+    _orig(moId);
+  };
+})();
+
+function setView(v) {
+  curView = v;
+  document.getElementById('bGrid').classList.toggle('active', v==='grid');
+  document.getElementById('bList').classList.toggle('active', v==='list');
+  filter();
+}
+
+function filter() {
+  const q   = document.getElementById('q').value.toLowerCase();
+  const st  = document.getElementById('fStatut').value;
+  const ty  = document.getElementById('fType').value;
+  const aid = document.getElementById('fAssoc').value;
+  const an  = document.getElementById('fAnnee')?.value || '';
+  let vis   = 0;
+
+  document.querySelectorAll('[id^="c"]').forEach(el => {
+    if (!/^c\d+$/.test(el.id)) return;
+    const show = (!q  || el.dataset.nom.includes(q) || el.dataset.num.includes(q) || el.dataset.lieu.includes(q) || el.dataset.don.includes(q)) &&
+                 (!st || el.dataset.statut===st) && (!ty || el.dataset.type===ty) &&
+                 (!aid || el.dataset.aid===aid)  && (!an  || el.dataset.annee===an);
+    el.style.display = show && curView==='grid' ? '' : 'none';
+    if (show) vis++;
+  });
+  document.querySelectorAll('[id^="r"]').forEach(el => {
+    if (!/^r\d+$/.test(el.id)) return;
+    const show = (!q  || el.dataset.nom.includes(q) || el.dataset.num.includes(q) || el.dataset.lieu.includes(q) || el.dataset.don.includes(q)) &&
+                 (!st || el.dataset.statut===st) && (!ty || el.dataset.type===ty) &&
+                 (!aid || el.dataset.aid===aid)  && (!an  || el.dataset.annee===an);
+    el.style.display = show && curView==='list' ? 'flex' : 'none';
+  });
+  document.querySelectorAll('[id^="pgrid"]').forEach(g => { g.style.display = curView==='grid' ? 'grid' : 'none' });
+  document.querySelectorAll('[id^="plist"]').forEach(l => { l.style.display = curView==='list' ? 'flex'  : 'none' });
+  document.querySelectorAll('.ag').forEach(ag => {
+    const aMatch = !aid || ag.dataset.aid===aid;
+    const hasVis = aMatch && Array.from(ag.querySelectorAll('[id^="c"],[id^="r"]')).some(e => e.style.display!=='none');
+    ag.style.display = hasVis ? '' : 'none';
+  });
+  document.getElementById('cnt').textContent = vis + ' {{ 'proj.filter_results'|trans }}';
+  document.getElementById('eg').classList.toggle('vis', vis===0);
+}
+
+function spUpdate(radio, couleur) {
+  const grid = radio.closest('.statut-grid'); if (!grid) return;
+  grid.querySelectorAll('.sp-pill').forEach(p => { p.classList.remove('active'); p.style.background=''; p.style.borderColor=''; p.style.color=''; });
+  const pill = radio.nextElementSibling, c = couleur || pill.dataset.c;
+  pill.classList.add('active'); pill.style.background=c+'1A'; pill.style.borderColor=c; pill.style.color=c;
+}
+function editSlide(v) {
+  document.getElementById('editProgLabel').textContent = v + '%';
+  const bar = document.getElementById('editProgBar'); if (bar) bar.style.width = v + '%';
+}
+
+/* ── Tab médias colonne milieu ── */
+let curVmTab = 'photos';
+function vmTab(name, btn) {
+  curVmTab = name;
+  document.querySelectorAll('.vmpanel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.vmtab').forEach(b => b.classList.remove('active'));
+  document.getElementById('vm-'+name).classList.add('active');
+  btn.classList.add('active');
+  // Mettre à jour le bouton ajouter
+  const labels = {
+    photos:   '{{ 'proj.pho_add_title'|trans }}',
+    fichiers: '{{ 'proj.fi_add_title'|trans }}',
+    videos:   '{{ 'proj.vi_add_title'|trans }}'
+  };
+  const lbl = document.getElementById('vmAddLbl');
+  if (lbl) lbl.textContent = labels[name] || labels.photos;
+}
+function vmAdd() {
+  if (curVmTab === 'photos')   ouvrirAddPhoto();
+  else if (curVmTab === 'fichiers') ouvrirAddFichier();
+  else if (curVmTab === 'videos')   ouvrirAddVideo();
+}
+
+function ouvrirVisu(id) {
+  const p = PROJETS[id]; if (!p) return;
+  curProjetId = id;
+
+  // ── Header ──
+  document.getElementById('visuTitre').textContent = p.nom;
+  document.getElementById('visuSub').textContent   = p.numero + ' · ' + p.assocNom;
+  document.getElementById('visuRapportLink').href  = `/projet/${id}`;
+
+  // ── Bilan financier ──
+  const fmt = n => Number(n).toLocaleString('fr-FR',{maximumFractionDigits:0}) + ' MRU';
+  document.getElementById('vBudget').textContent  = fmt(p.coutTotal);
+  document.getElementById('vPaye').textContent    = fmt(p.montantPaye);
+  document.getElementById('vRestant').textContent = fmt(p.montantRestant);
+  document.getElementById('vTaux').textContent    = p.tauxPaiement.toFixed(1) + '%';
+  const bar = document.getElementById('vProgBar'); bar.style.width = '0%';
+  setTimeout(() => { bar.style.width = p.tauxPaiement + '%' }, 200);
+
+  // ── Compteurs ──
+  document.getElementById('vtcPai').textContent = p.paiements.length;
+  document.getElementById('vtcPho').textContent = p.photos.length;
+  document.getElementById('vtcFi').textContent  = p.fichiers.length;
+  document.getElementById('vtcVi').textContent  = p.videos.length;
+
+  // ── COL GAUCHE : Infos ──
+  document.getElementById('visuInfos').innerHTML = `
+    <div class="irow"><span class="ilbl">${T.info_number}</span><span class="ival" style="font-family:monospace;font-weight:700">${p.numero}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_assoc}</span><span class="ival">${p.assocNom}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_type}</span><span class="ival"><i class="bi ${p.typeIcone}" style="color:${p.typeCouleur};margin-right:4px"></i>${p.typeLabel}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_statut}</span><span class="ival"><span class="spill" style="background:${p.statutCouleur}18;color:${p.statutCouleur}"><i class="bi ${p.statutIcone}"></i>${p.statutLabel}</span></span></div>
+    <div class="irow"><span class="ilbl">${T.info_location}</span><span class="ival">${p.lieu}, ${p.pays}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_donor}</span><span class="ival">${p.donateur}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_duration}</span><span class="ival">${p.duree||'—'}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_contract}</span><span class="ival">${p.dateContrat||'—'}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_end_date}</span><span class="ival">${p.dateFin||'—'}</span></div>
+    <div class="irow"><span class="ilbl">${T.info_progression}</span><span class="ival">${p.progression}%</span></div>
+    ${p.description ? `<div class="irow"><span class="ilbl">${T.info_description}</span><span class="ival" style="line-height:1.6;font-size:.75rem">${p.description}</span></div>` : ''}`;
+
+  // ── COL MILIEU : Photos ──
+  const emptyBlock = (ico,msg) => `<div style="text-align:center;padding:24px;color:var(--txt3);font-size:.75rem"><i class="bi bi-${ico}" style="font-size:1.6rem;opacity:.18;display:block;margin-bottom:8px"></i>${msg}</div>`;
+
+  document.getElementById('visuPhotos').innerHTML = p.photos.length === 0
+    ? emptyBlock('images', T.pho_none)
+    : p.photos.map((ph, i) => `
+        <div class="pgal3-item" onclick="openLB('${ph.path}')">
+          <img src="${ph.path}" alt="${ph.legende}" loading="lazy">
+          ${i===0 ? `<span style="position:absolute;top:4px;left:4px;background:var(--go);color:#fff;font-size:.52rem;font-weight:700;padding:2px 5px;border-radius:5px">${T.pho_cover}</span>` : ''}
+          <form method="POST" action="${ROUTES_PHOTO_DEL.replace('__ID__',ph.id)}" style="position:absolute;top:4px;right:4px;display:inline" onclick="event.stopPropagation()">
+            <input type="hidden" name="_token" value="${ph.csrfDel}">
+            <button type="submit" class="pac rd" style="width:22px;height:22px;border-radius:5px;font-size:.6rem" onclick="return confirm(T.pho_del)"><i class="bi bi-trash3"></i></button>
+          </form>
+        </div>`).join('');
+
+  // ── COL MILIEU : Fichiers ──
+  document.getElementById('visuFichiers').innerHTML = p.fichiers.length === 0
+    ? emptyBlock('file-earmark', T.fi_none)
+    : p.fichiers.map(fi => `
+        <div class="frow2">
+          <div class="f-ico" style="background:${fi.catCouleur}18"><i class="bi ${fi.catIcone}" style="color:${fi.catCouleur}"></i></div>
+          <div style="flex:1;min-width:0">
+            <div class="f-name">${fi.nom}</div>
+            <div class="f-sub"><span style="background:${fi.catCouleur}18;color:${fi.catCouleur};padding:1px 6px;border-radius:6px;font-size:.6rem">${fi.cat}</span>${fi.taille?' · '+fi.taille:''}</div>
+          </div>
+          <a href="${fi.path}" target="_blank" class="pac bl"><i class="bi bi-download"></i></a>
+          <form method="POST" action="${ROUTES_FICHIER_DEL.replace('__ID__',fi.id)}" style="display:inline">
+            <input type="hidden" name="_token" value="${fi.csrfDel}">
+            <button type="submit" class="pac rd" onclick="return confirm(T.fi_del)"><i class="bi bi-trash3"></i></button>
+          </form>
+        </div>`).join('');
+
+  // ── COL MILIEU : Vidéos ──
+  document.getElementById('visuVideos').innerHTML = p.videos.length === 0
+    ? emptyBlock('play-circle', T.vi_none)
+    : p.videos.map(vi => {
+        const ytId = ytExtract(vi.url);
+        const thumb = vi.thumb || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : '');
+        return `<div class="vid-item">
+          <div class="vid-thumb"><img src="${thumb}" alt="" loading="lazy">
+            <div class="vid-play"><a href="${vi.url}" target="_blank" class="vid-playbtn"><i class="bi bi-play-fill"></i></a></div>
+          </div>
+          <div class="vid-info">
+            <div class="vid-title">${vi.titre||vi.url}</div>
+            <form method="POST" action="${ROUTES_VIDEO_DEL.replace('__ID__',vi.id)}" style="display:inline">
+              <input type="hidden" name="_token" value="${vi.csrfDel}">
+              <button type="submit" class="pac rd" onclick="return confirm(T.vi_del)"><i class="bi bi-trash3"></i></button>
+            </form>
+          </div>
+        </div>`;
+      }).join('');
+
+  // ── COL DROITE : Paiements ──
+  document.getElementById('visuPaiements').innerHTML = p.paiements.length === 0
+    ? emptyBlock('cash', T.pai_none)
+    : p.paiements.map(pa => `
+        <div class="pair">
+          <div class="pai-ico" style="background:${pa.modeCouleur}18"><i class="bi ${pa.modeIcone}" style="color:${pa.modeCouleur}"></i></div>
+          <div class="pai-info">
+            <div class="pai-mt">${Number(pa.montant).toLocaleString('fr-FR',{maximumFractionDigits:2})} MRU</div>
+            <div class="pai-sub">${pa.date} · <span class="pmode" style="background:${pa.modeCouleur}18;color:${pa.modeCouleur}">${pa.modeLabel}</span>${pa.reference?' · '+pa.reference:''}</div>
+          </div>
+          ${pa.justif ? `<a href="${pa.justif}" target="_blank" class="pac bl"><i class="bi bi-file-earmark-pdf"></i></a>` : ''}
+          <form method="POST" action="${ROUTES_PAIEMENT_DEL.replace('__ID__',pa.id)}" style="display:inline">
+            <input type="hidden" name="_token" value="${pa.csrfDel}">
+            <button type="submit" class="pac rd" onclick="return confirm(T.pai_del)"><i class="bi bi-trash3"></i></button>
+          </form>
+        </div>`).join('');
+
+  // ── PLAQUE DRAPEAUX ──
+  document.getElementById('vpNum').textContent   = p.numero;
+  document.getElementById('vpNom').textContent   = p.nom;
+  document.getElementById('vpLieu').textContent  = p.lieu + (p.pays && p.pays !== 'Mauritanie' ? ', ' + p.pays : '');
+  document.getElementById('vpAssoc').textContent = p.assocNom;
+
+  // Réinitialiser tabs médias sur photos
+  vmTab('photos', document.querySelector('.vmtab'));
+
+  openMo('moVisu');
+}
+
+function ouvrirAddDirect(id, type) {
+  curProjetId = id;
+  if (type==='photo') ouvrirAddPhoto(); else if (type==='fichier') ouvrirAddFichier(); else if (type==='video') ouvrirAddVideo();
+}
+function ouvrirAddPaiement() { const p=PROJETS[curProjetId]; if(!p) return; document.getElementById('paiSub').textContent=p.nom; document.getElementById('paiToken').value=p.csrfPaiement; document.getElementById('paiForm').action=p.urlPaiementCreate; resetFileSmart('justifF','uzJustif','frJustif'); openMo('moAddPai'); }
+function ouvrirAddPhoto()    { const p=PROJETS[curProjetId]; if(!p) return; document.getElementById('phoSub').textContent=p.nom; document.getElementById('phoToken').value=p.csrfPhoto; document.getElementById('phoForm').action=p.urlPhotoCreate; phoClear(); openMo('moAddPho'); }
+function ouvrirAddFichier()  { const p=PROJETS[curProjetId]; if(!p) return; document.getElementById('fiSub').textContent=p.nom; document.getElementById('fiToken').value=p.csrfFichier; document.getElementById('fiForm').action=p.urlFichierCreate; resetFileSmart('fichierF','uzFichier','frFichier'); openMo('moAddFi'); }
+function ouvrirAddVideo()    { const p=PROJETS[curProjetId]; if(!p) return; document.getElementById('viSub').textContent=p.nom; document.getElementById('viToken').value=p.csrfVideo; document.getElementById('viForm').action=p.urlVideoCreate; openMo('moAddVi'); }
+
+function ouvrirEdit(id) {
+  const p = PROJETS[id]; if (!p) return; curProjetId = id;
+  document.getElementById('editSub').textContent = p.numero;
+  document.getElementById('editForm').action     = p.urlEdit;
+  document.getElementById('editToken').value     = p.csrfEdit;
+  const en = document.getElementById('editNumero'); if(en) en.value=p.numero;
+  document.getElementById('editNom').value      = p.nom;
+  document.getElementById('editDonateur').value = p.donateur;
+  document.getElementById('editBudget').value   = p.coutTotal;
+  document.getElementById('editLieu').value     = p.lieu;
+  document.getElementById('editDuree').value    = p.duree||'';
+  document.getElementById('editDesc').value     = p.description||'';
+  const rng = document.getElementById('editProg'); if(rng){rng.value=p.progression;editSlide(p.progression);}
+  const sel = (eid,val) => {const s=document.getElementById(eid);if(s)[...s.options].forEach(o=>o.selected=o.value===val)};
+  sel('editAssoc', String(p.assocId));
+  const et=document.getElementById('editType'); if(et) et.value=p.type;
+  const ea=document.getElementById('editAnnee'); if(ea) ea.value=p.annee;
+  openMo('moEdit');
+}
+function ouvrirDelete(id, nom) {
+  document.getElementById('delMsg').innerHTML = T.delete_msg ? T.delete_msg.replace('%nom%',nom) : `Supprimer <strong>${nom}</strong> ?`;
+  document.getElementById('delForm').action   = PROJETS[id]?.urlDel||'#';
+  document.getElementById('delToken').value   = PROJETS[id]?.csrfDel||'';
+  openMo('moDel');
+}
+
+function filterOrNav(val) {
+  const url = new URL(window.location.href);
+  if (val) url.searchParams.set('assoc',val); else url.searchParams.delete('assoc');
+  window.location.href = url.toString();
+}
+
+function fileReadySmart(inputId,uznId,frId) {
+  const inp=document.getElementById(inputId),uzn=document.getElementById(uznId),fr=document.getElementById(frId);
+  if(!inp||!inp.files.length) return;
+  const f=inp.files[0];
+  const nameEl=document.getElementById(frId+'Name'),sizeEl=document.getElementById(frId+'Size');
+  if(nameEl) nameEl.textContent=f.name; if(sizeEl) sizeEl.textContent=formatSize(f.size);
+  uzn.style.display='none'; fr.classList.add('vis');
+}
+function resetFileSmart(inputId,uznId,frId) {
+  const inp=document.getElementById(inputId),uzn=document.getElementById(uznId),fr=document.getElementById(frId);
+  if(inp) inp.value=''; uzn.style.display=''; if(fr) fr.classList.remove('vis');
+}
+function handleDropSmart(e,inputId,uznId,frId) {
+  e.preventDefault(); document.getElementById(uznId)?.classList.remove('drag');
+  const inp=document.getElementById(inputId);
+  if(inp&&e.dataTransfer.files.length){try{inp.files=e.dataTransfer.files}catch(ex){}fileReadySmart(inputId,uznId,frId);}
+}
+function formatSize(bytes) {
+  if(bytes<1024) return bytes+' o'; if(bytes<1024*1024) return (bytes/1024).toFixed(0)+' Ko'; return (bytes/(1024*1024)).toFixed(1)+' Mo';
+}
+function phoPreview(files) {
+  const thumbs=document.getElementById('phoThumbs'),count=document.getElementById('phoCount'),btn=document.getElementById('phoBtnSend'),num=document.getElementById('phoSendCount'),uzn=document.getElementById('phoUzn'),ready=document.getElementById('phoReady');
+  if(!files||files.length===0){phoClear();return;}
+  thumbs.innerHTML=''; const n=Math.min(files.length,20);
+  for(let i=0;i<n;i++){const f=files[i];const div=document.createElement('div');div.style.cssText='position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--sand-dark)';const img=document.createElement('img');img.style.cssText='width:100%;height:100%;object-fit:cover;display:block';const src=URL.createObjectURL(f);img.src=src;img.onload=()=>URL.revokeObjectURL(src);div.appendChild(img);if(i===0){const badge=document.createElement('span');badge.textContent='Couverture';badge.style.cssText='position:absolute;top:3px;left:3px;background:var(--go);color:#fff;font-size:.52rem;font-weight:700;padding:1px 5px;border-radius:5px';div.appendChild(badge);}thumbs.appendChild(div);}
+  count.textContent=n+' photo'+(n>1?'s':'')+' sélectionnée'+(n>1?'s':''); num.textContent=n; btn.disabled=false; uzn.style.display='none'; ready.style.display='block';
+}
+function phoClear() {
+  const btn=document.getElementById('phoBtnSend'),uzn=document.getElementById('phoUzn'),ready=document.getElementById('phoReady'),th=document.getElementById('phoThumbs');
+  if(th) th.innerHTML=''; if(btn) btn.disabled=true;
+  const num=document.getElementById('phoSendCount'); if(num) num.textContent='0';
+  if(uzn) uzn.style.display=''; if(ready) ready.style.display='none';
+  const inp=document.getElementById('photoF'); if(inp) inp.value='';
+}
+function phoHandleDrop(e) {
+  e.preventDefault(); const uzn=document.getElementById('phoUzn'); if(uzn) uzn.classList.remove('drag');
+  const files=e.dataTransfer?.files; if(files&&files.length){try{document.getElementById('photoF').files=files}catch(ex){}phoPreview(files);}
+}
+function ytExtract(url) {
+  if(!url) return null; const m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/); return m?m[1]:null;
+}
+function previewYT(url) {
+  const id=ytExtract(url),prev=document.getElementById('ytPrev'),thumb=document.getElementById('ytThumb');
+  if(id){thumb.src=`https://img.youtube.com/vi/${id}/mqdefault.jpg`;prev.style.display='block'} else prev.style.display='none';
+}
+function openLB(src) { document.getElementById('lbImg').src=src; document.getElementById('lb').classList.add('open'); document.body.style.overflow='hidden' }
+function closeLB()   { document.getElementById('lb').classList.remove('open'); document.body.style.overflow='' }
+
+document.addEventListener('DOMContentLoaded', () => {
+  /* ── Pré-sélectionner la dernière année et appliquer le filtre ── */
+  if (DEFAULT_ANNEE) {
+    const sel = document.getElementById('fAnnee');
+    if (sel) sel.value = String(DEFAULT_ANNEE);
+  }
+  filter();
+
+  /* ── Animer barres de progression ── */
+  document.querySelectorAll('.pc-bar-f, .pr-fin-f').forEach(b => {
+    const pw = getComputedStyle(b).getPropertyValue('--pw').trim();
+    b.style.width = '0';
+    setTimeout(() => { b.style.width = pw }, 300 + Math.random() * 200);
+  });
+});
+</script>
+{% endblock %}
